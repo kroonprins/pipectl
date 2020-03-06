@@ -1,0 +1,33 @@
+{{ $bll_pipelines_chart := "./bll-pipelines" }}
+{{ $common_values_file := "./values/values.yaml" }}
+{{ $bll_group := "api" }}
+
+releases:
+  - name: "bll-contracting"
+    labels:
+      group: {{ $bll_group }}
+      component: "bll-contracting"
+    chart: {{ $bll_pipelines_chart }}
+    values:
+      - {{ $common_values_file }}
+      - name: Test via API for bll-contracting
+      - buildId: 228
+      - artifactAlias: BLL-Contracting CI
+      - esb: true
+      - rabbitmq: true
+      - database: false
+      - variables:
+          BLL_DO_AUDITING: do_uda
+  - name: "bll-contact"
+    labels:
+      group: {{ $bll_group }}
+      component: bll-contact
+    chart: {{ $bll_pipelines_chart }}
+    values:
+      - {{ $common_values_file }}
+      - name: Test via API for bll-contact
+      - buildId: 516
+      - artifactAlias: BLL-Contact CI
+      - esb: false
+      - rabbitmq: false
+      - database: false     

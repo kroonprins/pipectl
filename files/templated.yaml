@@ -1,0 +1,144 @@
+---
+apiVersion: azure-devops/v0.1
+kind: ReleaseDefiniton
+metadata:
+  name: POC-Created-Via-API
+  labels:
+    group: bll
+spec:
+  description: Testing via yaml3
+  path: "{{ Values.path }}"
+  releaseNameFormat: {{ Values.releaseNameFormat }}
+  {% if Values.commonVariables -%}
+  variables:
+    {% for name, value in Values.commonVariables -%}
+    {{ name }}:
+      value: {{ value }}
+    {% endfor -%}
+  {% endif %}
+  environments:
+  {% for stage in Values.stages -%}
+  - name: {{ stage.name }}
+    rank: {{ loop.index }}
+    environmentOptions:
+      emailNotificationType: Always
+      publishDeploymentStatus: true
+    executionPolicy:
+      concurrencyCount: 1
+    retentionPolicy:
+      daysToKeep: 30
+      releasesToKeep: 10
+      retainBuild: true
+    {% if stage.variables -%}
+    variables:
+      {% for name, value in stage.variables -%}
+      {{ name }}:
+        value: {{ value }}
+      {% endfor -%}
+    {% endif %}        
+    {% if stage.variableGroups -%}
+    variableGroups:
+    {% for variableGroup in stage.variableGroups -%}
+    - {{ variableGroup }}
+    {% endfor -%}
+    {% endif %}     
+    deployPhases:
+    - name: Agent phase
+      rank: 1
+      phaseType: 1
+      deploymentInput:
+        queueId: {{ stage.agentPool }}
+      workflowTasks:
+      - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
+        version: 1.*
+        name: 'Azure Key Vault: {{ stage.vault }}'
+        enabled: true
+        definitionType: task
+        inputs:
+          ConnectedServiceName: {{ stage.azureSubscription }}
+          KeyVaultName: {{ stage.vault }}
+          SecretsFilter: "*"
+      - taskId: 93a67d85-4982-4e19-87dd-29311c974748
+        version: 2.*
+        name: 'Task group: Create RabbitMQ user'
+        enabled: true
+        definitionType: metaTask
+        inputs:
+          AksCluster: "$(AKS_CLUSTER)"
+          AzureResourceGroup: "$(AZURE_RESOURCE_GROUP)"
+          AzureSubscription: {{ stage.azureSubscription }}
+          KubernetesNamespace: "$(K8S_NAMESPACE)"
+          RabbitMQPassword: "$(rabbitmq-{{ Values.component }}-password)"
+          RabbitMQPod: ''
+          RabbitMQUsername: "$(RABBITMQ_USERNAME)"
+          RabbitMQVirtualHost: ''
+      - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
+        version: 2.*
+        name: 'Task group: K8S Deploy V3 {{ Values.component }}'
+        enabled: true
+        definitionType: metaTask
+        inputs:
+          AksCluster: "$(AKS_CLUSTER)"
+          AzureResourceGroup: "$(AZURE_RESOURCE_GROUP)"
+          AzureSubscription: {{ stage.azureSubscription }}
+          HelmArtifact: ''
+          KubernetesDeploymentName: {{ Values.component }}
+          KubernetesNamespace: "$(K8S_NAMESPACE)"
+          KubernetesObjectType: ''
+          SecretValues: {% for name, value in stage.secretValues -%}
+                          {{- name }}={{ value -}}{% if loop.index != loop.length -%},{%- endif -%}
+                        {%- endfor %}
+    preDeployApprovals:
+    {% if stage.preApprovers.length > 0 %}
+      approvals:
+      {% for approver in stage.preApprovers -%}      
+      - rank: {{ loop.index }}
+        isAutomated: false
+        isNotificationOn: false
+        approver:
+          id: {{ approver }}
+          isContainer: true
+      approvalOptions:
+        releaseCreatorCanBeApprover: true 
+      {% endfor %}   
+    {% else %}
+      approvals:
+      - rank: 1
+        isAutomated: true
+        isNotificationOn: false
+      approvalOptions:
+        releaseCreatorCanBeApprover: false
+    {% endif %}
+    postDeployApprovals:
+    {% if stage.postApprovers.length > 0 %}
+      approvals:
+      {% for approver in stage.postApprovers -%}      
+      - rank: {{ loop.index }}
+        isAutomated: false
+        isNotificationOn: false
+        approver:
+          id: {{ approver }}
+          isContainer: true
+      approvalOptions:
+        releaseCreatorCanBeApprover: true 
+      {% endfor %}   
+    {% else %}
+      approvals:
+      - rank: 1
+        isAutomated: true
+        isNotificationOn: false
+      approvalOptions:
+        releaseCreatorCanBeApprover: false
+    {% endif %}
+  {% endfor %}
+  artifacts:
+  - type: Build
+    alias: {{ Values.artifactAlias }}
+    definitionReference:
+      defaultVersionType:
+        id: latestType
+        name: Latest
+      definition:
+        id: '{{ Values.buildId }}'
+      project:
+        id: {{ Values.project }}
