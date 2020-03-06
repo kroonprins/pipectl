@@ -1,0 +1,1380 @@
+{
+    "source": 2,
+    "revision": 37,
+    "description": null,
+    "createdBy": {
+        "displayName": "Laure-Emmanuelle Issler",
+        "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+        "_links": {
+            "avatar": {
+                "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            }
+        },
+        "id": "742e583e-24dd-4788-86be-1915002f64e4",
+        "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+        "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+        "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+    },
+    "createdOn": "2019-02-11T11:48:07.917Z",
+    "modifiedBy": {
+        "displayName": "Aymeric Levaux",
+        "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/55ec30db-e81c-46a2-88f2-3d16500b3bf6",
+        "_links": {
+            "avatar": {
+                "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMjYyNg"
+            }
+        },
+        "id": "55ec30db-e81c-46a2-88f2-3d16500b3bf6",
+        "uniqueName": "ENGIEALM\\aymeric.levaux",
+        "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMjYyNg",
+        "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMjYyNg"
+    },
+    "modifiedOn": "2019-12-04T12:50:13.163Z",
+    "isDeleted": false,
+    "variables": {
+        "BLL_DO_AUDITING": {
+            "value": "do_uda"
+        },
+        "BLL_LOG_LEVEL": {
+            "value": "INFO"
+        },
+        "K8S_AGENT_POOL": {
+            "value": "general"
+        },
+        "K8S_NAMESPACE": {
+            "value": "core"
+        },
+        "RABBITMQ_USERNAME": {
+            "value": "bll-contracting"
+        },
+        "REPLICAS": {
+            "value": "2"
+        },
+        "ROOT_LOG_LEVEL": {
+            "value": "INFO"
+        }
+    },
+    "variableGroups": [],
+    "environments": [
+        {
+            "id": 779,
+            "name": "INT-WE",
+            "rank": 1,
+            "owner": {
+                "displayName": "Laure-Emmanuelle Issler",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+                    }
+                },
+                "id": "742e583e-24dd-4788-86be-1915002f64e4",
+                "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+                "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            },
+            "variables": {
+                "BLL_LOG_LEVEL": {
+                    "value": "DEBUG"
+                }
+            },
+            "variableGroups": [
+                113,
+                25
+            ],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2609
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2620
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2621
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "agentSpecification": null,
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 165,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent phase",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "1e244d32-2dd4-4165-96fb-b7441ca9331e",
+                            "version": "1.*",
+                            "name": "Azure Key Vault: webfoundation-int-akv",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "ConnectedServiceName": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KeyVaultName": "webfoundation-int-akv",
+                                "SecretsFilter": "*"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "93a67d85-4982-4e19-87dd-29311c974748",
+                            "version": "2.*",
+                            "name": "Task group: Create RabbitMQ user",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "RabbitMQPassword": "$(rabbitmq-bll-contracting-password)",
+                                "RabbitMQPod": "",
+                                "RabbitMQUsername": "$(RABBITMQ_USERNAME)",
+                                "RabbitMQVirtualHost": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "76a92167-7c70-4b54-ba35-13d5819c9b1e",
+                            "version": "2.*",
+                            "name": "Task group: K8S Deploy V3 bll-contracting",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "HelmArtifact": "",
+                                "KubernetesDeploymentName": "bll-contracting",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "KubernetesObjectType": "",
+                                "SecretValues": "ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature),RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password)"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "Always",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 17215,
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/releases/17215",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 10,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/public/Release/badge/5a4ec25a-2f9d-4947-9937-d4347eaceadd/209/779"
+        },
+        {
+            "id": 780,
+            "name": "INT-NE",
+            "rank": 2,
+            "owner": {
+                "displayName": "Laure-Emmanuelle Issler",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+                    }
+                },
+                "id": "742e583e-24dd-4788-86be-1915002f64e4",
+                "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+                "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            },
+            "variables": {
+                "BLL_LOG_LEVEL": {
+                    "value": "DEBUG"
+                }
+            },
+            "variableGroups": [
+                113,
+                23
+            ],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2610
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2619
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2622
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": false,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "agentSpecification": null,
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 164,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent phase",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "1e244d32-2dd4-4165-96fb-b7441ca9331e",
+                            "version": "1.*",
+                            "name": "Azure Key Vault: webfoundation-int-akv",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "ConnectedServiceName": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KeyVaultName": "webfoundation-int-akv",
+                                "SecretsFilter": "*"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "93a67d85-4982-4e19-87dd-29311c974748",
+                            "version": "2.*",
+                            "name": "Task group: Create RabbitMQ user",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "RabbitMQPassword": "$(rabbitmq-bll-contracting-password)",
+                                "RabbitMQPod": "",
+                                "RabbitMQUsername": "$(RABBITMQ_USERNAME)",
+                                "RabbitMQVirtualHost": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "76a92167-7c70-4b54-ba35-13d5819c9b1e",
+                            "version": "2.*",
+                            "name": "Task group: K8S Deploy V3 bll-contracting",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "HelmArtifact": "",
+                                "KubernetesDeploymentName": "bll-contracting",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "KubernetesObjectType": "",
+                                "SecretValues": "ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature),RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password)"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "Always",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 17215,
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/releases/17215",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 10,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/public/Release/badge/5a4ec25a-2f9d-4947-9937-d4347eaceadd/209/780"
+        },
+        {
+            "id": 781,
+            "name": "ACC-WE",
+            "rank": 3,
+            "owner": {
+                "displayName": "Laure-Emmanuelle Issler",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+                    }
+                },
+                "id": "742e583e-24dd-4788-86be-1915002f64e4",
+                "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+                "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            },
+            "variables": {
+                "BLL_LOG_LEVEL": {
+                    "value": "DEBUG"
+                }
+            },
+            "variableGroups": [
+                114,
+                27
+            ],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": false,
+                        "isNotificationOn": false,
+                        "approver": {
+                            "displayName": "[Webfoundation]\\Acc Apps Release Managers",
+                            "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/c48d7901-feca-403b-b698-cf99c6e7d602",
+                            "_links": {
+                                "avatar": {
+                                    "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA"
+                                }
+                            },
+                            "id": "c48d7901-feca-403b-b698-cf99c6e7d602",
+                            "uniqueName": "vstfs:///Classification/TeamProject/5a4ec25a-2f9d-4947-9937-d4347eaceadd\\Acc Apps Release Managers",
+                            "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA",
+                            "isContainer": true,
+                            "descriptor": "vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA"
+                        },
+                        "id": 2611
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2618
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2623
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "agentSpecification": null,
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 165,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent phase",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "1e244d32-2dd4-4165-96fb-b7441ca9331e",
+                            "version": "1.*",
+                            "name": "Azure Key Vault: webfoundation-acc-akv",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "ConnectedServiceName": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KeyVaultName": "webfoundation-acc-akv",
+                                "SecretsFilter": "*"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "93a67d85-4982-4e19-87dd-29311c974748",
+                            "version": "2.*",
+                            "name": "Task group: Create RabbitMQ user",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "RabbitMQPassword": "$(rabbitmq-bll-contracting-password)",
+                                "RabbitMQPod": "",
+                                "RabbitMQUsername": "$(RABBITMQ_USERNAME)",
+                                "RabbitMQVirtualHost": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "76a92167-7c70-4b54-ba35-13d5819c9b1e",
+                            "version": "2.*",
+                            "name": "Task group: K8S Deploy V3 bll-contracting",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "HelmArtifact": "",
+                                "KubernetesDeploymentName": "bll-contracting",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "KubernetesObjectType": "",
+                                "SecretValues": "ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature),RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password)"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "Always",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 16865,
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/releases/16865",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 10,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/public/Release/badge/5a4ec25a-2f9d-4947-9937-d4347eaceadd/209/781"
+        },
+        {
+            "id": 782,
+            "name": "ACC-NE",
+            "rank": 4,
+            "owner": {
+                "displayName": "Laure-Emmanuelle Issler",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+                    }
+                },
+                "id": "742e583e-24dd-4788-86be-1915002f64e4",
+                "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+                "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            },
+            "variables": {},
+            "variableGroups": [
+                114,
+                26
+            ],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": false,
+                        "isNotificationOn": false,
+                        "approver": {
+                            "displayName": "[Webfoundation]\\Acc Apps Release Managers",
+                            "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/c48d7901-feca-403b-b698-cf99c6e7d602",
+                            "_links": {
+                                "avatar": {
+                                    "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA"
+                                }
+                            },
+                            "id": "c48d7901-feca-403b-b698-cf99c6e7d602",
+                            "uniqueName": "vstfs:///Classification/TeamProject/5a4ec25a-2f9d-4947-9937-d4347eaceadd\\Acc Apps Release Managers",
+                            "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA",
+                            "isContainer": true,
+                            "descriptor": "vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA"
+                        },
+                        "id": 2612
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2617
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2624
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "agentSpecification": null,
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 164,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent phase",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "1e244d32-2dd4-4165-96fb-b7441ca9331e",
+                            "version": "1.*",
+                            "name": "Azure Key Vault: webfoundation-acc-akv",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "ConnectedServiceName": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KeyVaultName": "webfoundation-acc-akv",
+                                "SecretsFilter": "*"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "93a67d85-4982-4e19-87dd-29311c974748",
+                            "version": "2.*",
+                            "name": "Task group: Create RabbitMQ user",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "RabbitMQPassword": "$(rabbitmq-bll-contracting-password)",
+                                "RabbitMQPod": "",
+                                "RabbitMQUsername": "$(RABBITMQ_USERNAME)",
+                                "RabbitMQVirtualHost": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "76a92167-7c70-4b54-ba35-13d5819c9b1e",
+                            "version": "2.*",
+                            "name": "Task group: K8S Deploy V3 bll-contracting",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "6714e6c3-6518-4050-90ec-ed7288c13b3a",
+                                "HelmArtifact": "",
+                                "KubernetesDeploymentName": "bll-contracting",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "KubernetesObjectType": "",
+                                "SecretValues": "ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature),RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password)"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "Always",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 16865,
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/releases/16865",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 10,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/public/Release/badge/5a4ec25a-2f9d-4947-9937-d4347eaceadd/209/782"
+        },
+        {
+            "id": 783,
+            "name": "PRD-WE",
+            "rank": 5,
+            "owner": {
+                "displayName": "Laure-Emmanuelle Issler",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+                    }
+                },
+                "id": "742e583e-24dd-4788-86be-1915002f64e4",
+                "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+                "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            },
+            "variables": {},
+            "variableGroups": [
+                115,
+                28
+            ],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": false,
+                        "isNotificationOn": false,
+                        "approver": {
+                            "displayName": "[Webfoundation]\\Prod Apps Release Managers",
+                            "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/e9a38fdf-a890-4227-909e-c438dc074464",
+                            "_links": {
+                                "avatar": {
+                                    "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA"
+                                }
+                            },
+                            "id": "e9a38fdf-a890-4227-909e-c438dc074464",
+                            "uniqueName": "vstfs:///Classification/TeamProject/5a4ec25a-2f9d-4947-9937-d4347eaceadd\\Prod Apps Release Managers",
+                            "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA",
+                            "isContainer": true,
+                            "descriptor": "vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA"
+                        },
+                        "id": 2613
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2616
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2625
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "agentSpecification": null,
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 168,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent phase",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "1e244d32-2dd4-4165-96fb-b7441ca9331e",
+                            "version": "1.*",
+                            "name": "Azure Key Vault: webfoundation-prd-akv",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "ConnectedServiceName": "f9da387b-09b3-4d7a-aea4-6a95dd060a16",
+                                "KeyVaultName": "webfoundation-prd-akv",
+                                "SecretsFilter": "*"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "93a67d85-4982-4e19-87dd-29311c974748",
+                            "version": "2.*",
+                            "name": "Task group: Create RabbitMQ user",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "f9da387b-09b3-4d7a-aea4-6a95dd060a16",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "RabbitMQPassword": "$(rabbitmq-bll-contracting-password)",
+                                "RabbitMQPod": "",
+                                "RabbitMQUsername": "$(RABBITMQ_USERNAME)",
+                                "RabbitMQVirtualHost": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "76a92167-7c70-4b54-ba35-13d5819c9b1e",
+                            "version": "2.*",
+                            "name": "Task group: K8S Deploy V3 bll-contracting",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "f9da387b-09b3-4d7a-aea4-6a95dd060a16",
+                                "HelmArtifact": "",
+                                "KubernetesDeploymentName": "bll-contracting",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "KubernetesObjectType": "",
+                                "SecretValues": "ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature),RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password)"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "Always",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 16865,
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/releases/16865",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 10,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/public/Release/badge/5a4ec25a-2f9d-4947-9937-d4347eaceadd/209/783"
+        },
+        {
+            "id": 784,
+            "name": "PRD-NE",
+            "rank": 6,
+            "owner": {
+                "displayName": "Laure-Emmanuelle Issler",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/742e583e-24dd-4788-86be-1915002f64e4",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+                    }
+                },
+                "id": "742e583e-24dd-4788-86be-1915002f64e4",
+                "uniqueName": "ENGIEALM\\laure-emmanuelle.iss",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ",
+                "descriptor": "win.Uy0xLTUtMjEtMjg1MTgwMjI1MS0zNTA3Mzk2MzgzLTM3Mzg1MDI1NzctMzA2OQ"
+            },
+            "variables": {},
+            "variableGroups": [
+                115,
+                29
+            ],
+            "preDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": false,
+                        "isNotificationOn": false,
+                        "approver": {
+                            "displayName": "[Webfoundation]\\Prod Apps Release Managers",
+                            "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/e9a38fdf-a890-4227-909e-c438dc074464",
+                            "_links": {
+                                "avatar": {
+                                    "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA"
+                                }
+                            },
+                            "id": "e9a38fdf-a890-4227-909e-c438dc074464",
+                            "uniqueName": "vstfs:///Classification/TeamProject/5a4ec25a-2f9d-4947-9937-d4347eaceadd\\Prod Apps Release Managers",
+                            "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA",
+                            "isContainer": true,
+                            "descriptor": "vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA"
+                        },
+                        "id": 2614
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 1
+                }
+            },
+            "deployStep": {
+                "id": 2615
+            },
+            "postDeployApprovals": {
+                "approvals": [
+                    {
+                        "rank": 1,
+                        "isAutomated": true,
+                        "isNotificationOn": false,
+                        "id": 2626
+                    }
+                ],
+                "approvalOptions": {
+                    "requiredApproverCount": null,
+                    "releaseCreatorCanBeApprover": true,
+                    "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+                    "enforceIdentityRevalidation": false,
+                    "timeoutInMinutes": 0,
+                    "executionOrder": 2
+                }
+            },
+            "deployPhases": [
+                {
+                    "deploymentInput": {
+                        "parallelExecution": {
+                            "parallelExecutionType": "none"
+                        },
+                        "agentSpecification": null,
+                        "skipArtifactsDownload": false,
+                        "artifactsDownloadInput": {
+                            "downloadInputs": []
+                        },
+                        "queueId": 167,
+                        "demands": [],
+                        "enableAccessToken": false,
+                        "timeoutInMinutes": 0,
+                        "jobCancelTimeoutInMinutes": 1,
+                        "condition": "succeeded()",
+                        "overrideInputs": {}
+                    },
+                    "rank": 1,
+                    "phaseType": 1,
+                    "name": "Agent phase",
+                    "refName": null,
+                    "workflowTasks": [
+                        {
+                            "environment": {},
+                            "taskId": "1e244d32-2dd4-4165-96fb-b7441ca9331e",
+                            "version": "1.*",
+                            "name": "Azure Key Vault: webfoundation-prd-akv",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": false,
+                            "continueOnError": false,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "task",
+                            "overrideInputs": {},
+                            "condition": "succeeded()",
+                            "inputs": {
+                                "ConnectedServiceName": "f9da387b-09b3-4d7a-aea4-6a95dd060a16",
+                                "KeyVaultName": "webfoundation-prd-akv",
+                                "SecretsFilter": "*"
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "93a67d85-4982-4e19-87dd-29311c974748",
+                            "version": "2.*",
+                            "name": "Task group: Create RabbitMQ user",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "f9da387b-09b3-4d7a-aea4-6a95dd060a16",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "RabbitMQPassword": "$(rabbitmq-bll-contracting-password)",
+                                "RabbitMQPod": "",
+                                "RabbitMQUsername": "$(RABBITMQ_USERNAME)",
+                                "RabbitMQVirtualHost": ""
+                            }
+                        },
+                        {
+                            "environment": {},
+                            "taskId": "76a92167-7c70-4b54-ba35-13d5819c9b1e",
+                            "version": "2.*",
+                            "name": "Task group: K8S Deploy V3 bll-contracting",
+                            "refName": "",
+                            "enabled": true,
+                            "alwaysRun": true,
+                            "continueOnError": true,
+                            "timeoutInMinutes": 0,
+                            "definitionType": "metaTask",
+                            "overrideInputs": {},
+                            "condition": "succeededOrFailed()",
+                            "inputs": {
+                                "AksCluster": "$(AKS_CLUSTER)",
+                                "AzureResourceGroup": "$(AZURE_RESOURCE_GROUP)",
+                                "AzureSubscription": "f9da387b-09b3-4d7a-aea4-6a95dd060a16",
+                                "HelmArtifact": "",
+                                "KubernetesDeploymentName": "bll-contracting",
+                                "KubernetesNamespace": "$(K8S_NAMESPACE)",
+                                "KubernetesObjectType": "",
+                                "SecretValues": "ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature),RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password)"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "environmentOptions": {
+                "emailNotificationType": "Always",
+                "emailRecipients": "release.environment.owner;release.creator",
+                "skipArtifactsDownload": false,
+                "timeoutInMinutes": 0,
+                "enableAccessToken": false,
+                "publishDeploymentStatus": true,
+                "badgeEnabled": false,
+                "autoLinkWorkItems": false,
+                "pullRequestDeploymentEnabled": false
+            },
+            "demands": [],
+            "conditions": [],
+            "executionPolicy": {
+                "concurrencyCount": 1,
+                "queueDepthCount": 0
+            },
+            "schedules": [],
+            "currentRelease": {
+                "id": 16865,
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/releases/16865",
+                "_links": {}
+            },
+            "retentionPolicy": {
+                "daysToKeep": 30,
+                "releasesToKeep": 10,
+                "retainBuild": true
+            },
+            "processParameters": {},
+            "properties": {},
+            "preDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "postDeploymentGates": {
+                "id": 0,
+                "gatesOptions": null,
+                "gates": []
+            },
+            "environmentTriggers": [],
+            "badgeUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/public/Release/badge/5a4ec25a-2f9d-4947-9937-d4347eaceadd/209/784"
+        }
+    ],
+    "artifacts": [
+        {
+            "sourceId": "5a4ec25a-2f9d-4947-9937-d4347eaceadd:228",
+            "type": "Build",
+            "alias": "BLL-Contracting CI",
+            "definitionReference": {
+                "artifactSourceDefinitionUrl": {
+                    "id": "https://tfs.alm.engie-electrabel.be/tfs/_permalink/_build/index?collectionId=bf5843f5-2913-415d-a81f-f6fc1b4b5952&projectId=5a4ec25a-2f9d-4947-9937-d4347eaceadd&definitionId=228",
+                    "name": ""
+                },
+                "defaultVersionBranch": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionSpecific": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionTags": {
+                    "id": "",
+                    "name": ""
+                },
+                "defaultVersionType": {
+                    "id": "latestType",
+                    "name": "Latest"
+                },
+                "definition": {
+                    "id": "228",
+                    "name": "BLL-Accounts CI"
+                },
+                "project": {
+                    "id": "5a4ec25a-2f9d-4947-9937-d4347eaceadd",
+                    "name": "Website"
+                }
+            },
+            "isPrimary": true,
+            "isRetained": false
+        }
+    ],
+    "triggers": [],
+    "releaseNameFormat": "Release-$(rev:r)",
+    "tags": [],
+    "pipelineProcess": {
+        "type": 1
+    },
+    "properties": {
+        "DefinitionCreationSource": {
+            "$type": "System.String",
+            "$value": "ReleaseClone"
+        }
+    },
+    "id": 209,
+    "name": "BLL-Contracting",
+    "path": "\\API",
+    "projectReference": null,
+    "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/definitions/209",
+    "_links": {
+        "self": {
+            "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_apis/Release/definitions/209"
+        },
+        "web": {
+            "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/5a4ec25a-2f9d-4947-9937-d4347eaceadd/_release?definitionId=209"
+        }
+    }
+}

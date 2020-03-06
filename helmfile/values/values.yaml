@@ -1,0 +1,90 @@
+project:
+  id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  name: Webfoundation
+
+path: "\\\\Other\\\\POC"
+releaseNameFormat: Release-$(rev:r)
+description: Created via script
+
+variables:
+  BLL_LOG_LEVEL: INFO
+  K8S_AGENT_POOL: general
+  K8S_NAMESPACE: core
+  REPLICAS: '2'
+  ROOT_LOG_LEVEL: INFO
+
+secretValues:
+  BLL_JWKS_ENCRYPTION: $(bll-jwks-encryption)
+  BLL_JWKS_SIGNATURE: $(bll-jwks-signature)
+
+stages:
+  - name: INT-WE
+    variables:
+      BLL_LOG_LEVEL: DEBUG
+    variableGroups:
+      - 113
+      - 25
+    agentPool: 165 # MS-NONPROD-WE
+    vault: webfoundation-int-akv
+    azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+    esb: ihn519
+    preApprovers: []
+    postApprovers: []
+  - name: INT-NE
+    variables:
+      BLL_LOG_LEVEL: DEBUG
+    variableGroups:
+      - 113
+      - 23
+    agentPool: 164 # MS-NONPROD-NE
+    vault: webfoundation-int-akv
+    azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+    esb: ihn519
+    preApprovers: []
+    postApprovers: []
+  - name: ACC-WE
+    variables:
+      BLL_LOG_LEVEL: DEBUG
+    variableGroups: # [114, 27] I don't have access
+      - 113
+      - 25
+    agentPool: 165 # MS-NONPROD-WE
+    vault: webfoundation-acc-akv
+    azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+    esb: hhn544
+    preApprovers:
+      - "c48d7901-feca-403b-b698-cf99c6e7d602"
+    postApprovers: []
+  - name: ACC-NE
+    variableGroups: # [114, 26] I don't have access
+      - 113
+      - 23
+    agentPool: 164 # MS-NONPROD-NE
+    vault: webfoundation-acc-akv
+    azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+    esb: hhn544
+    preApprovers:
+      - "c48d7901-feca-403b-b698-cf99c6e7d602"
+    postApprovers: []
+  - name: PRD-WE
+    variableGroups: # [115, 28] I don't have access
+      - 113
+      - 25
+    agentPool: 165 # 168 I don't have access # MS-PROD-WE
+    vault: webfoundation-prd-akv
+    azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
+    esb: gim597
+    preApprovers:
+      - "e9a38fdf-a890-4227-909e-c438dc074464"
+    postApprovers: []
+  - name: PRD-NE
+    variableGroups: # [115, 29] I don't have access
+      - 113
+      - 23
+    agentPool: 164 # 167 I don't have access # MS-PROD-NE
+    vault: webfoundation-prd-akv
+    azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
+    esb: gim597
+    preApprovers:
+      - "e9a38fdf-a890-4227-909e-c438dc074464"
+    postApprovers: []

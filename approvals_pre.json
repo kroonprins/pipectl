@@ -1,0 +1,84 @@
+"preDeployApprovals": {
+    "approvals": [
+        {
+            "rank": 1,
+            "isAutomated": true,
+            "isNotificationOn": false,
+            "id": 2609
+        }
+    ],
+    "approvalOptions": {
+        "requiredApproverCount": null,
+        "releaseCreatorCanBeApprover": false,
+        "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+        "enforceIdentityRevalidation": false,
+        "timeoutInMinutes": 0,
+        "executionOrder": 1
+    }
+}
+
+"preDeployApprovals": {
+    "approvals": [
+        {
+            "rank": 1,
+            "isAutomated": false,
+            "isNotificationOn": false,
+            "approver": {
+                "displayName": "[Webfoundation]\\Acc Apps Release Managers",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/c48d7901-feca-403b-b698-cf99c6e7d602",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA"
+                    }
+                },
+                "id": "c48d7901-feca-403b-b698-cf99c6e7d602",
+                "uniqueName": "vstfs:///Classification/TeamProject/5a4ec25a-2f9d-4947-9937-d4347eaceadd\\Acc Apps Release Managers",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA",
+                "isContainer": true,
+                "descriptor": "vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMjI0NTQ0OTI5NS0xMDkxMTM1NTY1LTI5MDc5MjIyNzAtMjI0NzAwOTA4OA"
+            },
+            "id": 2611
+        }
+    ],
+    "approvalOptions": {
+        "requiredApproverCount": null,
+        "releaseCreatorCanBeApprover": true,
+        "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+        "enforceIdentityRevalidation": false,
+        "timeoutInMinutes": 0,
+        "executionOrder": 1
+    }
+}
+
+"preDeployApprovals": {
+    "approvals": [
+        {
+            "rank": 1,
+            "isAutomated": false,
+            "isNotificationOn": false,
+            "approver": {
+                "displayName": "[Webfoundation]\\Prod Apps Release Managers",
+                "url": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/Identities/e9a38fdf-a890-4227-909e-c438dc074464",
+                "_links": {
+                    "avatar": {
+                        "href": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA"
+                    }
+                },
+                "id": "e9a38fdf-a890-4227-909e-c438dc074464",
+                "uniqueName": "vstfs:///Classification/TeamProject/5a4ec25a-2f9d-4947-9937-d4347eaceadd\\Prod Apps Release Managers",
+                "imageUrl": "https://tfs.alm.engie-electrabel.be/tfs/MS_Belux/_apis/GraphProfile/MemberAvatars/vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA",
+                "isContainer": true,
+                "descriptor": "vssgp.Uy0xLTktMTU1MTM3NDI0NS0xOTEzMzEyOTc1LTIyNTY1OTA2NjctMjk4MDk1NDE0OC0zMzQ5NjIyODk5LTEtMTcyODM2MjAxNy0xMzk0ODM2MDM1LTMwMTg0MjM4NTEtMzI1MDQ4MDM0OA"
+            },
+            "id": 2613
+        }
+    ],
+    "approvalOptions": {
+        "requiredApproverCount": null,
+        "releaseCreatorCanBeApprover": true,
+        "autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped": false,
+        "enforceIdentityRevalidation": false,
+        "timeoutInMinutes": 0,
+        "executionOrder": 1
+    }
+}
