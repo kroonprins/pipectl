@@ -3,6 +3,7 @@ import { isAzureDevOps } from "./util";
 import { Kind, AzureReleaseDefinition, AzureBuildDefinition } from './model'
 import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces";
 import { Action, CommonArguments } from "../core/actions/model";
+import { buildApi } from "./adapters";
 
 class BuildDefinitionTransformer implements DefinitionTransformer {
     canTransform(definition: Definition): boolean {
@@ -24,7 +25,7 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
     }
     async transform(definition: Definition, action: Action, args: CommonArguments) {
         console.log('Adding defaults')
-        const transformedSpec = this.setReleaseDefinitionDefaults(definition.spec)
+        const transformedSpec = await this.setReleaseDefinitionDefaults(definition)
         return new AzureReleaseDefinition(
             definition.apiVersion,
             definition.kind,
@@ -33,9 +34,9 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
         )
     }
 
-    protected setReleaseDefinitionDefaults(spec: object): ReleaseDefinition {
+    protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
         // TODO clone?
-        const updatedSpec = spec as ReleaseDefinition
+        const updatedSpec = definition.spec as ReleaseDefinition
         if (!updatedSpec.hasOwnProperty('path')) updatedSpec.path = "\\"
         return updatedSpec
     }
@@ -45,9 +46,11 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
     canTransform(definition: Definition, action: Action, args: CommonArguments): boolean {
         return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.RELEASE_DEFINITION && action === Action.APPLY
     }
-    protected setReleaseDefinitionDefaults(spec: object): ReleaseDefinition {
+    protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
         console.log('Adding defaults for apply')
-        const updatedSpec = super.setReleaseDefinitionDefaults(spec)
+        const updatedSpec = await super.setReleaseDefinitionDefaults(definition)
+
+        // TODO find elegant way to achieve the below
 
         updatedSpec.environments?.forEach((environment, index) => {
             if (!environment.hasOwnProperty('rank')) environment.rank = index + 1
@@ -130,15 +133,30 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
             }
         })
 
-        updatedSpec.artifacts?.forEach(artifact => {
+        for(const artifact of updatedSpec.artifacts || []) {
             if (artifact.type === 'Build') {
                 if (!artifact.hasOwnProperty('definitionReference')) artifact.definitionReference = {}
                 const defaultVersionType = artifact.definitionReference!['defaultVersionType'] || {}
                 if (!defaultVersionType.hasOwnProperty('id')) defaultVersionType['id'] = 'latestType'
                 if (!defaultVersionType.hasOwnProperty('name')) defaultVersionType['name'] = 'Latest'
                 artifact.definitionReference!['defaultVersionType'] = defaultVersionType
+
+                // TODO handle errors if missing things
+                if(!artifact.definitionReference!['definition']['id']) {
+                    const buildName = artifact.definitionReference!['definition']['name']!
+                    const buildPath = (artifact.definitionReference!['definition'] as any)['path']
+                    const project = artifact.definitionReference!['project']['id'] || artifact.definitionReference!['project']['name'] || definition.metadata.namespace
+                    console.log(`Finding build for ${buildName}-${buildPath}-${project}`)
+                    const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(buildName, buildPath, project)
+                    if(buildDefinition) {
+                        console.log(`Found ${buildDefinition.id}`)
+                        artifact.definitionReference!['definition']['id'] = buildDefinition.id?.toString()
+                    }
+                }
+                delete artifact.definitionReference!['definition']['name']
+                delete (artifact.definitionReference!['definition'] as any)['path']
             }
-        })
+        }
 
         return updatedSpec
     }

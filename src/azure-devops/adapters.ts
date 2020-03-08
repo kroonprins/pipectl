@@ -2,6 +2,8 @@ import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInter
 import { WebApi, getBasicHandler } from "azure-devops-node-api"
 import { currentServer, currentUser } from "../core/config"
 import { IReleaseApi } from "azure-devops-node-api/ReleaseApi"
+import { IBuildApi } from "azure-devops-node-api/BuildApi"
+import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces"
 
 const getAuthProvider = () => {
     const user = currentUser()
@@ -14,13 +16,35 @@ const getAuthProvider = () => {
     }
 }
 
+class BuildApi {
+
+    private _buildApi: IBuildApi | null = null
+
+    private async getApi(): Promise<IBuildApi> {
+        if (!this._buildApi) {
+            const connection = new WebApi(currentServer()['base-url'], getAuthProvider())
+            this._buildApi = await connection.getBuildApi()
+        }
+        return this._buildApi
+    }
+
+    async findBuildDefinitionByNameAndPath(name: string, path: string, project: string): Promise<BuildDefinition | null> {
+        const api = await this.getApi()
+        const search = await api.getDefinitions(project, name, undefined, undefined, undefined, undefined, undefined, undefined, undefined, path, undefined, undefined, undefined, false, undefined, undefined, undefined)
+        if (search && search.length) {
+            return search[0]
+        }
+        return null
+    }
+}
+
 class ReleaseApi {
 
     private _releaseApi: IReleaseApi | null = null
 
     private async getApi(): Promise<IReleaseApi> {
         if (!this._releaseApi) {
-            const connection = new WebApi(currentServer()['base-url'], getAuthProvider())
+            const connection = new WebApi(currentServer()['base-url'], getAuthProvider()) // TODO use same connection as release api
             this._releaseApi = await connection.getReleaseApi()
         }
         return this._releaseApi
@@ -42,7 +66,7 @@ class ReleaseApi {
 
     async findAllReleaseDefinitions(project: string) {
         const api = await this.getApi()
-        return api.getReleaseDefinitions(project,undefined,undefined,undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false, undefined)
+        return api.getReleaseDefinitions(project, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false, undefined)
     }
 
     async createReleaseDefinition(releaseDefinition: ReleaseDefinition, project: string) {
@@ -61,9 +85,12 @@ class ReleaseApi {
     }
 }
 
+const buildApi = new BuildApi()
 const releaseApi = new ReleaseApi()
 
 export {
+    BuildApi,
+    buildApi,
     ReleaseApi,
     releaseApi,
 }

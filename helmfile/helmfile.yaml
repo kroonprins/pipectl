@@ -12,8 +12,9 @@ releases:
     values:
       - {{ $common_values_file }}
       - name: Test via API for bll-contracting
-      - buildId: 228
-      - artifactAlias: BLL-Contracting CI
+      - build:
+          name: BLL-Contracting CI
+          path: \API\
       - esb: true
       - rabbitmq: true
       - database: false
@@ -28,8 +29,9 @@ releases:
     values:
       - {{ $common_values_file }}
       - name: Test via API for bll-contact
-      - buildId: 516
-      - artifactAlias: BLL-Contact CI
+      - build:
+          name: BLL-Contact CI
+          path: \API\
       - esb: false
       - rabbitmq: false
       - database: false     
