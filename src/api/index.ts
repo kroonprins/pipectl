@@ -1,22 +1,18 @@
-import { Definition } from "../model"
 import { Api } from "../model/api"
 import { AzureDevOpsApi } from '../azure-devops/api'
+import { getCurrentServer } from "../config"
 
 const API_MAPPING: { [key: string]: Api } = {
     'azure-devops': new AzureDevOpsApi()
 }
 
-const getApi = (definition: Definition): Api => {
-    const apiType = getApiType(definition.apiVersion)
+const getApi = (): Api => {
+    const apiType = getCurrentServer().type
     const api = API_MAPPING[apiType]
     if (!api) {
-        throw new Error(`Unsupported apiVersion ${definition.apiVersion}`)
+        throw new Error(`Unsupported apiVersion ${apiType}`)
     }
     return api
-}
-
-const getApiType = (apiVersion: string) => {
-    return apiVersion.split('/')[0]
 }
 
 export {

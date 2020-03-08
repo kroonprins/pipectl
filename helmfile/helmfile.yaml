@@ -4,6 +4,7 @@
 
 releases:
   - name: "bll-contracting"
+    namespace: Webfoundation
     labels:
       group: {{ $bll_group }}
       component: "bll-contracting"
@@ -19,6 +20,7 @@ releases:
       - variables:
           BLL_DO_AUDITING: do_uda
   - name: "bll-contact"
+    namespace: Webfoundation
     labels:
       group: {{ $bll_group }}
       component: bll-contact

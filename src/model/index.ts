@@ -1,10 +1,20 @@
 import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
 
-interface Arguments {
+interface CommonArguments {
+    filename?: string[]
+    recursive?: boolean,
+    selector?: string,
+    namespace?: string  
+}
+
+interface ApplyArguments extends CommonArguments  {
     filename: string[],
-    recursive: boolean,
-    dryRun: boolean
-    selector: string
+    dryRun?: boolean
+}
+
+interface GetArguments extends CommonArguments  {
+    kind: string,
+    name?: string // number for azure devops
 }
 
 interface Labels {
@@ -12,10 +22,9 @@ interface Labels {
 }
 
 interface MetaData {
-    name: string
-    path?: string
-    project?: string
-    labels: Labels
+    namespace?: string
+    labels?: Labels // TODO add them also as tags in azure devops?
+    // TODO annotations?
 }
 
 interface Definition extends Resource {
@@ -29,7 +38,9 @@ interface Resource {
 }
 
 export {
-    Arguments,
+    CommonArguments,
+    ApplyArguments,
+    GetArguments,
     Definition,
     Resource
 }

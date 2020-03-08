@@ -1,17 +1,22 @@
-import * as yaml from 'js-yaml'
+import { load } from 'js-yaml'
 import { readFileSync } from 'fs'
-import { AuthConfig, ContextConfig, UserConfig, ServerConfig } from '../model/auth'
+import { Config, ContextConfig, UserConfig, ServerConfig } from '../model/config'
 
-let authConfig: AuthConfig
+let config: Config
 
 const initialize = () => {
 
     const location = getConfigFileLocation()
 
-    authConfig = yaml.load((readFileSync(location)).toString()) as AuthConfig // TODO sync?
+    config = load((readFileSync(location)).toString()) as Config // TODO sync?
 
     console.log(`Loaded configuration from ${location}`)
-    console.log(` Current context ${authConfig['current-context']}`)
+    console.log(` Current context ${config['current-context']}`)
+    const defaultNamespace = getDefaultNamespace()
+    if(defaultNamespace) {
+        console.log(` Default namespace: ${defaultNamespace}`)
+    }
+    console.log(` Server type: ${getCurrentServer().type}`)
     console.log(` Base url: ${getCurrentServer()['base-url']}`)
     console.log(` Auth type: ${getCurrentUser()['auth-provider'].name}`)
 }
@@ -21,27 +26,31 @@ const getConfigFileLocation = () => {
 }
 
 const getCurrentContext = () => {
-    return authConfig.contexts
-        .find(context => context.name === authConfig['current-context']) as ContextConfig // TODO error handling not found
+    return config.contexts
+        .find(context => context.name === config['current-context']) as ContextConfig // TODO error handling not found
 }
 
 const getCurrentUser = () => {
     const currentUserRef = getCurrentContext().context.user
-    return (authConfig.users
+    return (config.users
         .find(user => user.name === currentUserRef) as UserConfig).user// TODO error handling not found
 
 }
 
 const getCurrentServer = () => {
     const currentServerRef = getCurrentContext().context.server
-    return (authConfig.servers
+    return (config.servers
         .find(server => server.name === currentServerRef) as ServerConfig).server// TODO error handling not found
+}
 
+const getDefaultNamespace = () => {
+    return getCurrentContext().context.namespace
 }
 
 export {
-    authConfig,
+    config,
     initialize,
     getCurrentUser,
-    getCurrentServer
+    getCurrentServer,
+    getDefaultNamespace
 }

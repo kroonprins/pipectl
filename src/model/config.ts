@@ -1,6 +1,7 @@
-import { Resource } from '../model'
+import { Resource } from '.'
 
 interface Server {
+    type: string
     'base-url': string
 }
 
@@ -11,6 +12,7 @@ interface ServerConfig {
 
 interface Context {
     server: string
+    namespace?: string
     user: string
 }
 
@@ -39,7 +41,7 @@ interface UserConfig {
     name: string
 }
 
-interface AuthConfig extends Resource {
+interface Config extends Resource {
     servers: ServerConfig[]
     contexts: ContextConfig[]
     'current-context': string
@@ -47,7 +49,7 @@ interface AuthConfig extends Resource {
 }
 
 export {
-    AuthConfig,
+    Config,
     ContextConfig,
     UserConfig,
     ServerConfig

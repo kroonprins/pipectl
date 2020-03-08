@@ -2,12 +2,12 @@
 apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
 metadata:
-  name: {{ default .Release.Name .Values.name }}
-  path: "{{ .Values.path }}"
-  project: {{ .Values.project.name }}
   labels:
     group: bll
+    component: {{ .Release.Name }}
 spec:
+  name: {{ default .Release.Name .Values.name }}
+  path: "{{ .Values.path }}"
   description: {{ .Values.description }}
   releaseNameFormat: {{ .Values.releaseNameFormat }}
   {{ if .Values.variables -}}
