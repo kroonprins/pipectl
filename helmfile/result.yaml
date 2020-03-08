@@ -30,16 +30,8 @@ spec:
       
   environments:
   - name: INT-WE
-    rank: 1
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variables:
       BLL_LOG_LEVEL:
         value: DEBUG
@@ -48,15 +40,12 @@ spec:
     - 25
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 165
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-int-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -65,7 +54,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -79,7 +67,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contracting'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -90,31 +77,11 @@ spec:
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
           SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
-    preDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
+    
   - name: INT-NE
-    rank: 2
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variables:
       BLL_LOG_LEVEL:
         value: DEBUG
@@ -123,15 +90,12 @@ spec:
     - 23
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 164
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-int-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -140,7 +104,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -154,7 +117,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contracting'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -165,31 +127,11 @@ spec:
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
           SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
-    preDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
+    
   - name: ACC-WE
-    rank: 3
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variables:
       BLL_LOG_LEVEL:
         value: DEBUG
@@ -198,15 +140,12 @@ spec:
     - 25
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 165
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-acc-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -215,7 +154,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -229,7 +167,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contracting'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -242,46 +179,26 @@ spec:
           SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: c48d7901-feca-403b-b698-cf99c6e7d602
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   - name: ACC-NE
-    rank: 4
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variableGroups:
     - 113
     - 23
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 164
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-acc-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -290,7 +207,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -304,7 +220,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contracting'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -317,46 +232,26 @@ spec:
           SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: c48d7901-feca-403b-b698-cf99c6e7d602
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   - name: PRD-WE
-    rank: 5
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variableGroups:
     - 113
     - 25
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 165
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-prd-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -365,7 +260,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -379,7 +273,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contracting'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -392,46 +285,26 @@ spec:
           SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: e9a38fdf-a890-4227-909e-c438dc074464
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   - name: PRD-NE
-    rank: 6
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variableGroups:
     - 113
     - 23
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 164
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-prd-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -440,7 +313,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -454,7 +326,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contracting'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -467,21 +338,12 @@ spec:
           SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: e9a38fdf-a890-4227-909e-c438dc074464
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   artifacts:
   - type: Build
     alias: BLL-Contracting CI
@@ -522,16 +384,8 @@ spec:
       
   environments:
   - name: INT-WE
-    rank: 1
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variables:
       BLL_LOG_LEVEL:
         value: DEBUG
@@ -540,15 +394,12 @@ spec:
     - 25
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 165
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-int-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -558,7 +409,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contact'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -569,31 +419,11 @@ spec:
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
           SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
-    preDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
+    
   - name: INT-NE
-    rank: 2
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variables:
       BLL_LOG_LEVEL:
         value: DEBUG
@@ -602,15 +432,12 @@ spec:
     - 23
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 164
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-int-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -620,7 +447,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contact'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -631,31 +457,11 @@ spec:
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
           SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
-    preDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
+    
   - name: ACC-WE
-    rank: 3
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variables:
       BLL_LOG_LEVEL:
         value: DEBUG
@@ -664,15 +470,12 @@ spec:
     - 25
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 165
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-acc-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -682,7 +485,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contact'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -695,46 +497,26 @@ spec:
           SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: c48d7901-feca-403b-b698-cf99c6e7d602
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   - name: ACC-NE
-    rank: 4
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variableGroups:
     - 113
     - 23
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 164
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-acc-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -744,7 +526,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contact'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -757,46 +538,26 @@ spec:
           SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: c48d7901-feca-403b-b698-cf99c6e7d602
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   - name: PRD-WE
-    rank: 5
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variableGroups:
     - 113
     - 25
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 165
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-prd-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -806,7 +567,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contact'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -819,46 +579,26 @@ spec:
           SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: e9a38fdf-a890-4227-909e-c438dc074464
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   - name: PRD-NE
-    rank: 6
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     variableGroups:
     - 113
     - 23
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: 164
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: webfoundation-prd-akv'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -868,7 +608,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 bll-contact'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -881,21 +620,12 @@ spec:
           SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
     preDeployApprovals:
       approvals:
-      - rank: 1
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      - approver:
           id: e9a38fdf-a890-4227-909e-c438dc074464
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true
-    postDeployApprovals:
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+    
   artifacts:
   - type: Build
     alias: BLL-Contact CI

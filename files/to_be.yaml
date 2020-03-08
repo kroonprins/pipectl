@@ -47,7 +47,7 @@ spec:
       rank: 1 # add rank automatically => transform required
       phaseType: 1
       deploymentInput:
-        queueId: 165
+        queueId: 165 # agent by name
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e # from name instead of id once task is also a resource
         version: 1.*
@@ -491,4 +491,4 @@ spec:
       definition:
         id: '228'
       project:
-        id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+        id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd # by name and default

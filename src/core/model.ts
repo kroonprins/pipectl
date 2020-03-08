@@ -29,8 +29,8 @@ interface UniqueId {
 }
 
 interface DefinitionTransformer {
-    canTransform(definition: Definition): boolean
-    transform(definition: Definition): TransformedDefinition
+    canTransform(definition: Definition, action: Action, args: CommonArguments): boolean
+    transform(definition: Definition, action: Action, args: CommonArguments): Promise<TransformedDefinition>
 }
 
 interface ActionProcessor {

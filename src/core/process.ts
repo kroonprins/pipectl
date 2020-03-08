@@ -12,7 +12,7 @@ const process = async (definitions: Definition[], action: Action, args: CommonAr
     const completedDefinitions = completeDefinitions(selectedDefinitions, args)
 
     // transform
-    const transformedDefinitions: TransformedDefinition[] = transform(completedDefinitions)
+    const transformedDefinitions: TransformedDefinition[] = await transform(completedDefinitions, action, args)
     console.log(`Transformed: ${transformedDefinitions}`)
 
     // duplicate removal

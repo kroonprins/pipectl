@@ -22,18 +22,10 @@ spec:
     {{ end }}  
   {{ end -}}
   environments:
-  {{ range $index, $stage := .Values.stages -}}
+  {{ range $stage := .Values.stages -}}
   - name: {{ $stage.name }}
-    rank: {{ add $index 1 }}
-    environmentOptions:
-      emailNotificationType: Always
-      publishDeploymentStatus: true
-    executionPolicy:
-      concurrencyCount: 1
     retentionPolicy:
-      daysToKeep: 30
       releasesToKeep: 10
-      retainBuild: true
     {{ if $stage.variables -}}
     variables:
       {{ range $name, $value := $stage.variables -}}
@@ -49,15 +41,12 @@ spec:
     {{ end -}}     
     deployPhases:
     - name: Agent phase
-      rank: 1
-      phaseType: 1
       deploymentInput:
         queueId: {{ $stage.agentPool }}
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
         name: 'Azure Key Vault: {{ $stage.vault }}'
-        enabled: true
         definitionType: task
         inputs:
           ConnectedServiceName: {{ $stage.azureSubscription }}
@@ -67,7 +56,6 @@ spec:
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -82,7 +70,6 @@ spec:
       - taskId: 76a92167-7c70-4b54-ba35-13d5819c9b1e
         version: 2.*
         name: 'Task group: K8S Deploy V3 {{ $.Release.Name }}'
-        enabled: true
         definitionType: metaTask
         inputs:
           AksCluster: "$(AKS_CLUSTER)"
@@ -104,47 +91,27 @@ spec:
                           {{- end }}
                           {{- $name }}={{ $value }}
                         {{- end }}                      
+    {{ if gt ($stage.preApprovers | len) 0 -}}
     preDeployApprovals:
-    {{- if gt ($stage.preApprovers | len) 0 }}
       approvals:
-      {{ range $index, $approver := $stage.preApprovers -}}      
-      - rank: {{ add $index 1 }}
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      {{ range $approver := $stage.preApprovers -}}      
+      - approver:
           id: {{ $approver }}
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true 
-      {{- end }}   
-    {{- else }}
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+      {{- end }}
     {{- end }}
+    {{ if gt ($stage.postApprovers | len ) 0 -}}
     postDeployApprovals:
-    {{- if gt ($stage.postApprovers | len ) 0 }}
       approvals:
-      {{ range $index, $approver := $stage.postApprovers -}}      
-      - rank: {{ add $index 1 }}
-        isAutomated: false
-        isNotificationOn: false
-        approver:
+      {{ range $approver := $stage.postApprovers -}}      
+      - approver:
           id: {{ $approver }}
           isContainer: true
       approvalOptions:
         releaseCreatorCanBeApprover: true 
-      {{- end }}   
-    {{- else }}
-      approvals:
-      - rank: 1
-        isAutomated: true
-        isNotificationOn: false
-      approvalOptions:
-        releaseCreatorCanBeApprover: false
+      {{- end }}
     {{- end }}
   {{ end -}}
   artifacts:
