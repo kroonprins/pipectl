@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import readStdin from 'get-stdin'
-import * as yaml from 'js-yaml'
-import { Definition, Arguments } from '../model'
+import { safeLoadAll } from 'js-yaml'
+import { Definition, CommonArguments as Arguments } from '../model'
 
 interface FileOptionHandler {
     (fileOption: string): Promise<string>
@@ -36,13 +36,13 @@ class Definitions {
     private key(definition: Definition): string {
         // TODO path should be "normalized" somewhere
         // TODO have equals method in Definition instead?
-        return `${definition.apiVersion}${definition.kind}${definition.metadata.name}${definition.spec.path}`
+        return `${definition.kind}${definition.metadata.namespace}${definition.spec.name}${definition.spec.path}`
     }
 }
 
 const getInputDefinitions = async (args: Arguments) => {
     let definitions: Definitions = new Definitions()
-    for(const fileOption of args.filename) {
+    for(const fileOption of args.filename!) {
         let handler: FileOptionHandler
         if (fileOption === "-") {
             handler = stdin
@@ -52,7 +52,7 @@ const getInputDefinitions = async (args: Arguments) => {
 
         const inputDefinitions = await handler(fileOption)
 
-        definitions.add(args.selector, ...yaml.safeLoadAll(inputDefinitions) as Definition[])
+        definitions.add(args.selector!, ...safeLoadAll(inputDefinitions) as Definition[])
     }
     return definitions.list()
 }
@@ -92,7 +92,7 @@ const select = (selector: string, definition: Definition) => {
         return true
     }
     const [labelName, labelValue] = selector.split("=") // TODO manage multiple
-    if(definition.metadata.labels[labelName] === labelValue) {
+    if(definition.metadata.labels && definition.metadata.labels[labelName] === labelValue) {
         return true
     }
     return false

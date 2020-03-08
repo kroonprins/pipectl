@@ -1,10 +1,9 @@
 * diff
 * no api call if no diff
 * support
-  * --selector / -l
+  * --selector / -l (basic implementation done)
   * --timeout
   * --validate
-  * multiple -f
 * transformations:
   * sensible defaults
   * add rank automatically

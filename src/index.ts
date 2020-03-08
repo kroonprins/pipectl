@@ -1,10 +1,11 @@
 import { Command } from 'commander'
 import apply from './actions/apply'
 import _delete from './actions/delete'
+import get from './actions/get'
 import { multiple } from './util/commander'
-import { initialize as initializeAuthConfig } from './auth'
+import { initialize as initializeConfig } from './config'
 
-initializeAuthConfig()
+initializeConfig()
 
 const program = new Command()
 program
@@ -13,6 +14,7 @@ program
     .option('-R, --recursive', 'recursively if directory')
     .option('--dry-run', 'todo')
     .option('-l, --selector <selector>', 'todo')
+    .option('-n, --namespace <namespace>', 'todo')
     .action(apply)
 
 program
@@ -21,7 +23,17 @@ program
     .option('-R, --recursive', 'recursively if directory')
     .option('--dry-run', 'todo')
     .option('-l, --selector <selector>', 'todo')
+    .option('-n, --namespace <namespace>', 'todo')
     .action(_delete)
+
+
+program
+    .command('get <kind> [name]')
+    //.option('-f, --filename <fileOption>', 'todo.', multiple) // TODO
+    //.option('-R, --recursive', 'recursively if directory')
+    .option('-l, --selector <selector>', 'todo')
+    .option('-n, --namespace <namespace>', 'todo')
+    .action(get)    
 
 program
     .parseAsync(process.argv)

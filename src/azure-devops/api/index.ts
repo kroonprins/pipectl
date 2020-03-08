@@ -1,10 +1,10 @@
 import { Api, KindProcessor } from "../../model/api"
-import { Definition, Arguments } from "../../model"
+import { Definition, ApplyArguments, GetArguments } from "../../model"
 import { ReleaseDefinitionProcessor } from "./release"
 import { WebApi } from "azure-devops-node-api"
 import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
 import { getAuthProvider } from "../auth"
-import { getCurrentServer } from "../../auth"
+import { getCurrentServer } from "../../config"
 
 const KIND_MAPPING: { [key: string]: KindProcessor } = {
     'ReleaseDefinition': new ReleaseDefinitionProcessor()
@@ -30,6 +30,11 @@ const findReleaseDefinitionByNameAndPath = async (name: string, path: string, pr
     return null
 }
 
+const findReleaseDefinitionById = async (id: number, project: string) => {
+    const releaseApi = await getReleaseApi()
+    return releaseApi.getReleaseDefinition(project, id, ['id', 'name', 'path'])
+}
+
 const createReleaseDefinition = async (releaseDefinition: ReleaseDefinition, project: string) => {
     const releaseApi = await getReleaseApi()
     return releaseApi.createReleaseDefinition(releaseDefinition, project)
@@ -46,11 +51,14 @@ const deleteReleaseDefinition = async (releaseDefinitionId: number, project: str
 }
 
 class AzureDevOpsApi implements Api {
-    apply(definition: Definition, args: Arguments) {
+    apply(definition: Definition, args: ApplyArguments) {
         return getKindProcessor(definition.kind).apply(definition, args)
     }
-    delete(definition: Definition, args: Arguments) {
+    delete(definition: Definition, args: ApplyArguments) {
         return getKindProcessor(definition.kind).delete(definition, args)
+    }
+    get(args: GetArguments) {
+        return getKindProcessor(args.kind).get(args)
     }
 }
 
@@ -66,6 +74,7 @@ export {
     AzureDevOpsApi,
     getReleaseApi,
     findReleaseDefinitionByNameAndPath,
+    findReleaseDefinitionById,
     createReleaseDefinition,
     updateReleaseDefinition,
     deleteReleaseDefinition
