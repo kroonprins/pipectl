@@ -1,4 +1,4 @@
-import { Resource } from '.'
+import { Resource } from '../model'
 
 interface Server {
     type: string

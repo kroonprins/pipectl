@@ -1,11 +1,13 @@
 import { Command } from 'commander'
-import apply from './actions/apply'
-import _delete from './actions/delete'
-import get from './actions/get'
-import { multiple } from './util/commander'
-import { initialize as initializeConfig } from './config'
+import apply from './core/actions/apply'
+import _delete from './core/actions/delete'
+import get from './core/actions/get'
+import { multiple } from './core/util/commander'
+import { initialize as initializeConfig } from './core/config'
+import bootstrapAzureDevOps from './azure-devops/bootstrap'
 
 initializeConfig()
+bootstrapAzureDevOps()
 
 const program = new Command()
 program

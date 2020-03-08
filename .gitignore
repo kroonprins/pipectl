@@ -9,4 +9,4 @@
 /config
 /helmfile/helmfile
 dist
-/src/_old
+/src_old

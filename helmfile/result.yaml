@@ -3,12 +3,12 @@
 apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
 metadata:
-  name: Test via API for bll-contracting
-  path: "\\Other\\POC"
-  project: Webfoundation
   labels:
     group: bll
+    component: bll-contracting
 spec:
+  name: Test via API for bll-contracting
+  path: "\\Other\\POC"
   description: Created via script
   releaseNameFormat: Release-$(rev:r)
   variables:
@@ -499,12 +499,12 @@ spec:
 apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
 metadata:
-  name: Test via API for bll-contact
-  path: "\\Other\\POC"
-  project: Webfoundation
   labels:
     group: bll
+    component: bll-contact
 spec:
+  name: Test via API for bll-contact
+  path: "\\Other\\POC"
   description: Created via script
   releaseNameFormat: Release-$(rev:r)
   variables:
