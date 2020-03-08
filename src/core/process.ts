@@ -2,7 +2,7 @@ import { transform } from "./transform"
 import { Definition, TransformedDefinition } from "./model"
 import { CommonArguments, Action } from "./actions/model"
 import { applySelector, completeDefinitions, filterOutDuplicates } from './util'
-import { processors } from "./registration"
+import { processors, reporters } from "./registration"
 
 const process = async (definitions: Definition[], action: Action, args: CommonArguments) => {
     // filter selector
@@ -20,26 +20,28 @@ const process = async (definitions: Definition[], action: Action, args: CommonAr
     console.log(`Duplicates filtered: ${definitionsWithoutDuplicates}`)
 
     // group
+    // TODO
 
-    // process
-    const processResults = await processAction(definitionsWithoutDuplicates, action, args)
-    processResults.forEach(r => console.log(r.message))
-
-    // report
+    // process & report
+    await processAction(definitionsWithoutDuplicates, action, args)
 }
 
 const processAction = (definitions: TransformedDefinition[], action: Action, args: CommonArguments) => {
     return Promise.all(
         definitions
-        .map(async definition => {
-            const processor = processors()
-                .find(processor => processor.canProcess(definition, action, args))
-            if (!processor) {
-                throw new Error(`TODO no processor registered`)
-            }
-            const processResult = await processor.process(definition, action, args)
-            return processResult
-        })
+            .map(async definition => {
+                const processor = processors()
+                    .find(processor => processor.canProcess(definition, action, args))
+                if (!processor) {
+                    throw new Error('TODO no processor registered')
+                }
+                const processResult = await processor.process(definition, action, args)
+                const reporter = reporters().find(reporter => reporter.canReport(processResult, definition, action, args))
+                if(!reporter) {
+                    throw new Error('TODO no reporter registered')
+                }
+                return reporter.report(processResult, definition, action, args)
+            })
     )
 }
 

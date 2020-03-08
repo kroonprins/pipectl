@@ -1,7 +1,7 @@
 import { ActionProcessor, TransformedDefinition, ProcessResult } from "../core/model";
 import { Action, ApplyArguments, GetArguments } from "../core/actions/model";
 import { releaseApi } from "./adapters";
-import { AzureReleaseDefinition } from "./model";
+import { AzureReleaseDefinition, GetReleaseDefinitionProcessResult } from "./model";
 
 class ApplyReleaseDefinition implements ActionProcessor {
 
@@ -115,7 +115,7 @@ class GetOneReleaseDefinition implements ActionProcessor {
         return transformedDefinition instanceof AzureReleaseDefinition && action === Action.GET && !!args.name
     }
 
-    async process(azureReleaseDefinition: AzureReleaseDefinition, action: Action, args: GetArguments): Promise<ProcessResult> {
+    async process(azureReleaseDefinition: AzureReleaseDefinition, action: Action, args: GetArguments): Promise<GetReleaseDefinitionProcessResult> {
         const api = releaseApi
         const project = azureReleaseDefinition.project
         console.log(`Retrieving release definition ${args.name}`)
@@ -123,7 +123,7 @@ class GetOneReleaseDefinition implements ActionProcessor {
         try {
             const releaseDefinition = await api.findReleaseDefinitionById(Number(args.name), project)
             if (releaseDefinition) {
-                return { message: `${releaseDefinition.path}\\${releaseDefinition.name}` }
+                return { releaseDefinition: releaseDefinition }
             } else {
                 return { message: "Not found" }
             }

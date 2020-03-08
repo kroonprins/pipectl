@@ -1,4 +1,4 @@
-import { TransformedDefinition } from "../core/model";
+import { TransformedDefinition, ProcessResult } from "../core/model";
 import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces";
 import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces";
 
@@ -25,6 +25,10 @@ class AzureReleaseDefinition extends AzureDefinition<ReleaseDefinition> {
     }
 }
 
+interface GetReleaseDefinitionProcessResult extends ProcessResult {
+    releaseDefinition?: ReleaseDefinition
+}
+
 enum Kind {
     BUILD_DEFINITION = "BuildDefinition",
     RELEASE_DEFINITION = "ReleaseDefinition",
@@ -33,5 +37,6 @@ enum Kind {
 export {
     AzureBuildDefinition,
     AzureReleaseDefinition,
+    GetReleaseDefinitionProcessResult,
     Kind
 }
