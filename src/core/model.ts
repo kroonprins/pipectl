@@ -39,7 +39,12 @@ interface ActionProcessor {
 }
 
 interface ProcessResult { // TODO
-    message: string
+    message?: string
+}
+
+interface Reporter {
+    canReport(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): boolean
+    report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void>
 }
 
 export {
@@ -47,6 +52,7 @@ export {
     Definition,
     TransformedDefinition,
     DefinitionTransformer,
+    ActionProcessor,
     ProcessResult,
-    ActionProcessor
+    Reporter,
 }
