@@ -35,7 +35,7 @@ program
     //.option('-R, --recursive', 'recursively if directory')
     .option('-l, --selector <selector>', 'todo')
     .option('-n, --namespace <namespace>', 'todo')
-    .action(get)    
+    .action(get)
 
 program
     .parseAsync(process.argv)
