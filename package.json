@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "HTTPS_PROXY=http://proxy.eib.electrabel.be:8080 ts-node src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "tslint 'src/**/*.ts'",
+    "lint-fix": "tslint --fix 'src/**/*.ts'"
   },
   "devDependencies": {
     "@types/node": "^13.7.7",

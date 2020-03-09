@@ -1,7 +1,7 @@
 function multiple(value: string, previous: string[] = []) {
-    return previous.concat([value]);
+  return previous.concat([value])
 }
 
 export {
-    multiple
+  multiple
 }
