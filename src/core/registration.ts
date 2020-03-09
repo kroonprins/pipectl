@@ -1,5 +1,5 @@
-import { DefinitionTransformer, ActionProcessor, Reporter, ProcessResult, TransformedDefinition } from "./model";
-import { Action, CommonArguments } from "./actions/model";
+import { DefinitionTransformer, ActionProcessor, Reporter, ProcessResult, TransformedDefinition } from "./model"
+import { Action, CommonArguments } from "./actions/model"
 
 const _transformers: DefinitionTransformer[] = []
 
@@ -23,10 +23,11 @@ const processors = (): readonly ActionProcessor[] => {
 
 const _reporters: Reporter[] = []
 
-const registerReporter = (...reporters: Reporter[]): void => {
-    _reporters.push(...reporters)
+const registerReporter = (...r: Reporter[]): void => {
+    _reporters.push(...r)
 }
 
+/* tslint:disable:new-parens no-console */ // TODO
 const FallbackReporter = new class implements Reporter {
     canReport() {
         return true
