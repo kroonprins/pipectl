@@ -6,4 +6,3 @@ export default async (args: ApplyArguments) => {
     const definitions = await inputDefinitionsFromYaml(args)
     return process(definitions, Action.APPLY, args)
 }
-

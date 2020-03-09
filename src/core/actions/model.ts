@@ -2,7 +2,7 @@ interface CommonArguments {
     filename?: string[]
     recursive?: boolean,
     selector?: string,
-    namespace?: string  
+    namespace?: string
 }
 
 interface ApplyArguments extends CommonArguments  {
