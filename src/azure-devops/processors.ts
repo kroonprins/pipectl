@@ -89,7 +89,7 @@ class GetAllReleaseDefinitions implements ActionProcessor {
         return transformedDefinition instanceof AzureReleaseDefinition && action === Action.GET && !args.name
     }
 
-    async process(azureReleaseDefinition: AzureReleaseDefinition, action: Action, args: GetArguments): Promise<ProcessResult> {
+    async process(azureReleaseDefinition: AzureReleaseDefinition, action: Action, args: GetArguments): Promise<GetReleaseDefinitionProcessResult> {
         const api = releaseApi
         const project = azureReleaseDefinition.project
         console.log('Retrieving release definitions')
@@ -97,8 +97,7 @@ class GetAllReleaseDefinitions implements ActionProcessor {
         try {
             const releaseDefinitions = await api.findAllReleaseDefinitions(project)
             if(releaseDefinitions) {
-                return { message: releaseDefinitions.reduce<string>(
-                    (acc, value) => { return acc + `${value.path}\\${value.name}\n` }, "") }
+                return { releaseDefinitions: releaseDefinitions }
             } else {
                 return { message: 'Nothing found' }
             }
@@ -123,7 +122,7 @@ class GetOneReleaseDefinition implements ActionProcessor {
         try {
             const releaseDefinition = await api.findReleaseDefinitionById(Number(args.name), project)
             if (releaseDefinition) {
-                return { releaseDefinition: releaseDefinition }
+                return { releaseDefinitions: [ releaseDefinition ] }
             } else {
                 return { message: "Not found" }
             }

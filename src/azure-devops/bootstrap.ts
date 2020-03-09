@@ -2,7 +2,7 @@
 import { registerTransformer, registerActionProcessor, registerReporter } from "../core/registration";
 import { BuildDefinitionTransformer, ReleaseDefinitionTransformer, ApplyReleaseDefinitionTransformer } from "./transformers";
 import { ApplyReleaseDefinition, DeleteReleaseDefinition, GetAllReleaseDefinitions, GetOneReleaseDefinition } from "./processors";
-import { GetOneReleaseDefinitionReporter } from "./reporters";
+import { GetReleaseDefinitionReporter } from "./reporters";
 
 export default () => {
     registerTransformer(
@@ -19,6 +19,6 @@ export default () => {
     )
 
     registerReporter(
-        new GetOneReleaseDefinitionReporter(),
+        new GetReleaseDefinitionReporter(),
     )
 }
