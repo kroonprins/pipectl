@@ -15,11 +15,21 @@ class BuildApi {
 
   async findBuildDefinitionByNameAndPath(name: string, path: string, project: string): Promise<BuildDefinition | null> {
     const api = await this.getApi()
-    const search = await api.getDefinitions(project, name, undefined, undefined, undefined, undefined, undefined, undefined, undefined, path, undefined, undefined, undefined, false, undefined, undefined, undefined)
+    const search = await api.getDefinitions(project, name, undefined, undefined, undefined, undefined, undefined, undefined, undefined, path, undefined, undefined, true, false, undefined, undefined, undefined)
     if (search && search.length) {
       return search[0]
     }
     return null
+  }
+
+  async findAllBuildDefinitions(project: string) {
+    const api = await this.getApi()
+    return api.getDefinitions(project, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true, false, undefined, undefined, undefined)
+  }
+
+  async updateBuildDefinition(buildDefinition: BuildDefinition, project: string) {
+    const api = await this.getApi()
+    return api.updateDefinition(buildDefinition, project, buildDefinition.id!)
   }
 }
 

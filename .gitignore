@@ -9,4 +9,4 @@
 /config
 /helmfile/helmfile
 dist
-/src_old
+backup.txt
