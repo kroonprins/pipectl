@@ -5,7 +5,7 @@ import { GetReleaseDefinitionProcessResult } from "../model/get-release-definiti
 /* tslint:disable:no-console */ // TODO
 class GetReleaseDefinitionReporter implements Reporter {
   canReport(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetReleaseDefinitionProcessResult
+    return processResult instanceof GetReleaseDefinitionProcessResult && !args.output
   }
   async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
     const getReleaseDefinitionProcessResult = processResult as GetReleaseDefinitionProcessResult

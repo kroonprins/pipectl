@@ -17,6 +17,7 @@ program
   .option('--dry-run', 'todo')
   .option('-l, --selector <selector>', 'todo')
   .option('-n, --namespace <namespace>', 'todo')
+  .option('-o, --output <output>', 'todo')
   .action(apply)
 
 program
@@ -26,6 +27,7 @@ program
   .option('--dry-run', 'todo')
   .option('-l, --selector <selector>', 'todo')
   .option('-n, --namespace <namespace>', 'todo')
+  .option('-o, --output <output>', 'todo')
   .action(_delete)
 
 
@@ -35,6 +37,8 @@ program
   // .option('-R, --recursive', 'recursively if directory')
   .option('-l, --selector <selector>', 'todo')
   .option('-n, --namespace <namespace>', 'todo')
+  .option('-o, --output <output>', 'todo')
+  .option('--export', 'todo')
   .action(get)
 
 program

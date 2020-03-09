@@ -8,6 +8,8 @@ import { DeleteReleaseDefinition } from "./processors/delete-release-definition"
 import { GetReleaseDefinitionReporter } from "./reporters/get-release-definition-reporter"
 import { BuildDefinitionTransformer } from "./transformers/build-definition-transformer"
 import { ApplyReleaseDefinitionTransformer } from "./transformers/apply-release-definition-transformer"
+import { GetReleaseDefinitionYamlReporter } from "./reporters/get-release-definition-yaml-reporter"
+import { GetReleaseDefinitionJsonReporter } from "./reporters/get-release-definition-json-reporter"
 
 export default () => {
   registerTransformer(
@@ -25,5 +27,7 @@ export default () => {
 
   registerReporter(
     new GetReleaseDefinitionReporter(),
+    new GetReleaseDefinitionYamlReporter(),
+    new GetReleaseDefinitionJsonReporter(),
   )
 }
