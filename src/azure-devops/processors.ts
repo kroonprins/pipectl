@@ -16,33 +16,27 @@ class ApplyReleaseDefinition implements ActionProcessor {
 
         const existingReleaseDefinition = await api.findReleaseDefinitionByNameAndPath(releaseDefinition.name!, releaseDefinition.path!, project)
         if (existingReleaseDefinition) {
-            console.log(`Updating existing release definition ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})`)
             releaseDefinition.id = existingReleaseDefinition.id
             releaseDefinition.revision = existingReleaseDefinition.revision
             if (args.dryRun) {
-                console.log('Skipping update (dry run)')
-                return { message: 'Update skipped (dry run)' }
+                return { info: `Release definition ${releaseDefinition.name} update skipped because dry run.` }
             } else {
                 try {
                     await api.updateReleaseDefinition(releaseDefinition, project)
-                    return { message: `Successfully updated ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
+                    return { info: `Successfully updated ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
                 } catch (e) {
-                    console.log(e)
-                    return { message: e.message }
+                    return { error: e }
                 }
             }
         } else {
-            console.log(`Creating release definition ${releaseDefinition.name}`)
             if (args.dryRun) {
-                console.log('Skipping create (dry run)')
-                return { message: 'Update skipped (dry run)' }
+                return { info: `Release definition ${releaseDefinition.name} creation skipped because dry run.` }
             } else {
                 try {
                     const createdReleaseDefinition = await api.createReleaseDefinition(releaseDefinition, project)
-                    return { message: `Successfully created ${createdReleaseDefinition.id} (${createdReleaseDefinition.name})` }
+                    return { info: `Successfully created ${createdReleaseDefinition.id} (${createdReleaseDefinition.name})` }
                 } catch (e) {
-                    console.log(e)
-                    return { message: e.message }
+                    return { error: e }
                 }
             }
         }
@@ -62,23 +56,18 @@ class DeleteReleaseDefinition implements ActionProcessor {
 
         const existingReleaseDefinition = await api.findReleaseDefinitionByNameAndPath(releaseDefinition.name!, releaseDefinition.path!, project)
         if (existingReleaseDefinition) {
-            console.log(`Deleting release definition ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})`)
-
             if (args.dryRun) {
-                console.log('Skipping delete (dry run)')
-                return { message: 'Delete skipped (dry run)' }
+                return { info: `Release definition ${releaseDefinition.name} deletion skipped because dry run.` }
             } else {
                 try {
                     await api.deleteReleaseDefinition(existingReleaseDefinition.id!, project)
-                    return { message: `Successfully deleted ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
+                    return { info: `Successfully deleted ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
                 } catch (e) {
-                    console.log(e)
-                    return { message: e.message }
+                    return { error: e }
                 }
             }
         } else {
-            console.log(`Not deleting release definition ${releaseDefinition.name} because it does not exist`)
-            return { message: 'Delete skipped (doesn\'t exist)' }
+            return { info: `Release definition ${releaseDefinition.name} not deleted because it does not exist.` }
         }
     }
 }
@@ -92,18 +81,16 @@ class GetAllReleaseDefinitions implements ActionProcessor {
     async process(azureReleaseDefinition: AzureReleaseDefinition, action: Action, args: GetArguments): Promise<GetReleaseDefinitionProcessResult> {
         const api = releaseApi
         const project = azureReleaseDefinition.project
-        console.log('Retrieving release definitions')
 
         try {
             const releaseDefinitions = await api.findAllReleaseDefinitions(project)
             if(releaseDefinitions) {
-                return { releaseDefinitions: releaseDefinitions }
+                return new GetReleaseDefinitionProcessResult(releaseDefinitions)
             } else {
-                return { message: 'Nothing found' }
+                return { releaseDefinitions: [] }
             }
         } catch (e) {
-            console.log(e)
-            return { message: e.message }
+            return { error: e }
         }
     }
 }
@@ -117,18 +104,16 @@ class GetOneReleaseDefinition implements ActionProcessor {
     async process(azureReleaseDefinition: AzureReleaseDefinition, action: Action, args: GetArguments): Promise<GetReleaseDefinitionProcessResult> {
         const api = releaseApi
         const project = azureReleaseDefinition.project
-        console.log(`Retrieving release definition ${args.name}`)
 
         try {
             const releaseDefinition = await api.findReleaseDefinitionById(Number(args.name), project)
             if (releaseDefinition) {
-                return { releaseDefinitions: [ releaseDefinition ] }
+                return new GetReleaseDefinitionProcessResult([ releaseDefinition ])
             } else {
-                return { message: "Not found" }
+                return { error: new Error(`Release definition '${args.name}' does not exist in project '${project}'.`) }
             }
         } catch (e) {
-            console.log(e)
-            return { message: e.message }
+            return { error: e }
         }
     }
 }

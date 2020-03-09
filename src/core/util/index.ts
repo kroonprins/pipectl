@@ -32,12 +32,10 @@ const completeDefinitions = (definitions: Definition[], args: CommonArguments): 
 
 const namespace = (args: CommonArguments): string => {
     if (args.namespace) {
-        console.log(`Setting namespace ${args.namespace} from arguments`)
         return args.namespace
     }
     const namespace = defaultNamespace()
     if (namespace) {
-        console.log(`Setting namespace ${namespace} from global config`)
         return namespace
     }
     throw new Error('Can not determine the namespace.') // TODO global fallback "default" ?

@@ -13,11 +13,9 @@ const process = async (definitions: Definition[], action: Action, args: CommonAr
 
     // transform
     const transformedDefinitions: TransformedDefinition[] = await transform(completedDefinitions, action, args)
-    console.log(`Transformed: ${transformedDefinitions}`)
 
     // duplicate removal
     const definitionsWithoutDuplicates = filterOutDuplicates(transformedDefinitions)
-    console.log(`Duplicates filtered: ${definitionsWithoutDuplicates}`)
 
     // group
     // TODO

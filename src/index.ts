@@ -39,10 +39,10 @@ program
 
 program
     .parseAsync(process.argv)
-    .then(() => {
-        console.log()
-        console.log('Adios 👍')
-    })
+    // .then(() => {
+    //     console.log()
+    //     console.log('Adios 👍')
+    // })
     .catch((e: Error) => {
         console.log("ERROR 👎")
         console.log(e/*.message*/)
