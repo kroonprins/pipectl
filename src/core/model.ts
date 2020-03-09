@@ -38,8 +38,9 @@ interface ActionProcessor {
     process(transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<ProcessResult>
 }
 
-interface ProcessResult { // TODO
-    message?: string
+class ProcessResult {
+    public error?: Error
+    public info?: string
 }
 
 interface Reporter {

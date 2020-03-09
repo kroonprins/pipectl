@@ -19,6 +19,8 @@ const initialize = () => {
     console.log(` Server type: ${currentServer().type}`)
     console.log(` Base url: ${currentServer()['base-url']}`)
     console.log(` Auth type: ${currentUser()['auth-provider'].name}`)
+    console.log()
+    console.log()
 }
 
 const configFileLocation = () => {

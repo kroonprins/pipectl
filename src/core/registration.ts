@@ -1,4 +1,5 @@
-import { DefinitionTransformer, ActionProcessor, Reporter } from "./model";
+import { DefinitionTransformer, ActionProcessor, Reporter, ProcessResult, TransformedDefinition } from "./model";
+import { Action, CommonArguments } from "./actions/model";
 
 const _transformers: DefinitionTransformer[] = []
 
@@ -26,18 +27,22 @@ const registerReporter = (...reporters: Reporter[]): void => {
     _reporters.push(...reporters)
 }
 
-const NoopReporter = new class implements Reporter {
+const FallbackReporter = new class implements Reporter {
     canReport() {
         return true
     }
-    report() {
-        return Promise.resolve()
+    async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments) {
+        if(processResult.error) {
+            console.log(`Error occurred for the action ${action}: ${processResult.error.message}`)
+        } else if(processResult.info) {
+            console.log(processResult.info)
+        }
     }
 }
 
 const reporters = (): readonly Reporter[] => {
-    if(_reporters[_reporters.length - 1 ] !== NoopReporter) {
-        _reporters.push(NoopReporter)
+    if(_reporters[_reporters.length - 1 ] !== FallbackReporter) {
+        _reporters.push(FallbackReporter)
     }
     return Object.freeze(_reporters)
 }

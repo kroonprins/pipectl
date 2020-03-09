@@ -4,6 +4,7 @@
   * --selector / -l (basic implementation done)
   * --timeout
   * --validate
+  * -o yaml / --export
 * transformations:
   * sensible defaults
   * add rank automatically

@@ -13,16 +13,14 @@ class GetReleaseDefinitionYamlReporter implements Reporter {
 
 class GetReleaseDefinitionReporter implements Reporter {
     canReport(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): boolean {
-        return ("releaseDefinitions" in processResult) // TODO...
+        return processResult instanceof GetReleaseDefinitionProcessResult
     }
     async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
         const getReleaseDefinitionProcessResult = processResult as GetReleaseDefinitionProcessResult
-        if (getReleaseDefinitionProcessResult.releaseDefinitions) { // TODO if not error
-            console.log('NAME\tDESCRIPTON')
-            getReleaseDefinitionProcessResult.releaseDefinitions.forEach(releaseDefinition => {
-                console.log(`${releaseDefinition.id}\t${releaseDefinition.path}\\${releaseDefinition.name}`)
-            })
-        }
+        console.log('NAME\tDESCRIPTON')
+        getReleaseDefinitionProcessResult.releaseDefinitions!.forEach(releaseDefinition => {
+            console.log(`${releaseDefinition.id}\t${releaseDefinition.path}\\${releaseDefinition.name}`)
+        })
     }
 }
 

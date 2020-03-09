@@ -25,8 +25,8 @@ class AzureReleaseDefinition extends AzureDefinition<ReleaseDefinition> {
     }
 }
 
-interface GetReleaseDefinitionProcessResult extends ProcessResult {
-    releaseDefinitions?: ReleaseDefinition[]
+class GetReleaseDefinitionProcessResult extends ProcessResult {
+    constructor(public releaseDefinitions?: ReleaseDefinition[]){ super() }
 }
 
 enum Kind {

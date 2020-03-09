@@ -24,7 +24,6 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
         return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.RELEASE_DEFINITION && action !== Action.APPLY
     }
     async transform(definition: Definition, action: Action, args: CommonArguments) {
-        console.log('Adding defaults')
         const transformedSpec = await this.setReleaseDefinitionDefaults(definition)
         return new AzureReleaseDefinition(
             definition.apiVersion,
@@ -47,7 +46,6 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
         return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.RELEASE_DEFINITION && action === Action.APPLY
     }
     protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
-        console.log('Adding defaults for apply')
         const updatedSpec = await super.setReleaseDefinitionDefaults(definition)
 
         // TODO find elegant way to achieve the below
