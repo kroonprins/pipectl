@@ -10,6 +10,8 @@ import { BuildDefinitionTransformer } from "./transformers/build-definition-tran
 import { ApplyReleaseDefinitionTransformer } from "./transformers/apply-release-definition-transformer"
 import { GetReleaseDefinitionYamlReporter } from "./reporters/get-release-definition-yaml-reporter"
 import { GetReleaseDefinitionJsonReporter } from "./reporters/get-release-definition-json-reporter"
+import { GetAllBuildDefinitions } from "./processors/get-all-build-definitions"
+import { GetBuildDefinitionReporter } from "./reporters/get-build-definition-reporter"
 
 export default () => {
   registerTransformer(
@@ -19,6 +21,7 @@ export default () => {
   )
 
   registerActionProcessor(
+    new GetAllBuildDefinitions(),
     new ApplyReleaseDefinition(),
     new DeleteReleaseDefinition(),
     new GetAllReleaseDefinitions(),
@@ -26,6 +29,7 @@ export default () => {
   )
 
   registerReporter(
+    new GetBuildDefinitionReporter(),
     new GetReleaseDefinitionReporter(),
     new GetReleaseDefinitionYamlReporter(),
     new GetReleaseDefinitionJsonReporter(),

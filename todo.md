@@ -4,9 +4,7 @@
   * --selector / -l (basic implementation done)
   * --timeout
   * --validate
-  * -o yaml / --export
 * transformations:
-  * sensible defaults
-  * add rank automatically
   * variable groups by name
   * task group by name
+* check tags. If we can add tags from the labels, then the --selector could also work on "get"

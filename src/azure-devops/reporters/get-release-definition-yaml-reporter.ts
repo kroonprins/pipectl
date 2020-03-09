@@ -1,7 +1,6 @@
 import { Reporter, ProcessResult, TransformedDefinition, Definition } from "../../core/model"
 import { Action, CommonArguments } from "../../core/actions/model"
 import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
-import { AzureReleaseDefinition } from "../model/azure-release-definition"
 import { safeDump } from "js-yaml"
 import { transformGetReleaseDefinitionProcessResultForReporting } from "./util"
 
