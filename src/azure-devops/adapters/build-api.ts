@@ -22,7 +22,7 @@ class BuildApi {
     return null
   }
 
-  async findAllBuildDefinitions(project: string) {
+  async findAllBuildDefinitions(project: string): Promise<BuildDefinition[]> {
     const api = await this.getApi()
     return api.getDefinitions(project, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true, false, undefined, undefined, undefined)
   }

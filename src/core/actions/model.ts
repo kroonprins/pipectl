@@ -2,7 +2,8 @@ interface CommonArguments {
   filename?: string[]
   recursive?: boolean,
   selector?: string,
-  namespace?: string
+  namespace?: string,
+  output?: "yaml" | "json"
 }
 
 interface ApplyArguments extends CommonArguments {
@@ -12,7 +13,8 @@ interface ApplyArguments extends CommonArguments {
 
 interface GetArguments extends CommonArguments {
   kind: string,
-  name?: string // number for azure devops
+  name?: string, // number for azure devops
+  export?: boolean
 }
 
 enum Action {
