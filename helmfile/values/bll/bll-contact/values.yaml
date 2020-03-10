@@ -1,0 +1,5 @@
+build:
+  name: Test via API for bll-contact
+  repository: 60f95ef8-bd9a-4ade-87b2-751753700cb3
+release:
+  name: Test via API for bll-contact
