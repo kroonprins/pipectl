@@ -1,5 +1,5 @@
 
-import { registerTransformer, registerActionProcessor, registerReporter } from "../core/registration"
+import { registerTransformer, registerActionProcessor, registerReporter, registerGrouper } from "../core/registration"
 import { ReleaseDefinitionTransformer } from "./transformers/release-definition-transformer"
 import { ApplyReleaseDefinition } from "./processors/apply-release-definition"
 import { GetOneReleaseDefinition } from "./processors/get-one-release-definition"
@@ -18,6 +18,8 @@ import { GetBuildDefinitionYamlReporter } from "./reporters/get-build-definition
 import { ApplyBuildDefinition } from "./processors/apply-build-definition"
 import { DeleteBuildDefinition } from "./processors/delete-build-definition"
 import { ApplyBuildDefinitionTransformer } from "./transformers/apply-build-definition-transformer"
+import { AzureDefinitionGrouper } from "./groupers/azure-definition-grouper"
+import { ApplyAzureDefinitionGrouper } from "./groupers/apply-azure-definition-grouper"
 
 export default () => {
   registerTransformer(
@@ -25,6 +27,11 @@ export default () => {
     new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
     new ApplyReleaseDefinitionTransformer(),
+  )
+
+  registerGrouper(
+    new AzureDefinitionGrouper(),
+    new ApplyAzureDefinitionGrouper(),
   )
 
   registerActionProcessor(

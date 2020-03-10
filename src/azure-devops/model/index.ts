@@ -3,7 +3,7 @@ import { TransformedDefinition } from "../../core/model"
 abstract class AzureDefinition<T> implements TransformedDefinition {
   constructor(
     public apiVersion: string, // TODO public?
-    public kind: string,
+    public kind: Kind,
     public project: string,
     public spec: T
   ) { }

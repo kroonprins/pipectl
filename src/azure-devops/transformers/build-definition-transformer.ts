@@ -11,7 +11,7 @@ class BuildDefinitionTransformer implements DefinitionTransformer {
   }
   async transform(definition: Definition, action: Action, args: CommonArguments) {
     const transformedSpec = await this.setBuildDefinitionDefaults(definition)
-    return new AzureBuildDefinition(definition.apiVersion, definition.kind, definition.metadata.namespace, transformedSpec)
+    return new AzureBuildDefinition(definition.apiVersion, definition.kind as Kind, definition.metadata.namespace, transformedSpec) // TODO "as Kind"
   }
   protected async setBuildDefinitionDefaults(definition: Definition): Promise<BuildDefinition> {
     // TODO clone?

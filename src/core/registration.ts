@@ -1,4 +1,4 @@
-import { DefinitionTransformer, ActionProcessor, Reporter, ProcessResult, TransformedDefinition } from "./model"
+import { DefinitionTransformer, ActionProcessor, Reporter, ProcessResult, TransformedDefinition, DefinitionGrouper } from "./model"
 import { Action, CommonArguments } from "./actions/model"
 
 const _transformers: DefinitionTransformer[] = []
@@ -9,6 +9,16 @@ const registerTransformer = (...definitionTransformers: DefinitionTransformer[])
 
 const transformers = (): readonly DefinitionTransformer[] => {
     return Object.freeze(_transformers)
+}
+
+const _groupers: DefinitionGrouper[] = []
+
+const registerGrouper = (...definitionGroupers: DefinitionGrouper[]): void => {
+  _groupers.push(...definitionGroupers)
+}
+
+const groupers = (): readonly DefinitionGrouper[] => {
+    return Object.freeze(_groupers)
 }
 
 const _actionProcessors: ActionProcessor[] = []
@@ -51,6 +61,8 @@ const reporters = (): readonly Reporter[] => {
 export {
     registerTransformer,
     transformers,
+    registerGrouper,
+    groupers,
     registerActionProcessor,
     processors,
     registerReporter,

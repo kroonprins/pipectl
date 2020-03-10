@@ -25,6 +25,15 @@ interface TransformedDefinition extends UniqueId {
 
 }
 
+interface TransformedDefinitionGroupItem {
+  name: string,
+  transformedDefinitions: TransformedDefinition[],
+}
+
+interface TransformedDefinitionGroup {
+  items: TransformedDefinitionGroupItem[],
+}
+
 interface UniqueId {
   uniqueId(): string
 }
@@ -32,6 +41,11 @@ interface UniqueId {
 interface DefinitionTransformer {
   canTransform(definition: Definition, action: Action, args: CommonArguments): boolean
   transform(definition: Definition, action: Action, args: CommonArguments): Promise<TransformedDefinition>
+}
+
+interface DefinitionGrouper {
+  canGroup(definition: TransformedDefinition, action: Action, args: CommonArguments): boolean
+  group(definition: TransformedDefinition, action: Action, args: CommonArguments): [string, string[]]
 }
 
 interface ActionProcessor {
@@ -54,6 +68,9 @@ export {
   Definition,
   TransformedDefinition,
   DefinitionTransformer,
+  TransformedDefinitionGroup,
+  TransformedDefinitionGroupItem,
+  DefinitionGrouper,
   ActionProcessor,
   ProcessResult,
   Reporter,
