@@ -16,7 +16,4 @@ enum Kind {
   RELEASE_DEFINITION = "ReleaseDefinition",
 }
 
-export {
-  AzureDefinition,
-  Kind
-}
+export { AzureDefinition, Kind }

@@ -1,10 +1,10 @@
 import { Command } from 'commander'
+import bootstrapAzureDevOps from './azure-devops/bootstrap'
 import apply from './core/actions/apply'
 import _delete from './core/actions/delete'
 import get from './core/actions/get'
-import { multiple } from './core/util/commander'
 import { initialize as initializeConfig } from './core/config'
-import bootstrapAzureDevOps from './azure-devops/bootstrap'
+import { multiple } from './core/util/commander'
 
 initializeConfig()
 bootstrapAzureDevOps()

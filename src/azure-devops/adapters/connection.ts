@@ -1,4 +1,4 @@
-import { WebApi, getBasicHandler, getHandlerFromToken } from "azure-devops-node-api"
+import { getBasicHandler, getHandlerFromToken, WebApi } from "azure-devops-node-api"
 import { currentServer, currentUser } from "../../core/config"
 
 class AzureConnection {
@@ -27,7 +27,4 @@ class AzureConnection {
 
 const azureConnection = new AzureConnection()
 
-export {
-  AzureConnection,
-  azureConnection
-}
+export { AzureConnection, azureConnection }

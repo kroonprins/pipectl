@@ -23,9 +23,6 @@ enum Action {
   GET = "get"
 }
 
-export {
-  CommonArguments,
-  ApplyArguments,
-  GetArguments,
-  Action
-}
+// tslint:disable-next-line: semicolon // TODO why does visual studio code insist on the semicolon :'(
+export { CommonArguments, ApplyArguments, GetArguments, Action };
+

@@ -50,7 +50,5 @@ class ReleaseApi {
 
 const releaseApi = new ReleaseApi()
 
-export {
-  ReleaseApi,
-  releaseApi,
-}
+export { ReleaseApi, releaseApi }
+

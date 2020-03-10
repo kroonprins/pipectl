@@ -1,11 +1,11 @@
-import { ProcessResult, TransformedDefinition, Definition } from "../../core/model"
-import { AzureReleaseDefinition } from "../model/azure-release-definition"
-import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
 import { Action, CommonArguments, GetArguments } from "../../core/actions/model"
+import { Definition, ProcessResult, TransformedDefinition } from "../../core/model"
 import { AzureBuildDefinition } from "../model/azure-build-definition"
+import { AzureReleaseDefinition } from "../model/azure-release-definition"
 import { GetBuildDefinitionProcessResult } from "../model/get-build-definition-process-result"
+import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
 
-const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): object => {
+const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): object => {
   const azureBuildDefinition = transformedDefinition as AzureBuildDefinition
   const definitions: Definition[] = (processResult as GetBuildDefinitionProcessResult).buildDefinitions!
     .map(buildDefinition => {
@@ -39,7 +39,7 @@ const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Defin
   // TODO more elegant way :)
   const spec = definition.spec as any
   delete spec['_links']
-  for(const variableGroup of spec['variableGroups']) {
+  for (const variableGroup of spec['variableGroups']) {
     delete variableGroup['variables']
     delete variableGroup['type']
     delete variableGroup['name'] // TODO update when variable groups can be specified by name
@@ -63,9 +63,9 @@ const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Defin
   delete spec['repository']['name']
   delete spec['repository']['url']
 
-  for(const phase of spec['process']['phases']) {
+  for (const phase of spec['process']['phases']) {
     delete phase['refName']
-    for(const step of phase['steps']) {
+    for (const step of phase['steps']) {
       delete step['refName']
       delete step['condition']
       delete phase['refName']
@@ -76,7 +76,7 @@ const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Defin
   return definition
 }
 
-const transformGetReleaseDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): object => {
+const transformGetReleaseDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): object => {
   const azureReleaseDefinition = transformedDefinition as AzureReleaseDefinition
   const definitions: Definition[] = (processResult as GetReleaseDefinitionProcessResult).releaseDefinitions!
     .map(releaseDefinition => {
@@ -117,31 +117,31 @@ const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Def
   delete spec['modifiedOn']
   delete spec['isDeleted']
   delete spec['url']
-  for(const artifact of spec['artifacts']) {
+  for (const artifact of spec['artifacts']) {
     delete artifact['sourceId']
     delete artifact['definitionReference']['definition']['name']
     delete artifact['definitionReference']['project']['name']
     delete artifact['definitionReference']['artifactSourceDefinitionUrl']
   }
-  for(const environment of spec['environments']) {
+  for (const environment of spec['environments']) {
     delete environment['id']
     delete environment['rank']
     delete environment['owner']
     delete environment['deployStep']
     delete environment['currentRelease']
     delete environment['badgeUrl']
-    for(const deployPhase of environment['deployPhases']) {
+    for (const deployPhase of environment['deployPhases']) {
       delete deployPhase['rank']
       delete deployPhase['refName']
-      for(const workflowTask of deployPhase['workflowTasks']) {
+      for (const workflowTask of deployPhase['workflowTasks']) {
         delete workflowTask['refName']
       }
     }
-    if(environment['preDeployApprovals']['approvals']) {
-      for(const approval of environment['preDeployApprovals']['approvals']) {
+    if (environment['preDeployApprovals']['approvals']) {
+      for (const approval of environment['preDeployApprovals']['approvals']) {
         delete approval['rank']
         delete approval['id']
-        if(approval['approver']) {
+        if (approval['approver']) {
           delete approval['approver']['displayName']
           delete approval['approver']['url']
           delete approval['approver']['_links']
@@ -151,11 +151,11 @@ const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Def
         }
       }
     }
-    if(environment['postDeployApprovals']['approvals']) {
-      for(const approval of environment['postDeployApprovals']['approvals']) {
+    if (environment['postDeployApprovals']['approvals']) {
+      for (const approval of environment['postDeployApprovals']['approvals']) {
         delete approval['rank']
         delete approval['id']
-        if(approval['approver']) {
+        if (approval['approver']) {
           delete approval['approver']['displayName']
           delete approval['approver']['url']
           delete approval['approver']['_links']
@@ -171,7 +171,5 @@ const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Def
   return definition
 }
 
-export {
-  transformGetBuildDefinitionProcessResultForReporting,
-  transformGetReleaseDefinitionProcessResultForReporting,
-}
+export { transformGetBuildDefinitionProcessResultForReporting, transformGetReleaseDefinitionProcessResultForReporting }
+

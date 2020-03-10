@@ -4,7 +4,7 @@ import { safeLoadAll } from 'js-yaml'
 import { CommonArguments as Arguments } from '../actions/model'
 import { Definition } from '../model'
 
-type FileOptionHandler =  (fileOption: string) => Promise<string>
+type FileOptionHandler = (fileOption: string) => Promise<string>
 
 const inputDefinitions = async (args: Arguments) => {
   if (!(args.filename && args.filename.length)) {
@@ -52,6 +52,5 @@ const directory: FileOptionHandler = async () => {
   throw Error("Not supported yet")
 }
 
-export {
-  inputDefinitions
-}
+export { inputDefinitions }
+

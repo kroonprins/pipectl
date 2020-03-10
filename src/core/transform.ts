@@ -1,6 +1,6 @@
+import { Action, CommonArguments } from "./actions/model"
 import { Definition } from "./model"
 import { transformers } from "./registration"
-import { Action, CommonArguments } from "./actions/model"
 
 const transform = (definitions: Definition[], action: Action, args: CommonArguments) => {
   return Promise.all(
@@ -16,6 +16,5 @@ const transform = (definitions: Definition[], action: Action, args: CommonArgume
   )
 }
 
-export {
-  transform
-}
+export { transform }
+

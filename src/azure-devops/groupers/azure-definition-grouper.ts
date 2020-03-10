@@ -1,13 +1,12 @@
-import { DefinitionGrouper, TransformedDefinition } from "../../core/model"
 import { Action, CommonArguments } from "../../core/actions/model"
-import { AzureDefinition, Kind } from "../model"
-import { API_VERSION } from "../util"
+import { Definition, DefinitionGrouper } from "../../core/model"
+import { API_VERSION, isAzureDevOps } from "../util"
 
 class AzureDefinitionGrouper implements DefinitionGrouper {
-  canGroup(definition: TransformedDefinition, action: Action, args: CommonArguments): boolean {
-    return definition instanceof AzureDefinition  && action !== Action.APPLY
+  canGroup(definition: Definition, action: Action, _args: CommonArguments): boolean {
+    return isAzureDevOps(definition.apiVersion) && action !== Action.APPLY
   }
-  group(definition: TransformedDefinition, action: Action, args: CommonArguments): [string, string[]] {
+  group(_definition: Definition, _action: Action, _args: CommonArguments): [string, string[]] {
     return [
       API_VERSION,
       [API_VERSION]
@@ -15,6 +14,5 @@ class AzureDefinitionGrouper implements DefinitionGrouper {
   }
 }
 
-export {
-  AzureDefinitionGrouper
-}
+export { AzureDefinitionGrouper }
+

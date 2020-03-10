@@ -1,15 +1,15 @@
-import { DefinitionTransformer, Definition } from "../../core/model"
-import { isAzureDevOps } from "../util"
-import { Kind } from '../model'
-import { AzureReleaseDefinition } from "../model/azure-release-definition"
 import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
 import { Action, CommonArguments } from "../../core/actions/model"
+import { Definition, DefinitionTransformer } from "../../core/model"
+import { Kind } from '../model'
+import { AzureReleaseDefinition } from "../model/azure-release-definition"
+import { isAzureDevOps } from "../util"
 
 class ReleaseDefinitionTransformer implements DefinitionTransformer {
-  canTransform(definition: Definition, action: Action, args: CommonArguments): boolean {
+  canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
     return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.RELEASE_DEFINITION && action !== Action.APPLY
   }
-  async transform(definition: Definition, action: Action, args: CommonArguments) {
+  async transform(definition: Definition, _action: Action, _args: CommonArguments) {
     const transformedSpec = await this.setReleaseDefinitionDefaults(definition)
     return new AzureReleaseDefinition(definition.apiVersion, definition.kind as Kind, definition.metadata.namespace, transformedSpec) // TODO "as Kind"
   }
@@ -22,6 +22,5 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
   }
 }
 
-export {
-  ReleaseDefinitionTransformer,
-}
+export { ReleaseDefinitionTransformer }
+

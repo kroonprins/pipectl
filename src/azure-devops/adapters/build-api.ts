@@ -50,7 +50,4 @@ class BuildApi {
 
 const buildApi = new BuildApi()
 
-export {
-  BuildApi,
-  buildApi
-}
+export { BuildApi, buildApi }

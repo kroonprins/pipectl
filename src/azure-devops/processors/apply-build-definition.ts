@@ -1,15 +1,15 @@
-import { ActionProcessor, TransformedDefinition, ProcessResult } from "../../core/model"
 import { Action, ApplyArguments } from "../../core/actions/model"
-import { AzureBuildDefinition } from "../model/azure-build-definition"
+import { ActionProcessor, ProcessResult, TransformedDefinition } from "../../core/model"
 import { buildApi } from "../adapters/build-api"
+import { AzureBuildDefinition } from "../model/azure-build-definition"
 
 class ApplyBuildDefinition implements ActionProcessor {
 
-  canProcess(transformedDefinition: TransformedDefinition, action: Action, args: ApplyArguments): boolean {
+  canProcess(transformedDefinition: TransformedDefinition, action: Action, _args: ApplyArguments): boolean {
     return transformedDefinition instanceof AzureBuildDefinition && action === Action.APPLY
   }
 
-  async process(azureBuildDefinition: AzureBuildDefinition, action: Action, args: ApplyArguments): Promise<ProcessResult> {
+  async process(azureBuildDefinition: AzureBuildDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
     const api = buildApi
     const buildDefinition = azureBuildDefinition.spec
     const project = azureBuildDefinition.project
@@ -43,6 +43,5 @@ class ApplyBuildDefinition implements ActionProcessor {
   }
 }
 
-export {
-  ApplyBuildDefinition,
-}
+export { ApplyBuildDefinition }
+

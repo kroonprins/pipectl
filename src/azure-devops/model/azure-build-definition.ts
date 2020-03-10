@@ -7,6 +7,4 @@ class AzureBuildDefinition extends AzureDefinition<BuildDefinition> {
   }
 }
 
-export {
-  AzureBuildDefinition
-}
+export { AzureBuildDefinition }

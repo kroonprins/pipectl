@@ -1,6 +1,6 @@
 import { CommonArguments } from "../actions/model"
 import { defaultNamespace } from "../config"
-import { TransformedDefinition, Definition } from "../model"
+import { Definition, TransformedDefinition } from "../model"
 
 const applySelector = (definitions: Definition[], args: CommonArguments): Definition[] => {
   return definitions.
@@ -69,9 +69,5 @@ const filterOutDuplicates = (definitions: TransformedDefinition[]): TransformedD
   return new Definitions().add(...definitions).list()
 }
 
-export {
-  applySelector,
-  completeDefinitions,
-  filterOutDuplicates,
-  namespace
-}
+export { applySelector, completeDefinitions, filterOutDuplicates, namespace }
+
