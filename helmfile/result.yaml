@@ -1,5 +1,5 @@
 ---
-# Source: dummy/templates/BuildPipeline.yaml
+# Source: bll-common/templates/BuildPipeline.yaml
 apiVersion: azure-devops
 kind: BuildDefinition
 metadata:
@@ -62,7 +62,7 @@ spec:
   queue:
     id: 43
 ---
-# Source: dummy/templates/ReleaseDefinition.yaml
+# Source: bll-common/templates/ReleaseDefinition.yaml
 apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
 metadata:
@@ -421,7 +421,7 @@ spec:
         id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
 
 ---
-# Source: dummy/templates/BuildPipeline.yaml
+# Source: bll-common/templates/BuildPipeline.yaml
 apiVersion: azure-devops
 kind: BuildDefinition
 metadata:
@@ -484,7 +484,7 @@ spec:
   queue:
     id: 43
 ---
-# Source: dummy/templates/ReleaseDefinition.yaml
+# Source: bll-common/templates/ReleaseDefinition.yaml
 apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
 metadata:
