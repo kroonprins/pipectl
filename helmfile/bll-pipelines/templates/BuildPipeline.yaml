@@ -3,22 +3,20 @@ apiVersion: azure-devops
 kind: BuildDefinition
 metadata:
   labels:
-    group: bll
+    group: {{ .Values.group }}
     component: {{ .Release.Name }}
 spec:
-  name: Test via API for bll-contracting
-  path: \Other\Poc
+  name: {{ default .Release.Name .Values.build.name }}
+  path: {{ .Values.build.path }}
   project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
-  buildNumberFormat: '$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)'
+    id: {{ .Values.project.id }}
+  buildNumberFormat: {{ .Values.build.buildNameFormat }}
   triggers:
     - branchFilters:
-        - +refs/heads/rc*
-        - +refs/heads/feature/*
-        - +refs/heads/renovate/*
+{{ .Values.build.triggers.branchFilters | toYaml | indent 8 }}
       triggerType: 2
   variableGroups:
-    - id: 33
+{{ .Values.build.variableGroups | toYaml | indent 4 }}
   process:
     phases:
       - steps:
@@ -30,7 +28,7 @@ spec:
             inputs:
               goals: clean deploy -U
               publishJUnitResults: 'false'
-              jdkVersion: '1.11'
+              jdkVersion: '{{ .Values.build.jdkVersion }}'
               mavenFeedAuthenticate: 'true'
           - displayName: 'Publish Artifact: k8s'
             task:
@@ -40,7 +38,7 @@ spec:
             inputs:
               PathtoPublish: k8s
               ArtifactName: k8s
-          - displayName: 'Task group: Publish api-definitions artifact '
+          - displayName: 'Task group: Publish api-definitions Artifact '
             task:
               id: 2793ff62-78af-4351-bdbc-03da6a37eda4
               versionSpec: 1.*
@@ -53,10 +51,11 @@ spec:
               definitionType: metaTask
             inputs:
               build.arguments: ''
-              docker.baseimage: $(OPENJDK11_BASE_IMAGE)
+              docker.baseimage: {{ default "$(OPENJDK11_BASE_IMAGE)" .Values.build.baseImage }}
               dockerfile: ''
-              image.name: bll-contracting
+              image.name: {{ default .Release.Name .Values.build.imageName }}
   repository:
-    id: 6c68508f-62a2-4d9f-9707-9f2d2a418147 # by name
+    id: {{ .Values.build.repository }}
   queue:
-    id: 43
+    id: {{ .Values.build.agentPool }}
+
