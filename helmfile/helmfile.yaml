@@ -10,19 +10,16 @@ templates:
     missingFileHandler: Warn
     chart: {{ $bll_common_chart }}
     namespace: {{ $project }}
+    labels:
+      group: {{ $bll_group }}
+      component: "{{`{{ .Release.Name }}`}}"
     values:
       - "./values/values.yaml"
       - "./values/bll/values.yaml"
-      - "./values/bll/{{`{{ .Release.Labels.component }}`}}/values.yaml"
+      - "./values/bll/{{`{{ .Release.Name }}`}}/values.yaml"
 
 releases:
   - name: "bll-contracting"
-    labels:
-      group: {{ $bll_group }}
-      component: "bll-contracting"
     <<: *bll
   - name: "bll-contact"
-    labels:
-      group: {{ $bll_group }}
-      component: bll-contact
     <<: *bll
