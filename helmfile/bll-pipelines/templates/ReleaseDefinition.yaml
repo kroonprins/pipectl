@@ -3,26 +3,26 @@ apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
 metadata:
   labels:
-    group: bll
+    group: {{ .Values.group }}
     component: {{ .Release.Name }}
 spec:
-  name: {{ default .Release.Name .Values.name }}
-  path: {{ .Values.path }}
-  description: {{ .Values.description }}
-  releaseNameFormat: {{ .Values.releaseNameFormat }}
-  {{ if .Values.variables -}}
+  name: {{ default .Release.Name .Values.release.name }}
+  path: {{ .Values.release.path }}
+  description: {{ .Values.release.description }}
+  releaseNameFormat: {{ .Values.release.releaseNameFormat }}
+  {{ if .Values.release.variables -}}
   variables:
-    {{ range $name, $value := .Values.variables -}}
+    {{ range $name, $value := .Values.release.variables -}}
     {{ $name }}:
       value: {{ $value }}
-    {{ end }} 
-    {{ if .Values.rabbitmq -}}
+    {{ end }}
+    {{ if .Values.release.rabbitmq -}}
     RABBITMQ_USERNAME:
       value: {{ .Release.Name }}
-    {{ end }}  
+    {{ end }}
   {{ end -}}
   environments:
-  {{ range $stage := .Values.stages -}}
+  {{ range $stage := .Values.release.stages -}}
   - name: {{ $stage.name }}
     retentionPolicy:
       releasesToKeep: 10
@@ -32,13 +32,13 @@ spec:
       {{ $name }}:
         value: {{ $value }}
       {{- end }}
-    {{ end -}}        
+    {{ end -}}
     {{ if $stage.variableGroups -}}
     variableGroups:
     {{ range $variableGroup := $stage.variableGroups -}}
     - {{ $variableGroup }}
     {{ end -}}
-    {{ end -}}     
+    {{ end -}}
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -52,7 +52,7 @@ spec:
           ConnectedServiceName: {{ $stage.azureSubscription }}
           KeyVaultName: {{ $stage.vault }}
           SecretsFilter: "*"
-      {{ if $.Values.rabbitmq -}}
+      {{ if $.Values.release.rabbitmq -}}
       - taskId: 93a67d85-4982-4e19-87dd-29311c974748
         version: 2.*
         name: 'Task group: Create RabbitMQ user'
@@ -79,38 +79,38 @@ spec:
           KubernetesDeploymentName: {{ $.Release.Name }}
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: {{ if $.Values.rabbitmq }}RABBITMQ_PASSWORD=$(rabbitmq-{{ $.Release.Name }}-password),{{ end -}}
-                        {{ if $.Values.esb }}ESB_KEYSTORE_PW=$(esb-{{ $stage.esb }}-password),{{ end -}}
-                        {{ if $.Values.esb }}ESB_KEYSTORE_FILE=$(esb-{{ $stage.esb }}-value),{{ end -}}
+          SecretValues: {{ if $.Values.release.rabbitmq }}RABBITMQ_PASSWORD=$(rabbitmq-{{ $.Release.Name }}-password),{{ end -}}
+                        {{ if $.Values.release.esb }}ESB_KEYSTORE_PW=$(esb-{{ $stage.esb }}-password),{{ end -}}
+                        {{ if $.Values.release.esb }}ESB_KEYSTORE_FILE=$(esb-{{ $stage.esb }}-value),{{ end -}}
                         {{ $first := true -}}
-                        {{ range $name, $value := $.Values.secretValues -}}
+                        {{ range $name, $value := $.Values.release.secretValues -}}
                           {{ if $first -}}
                             {{ $first = false -}}
                           {{else -}}
                             ,
                           {{- end }}
                           {{- $name }}={{ $value }}
-                        {{- end }}                      
+                        {{- end }}
     {{ if gt ($stage.preApprovers | len) 0 -}}
     preDeployApprovals:
       approvals:
-      {{ range $approver := $stage.preApprovers -}}      
+      {{ range $approver := $stage.preApprovers -}}
       - approver:
           id: {{ $approver }}
           isContainer: true
       approvalOptions:
-        releaseCreatorCanBeApprover: true 
+        releaseCreatorCanBeApprover: true
       {{- end }}
     {{- end }}
     {{ if gt ($stage.postApprovers | len ) 0 -}}
     postDeployApprovals:
       approvals:
-      {{ range $approver := $stage.postApprovers -}}      
+      {{ range $approver := $stage.postApprovers -}}
       - approver:
           id: {{ $approver }}
           isContainer: true
       approvalOptions:
-        releaseCreatorCanBeApprover: true 
+        releaseCreatorCanBeApprover: true
       {{- end }}
     {{- end }}
   {{ end -}}

@@ -1,4 +1,67 @@
 ---
+# Source: dummy/templates/BuildPipeline.yaml
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: bll
+    component: bll-contracting
+spec:
+  name: Test via API for bll-contracting
+  path: \Other\POC
+  project:
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  triggers:
+    - branchFilters:
+        - +refs/heads/rc*
+        - +refs/heads/feature/*
+        - +refs/heads/renovate/*
+      triggerType: 2
+  variableGroups:
+    - id: 33
+  process:
+    phases:
+      - steps:
+          - displayName: Maven pom.xml
+            task:
+              id: ac4ee482-65da-4485-a532-7b085873e532 # TODO by name
+              versionSpec: 3.*
+              definitionType: task
+            inputs:
+              goals: clean deploy -U
+              publishJUnitResults: 'false'
+              jdkVersion: '1.11'
+              mavenFeedAuthenticate: 'true'
+          - displayName: 'Publish Artifact: k8s'
+            task:
+              id: 2ff763a7-ce83-4e1f-bc89-0ae63477cebe
+              versionSpec: 1.*
+              definitionType: task
+            inputs:
+              PathtoPublish: k8s
+              ArtifactName: k8s
+          - displayName: 'Task group: Publish api-definitions Artifact '
+            task:
+              id: 2793ff62-78af-4351-bdbc-03da6a37eda4
+              versionSpec: 1.*
+              definitionType: metaTask
+            inputs: {}
+          - displayName: 'Task group: Build and push Docker image to ALM Nexus'
+            task:
+              id: 001f6df6-2576-4520-ae2f-897b788a6017
+              versionSpec: 1.*
+              definitionType: metaTask
+            inputs:
+              build.arguments: ''
+              docker.baseimage: $(OPENJDK11_BASE_IMAGE)
+              dockerfile: ''
+              image.name: bll-contracting
+  repository:
+    id: 6c68508f-62a2-4d9f-9707-9f2d2a418147
+  queue:
+    id: 43
+---
 # Source: dummy/templates/ReleaseDefinition.yaml
 apiVersion: azure-devops/v0.1
 kind: ReleaseDefinition
@@ -8,7 +71,7 @@ metadata:
     component: bll-contracting
 spec:
   name: Test via API for bll-contracting
-  path: "\\Other\\POC"
+  path: \Other\POC
   description: Created via script
   releaseNameFormat: Release-$(rev:r)
   variables:
@@ -24,10 +87,10 @@ spec:
       value: 2
     ROOT_LOG_LEVEL:
       value: INFO
-     
+    
     RABBITMQ_USERNAME:
       value: bll-contracting
-      
+    
   environments:
   - name: INT-WE
     retentionPolicy:
@@ -76,7 +139,7 @@ spec:
           KubernetesDeploymentName: bll-contracting
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     
     
   - name: INT-NE
@@ -126,7 +189,7 @@ spec:
           KubernetesDeploymentName: bll-contracting
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-ihn519-password),ESB_KEYSTORE_FILE=$(esb-ihn519-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     
     
   - name: ACC-WE
@@ -176,7 +239,7 @@ spec:
           KubernetesDeploymentName: bll-contracting
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -229,7 +292,7 @@ spec:
           KubernetesDeploymentName: bll-contracting
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-hhn544-password),ESB_KEYSTORE_FILE=$(esb-hhn544-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -282,7 +345,7 @@ spec:
           KubernetesDeploymentName: bll-contracting
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -335,7 +398,7 @@ spec:
           KubernetesDeploymentName: bll-contracting
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: RABBITMQ_PASSWORD=$(rabbitmq-bll-contracting-password),ESB_KEYSTORE_PW=$(esb-gim597-password),ESB_KEYSTORE_FILE=$(esb-gim597-value),BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -346,16 +409,80 @@ spec:
     
   artifacts:
   - type: Build
-    alias: BLL-Contracting CI
+    alias: Test via API for bll-contracting
     definitionReference:
       defaultVersionType:
         id: latestType
         name: Latest
       definition:
-        id: '228'
+        name: Test via API for bll-contracting
+        path:  \Other\POC
       project:
         id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
 
+---
+# Source: dummy/templates/BuildPipeline.yaml
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: bll
+    component: bll-contact
+spec:
+  name: Test via API for bll-contact
+  path: \Other\POC
+  project:
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  triggers:
+    - branchFilters:
+        - +refs/heads/rc*
+        - +refs/heads/feature/*
+        - +refs/heads/renovate/*
+      triggerType: 2
+  variableGroups:
+    - id: 33
+  process:
+    phases:
+      - steps:
+          - displayName: Maven pom.xml
+            task:
+              id: ac4ee482-65da-4485-a532-7b085873e532 # TODO by name
+              versionSpec: 3.*
+              definitionType: task
+            inputs:
+              goals: clean deploy -U
+              publishJUnitResults: 'false'
+              jdkVersion: '1.11'
+              mavenFeedAuthenticate: 'true'
+          - displayName: 'Publish Artifact: k8s'
+            task:
+              id: 2ff763a7-ce83-4e1f-bc89-0ae63477cebe
+              versionSpec: 1.*
+              definitionType: task
+            inputs:
+              PathtoPublish: k8s
+              ArtifactName: k8s
+          - displayName: 'Task group: Publish api-definitions Artifact '
+            task:
+              id: 2793ff62-78af-4351-bdbc-03da6a37eda4
+              versionSpec: 1.*
+              definitionType: metaTask
+            inputs: {}
+          - displayName: 'Task group: Build and push Docker image to ALM Nexus'
+            task:
+              id: 001f6df6-2576-4520-ae2f-897b788a6017
+              versionSpec: 1.*
+              definitionType: metaTask
+            inputs:
+              build.arguments: ''
+              docker.baseimage: $(OPENJDK11_BASE_IMAGE)
+              dockerfile: ''
+              image.name: bll-contact
+  repository:
+    id: 60f95ef8-bd9a-4ade-87b2-751753700cb3
+  queue:
+    id: 43
 ---
 # Source: dummy/templates/ReleaseDefinition.yaml
 apiVersion: azure-devops/v0.1
@@ -366,7 +493,7 @@ metadata:
     component: bll-contact
 spec:
   name: Test via API for bll-contact
-  path: "\\Other\\POC"
+  path: \Other\POC
   description: Created via script
   releaseNameFormat: Release-$(rev:r)
   variables:
@@ -380,8 +507,8 @@ spec:
       value: 2
     ROOT_LOG_LEVEL:
       value: INFO
-     
-      
+    
+    
   environments:
   - name: INT-WE
     retentionPolicy:
@@ -418,7 +545,7 @@ spec:
           KubernetesDeploymentName: bll-contact
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     
     
   - name: INT-NE
@@ -456,7 +583,7 @@ spec:
           KubernetesDeploymentName: bll-contact
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     
     
   - name: ACC-WE
@@ -494,7 +621,7 @@ spec:
           KubernetesDeploymentName: bll-contact
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -535,7 +662,7 @@ spec:
           KubernetesDeploymentName: bll-contact
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -576,7 +703,7 @@ spec:
           KubernetesDeploymentName: bll-contact
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -617,7 +744,7 @@ spec:
           KubernetesDeploymentName: bll-contact
           KubernetesNamespace: "$(K8S_NAMESPACE)"
           KubernetesObjectType: ''
-          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)                      
+          SecretValues: BLL_JWKS_ENCRYPTION=$(bll-jwks-encryption),BLL_JWKS_SIGNATURE=$(bll-jwks-signature)
     preDeployApprovals:
       approvals:
       - approver:
@@ -628,13 +755,14 @@ spec:
     
   artifacts:
   - type: Build
-    alias: BLL-Contact CI
+    alias: Test via API for bll-contact
     definitionReference:
       defaultVersionType:
         id: latestType
         name: Latest
       definition:
-        id: '516'
+        name: Test via API for bll-contact
+        path:  \Other\POC
       project:
         id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
 

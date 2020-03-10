@@ -1,37 +1,39 @@
+{{ $project := "Webfoundation" }}
+{{ $common_values_file := "./values/values.common.yaml" }}
+{{ $bll_values_file := "./values/values.bll.yaml" }}
 {{ $bll_pipelines_chart := "./bll-pipelines" }}
-{{ $common_values_file := "./values/values.yaml" }}
 {{ $bll_group := "api" }}
 
 releases:
   - name: "bll-contracting"
-    namespace: Webfoundation
+    namespace: {{ $project }}
     labels:
       group: {{ $bll_group }}
       component: "bll-contracting"
     chart: {{ $bll_pipelines_chart }}
     values:
       - {{ $common_values_file }}
-      - name: Test via API for bll-contracting
+      - {{ $bll_values_file }}
       - build:
-          name: BLL-Contracting CI
-          path: \API\
-      - esb: true
-      - rabbitmq: true
-      - database: false
-      - variables:
-          BLL_DO_AUDITING: do_uda
+          name: Test via API for bll-contracting
+          repository: 6c68508f-62a2-4d9f-9707-9f2d2a418147
+        release:
+          name: Test via API for bll-contracting
+          esb: true
+          rabbitmq: true
+          variables:
+            BLL_DO_AUDITING: do_uda
   - name: "bll-contact"
-    namespace: Webfoundation
+    namespace: {{ $project }}
     labels:
       group: {{ $bll_group }}
       component: bll-contact
     chart: {{ $bll_pipelines_chart }}
     values:
       - {{ $common_values_file }}
-      - name: Test via API for bll-contact
+      - {{ $bll_values_file }}
       - build:
-          name: BLL-Contact CI
-          path: \API\
-      - esb: false
-      - rabbitmq: false
-      - database: false     
+          name: Test via API for bll-contact
+          repository: 60f95ef8-bd9a-4ade-87b2-751753700cb3
+        release:
+          name: Test via API for bll-contact
