@@ -13,6 +13,10 @@ import { GetReleaseDefinitionJsonReporter } from "./reporters/get-release-defini
 import { GetAllBuildDefinitions } from "./processors/get-all-build-definitions"
 import { GetBuildDefinitionReporter } from "./reporters/get-build-definition-reporter"
 import { GetOneBuildDefinition } from "./processors/get-one-build-definition"
+import { GetBuildDefinitionJsonReporter } from "./reporters/get-build-definition-json-reporter"
+import { GetBuildDefinitionYamlReporter } from "./reporters/get-build-definition-yaml-reporter"
+import { ApplyBuildDefinition } from "./processors/apply-build-definition"
+import { DeleteBuildDefinition } from "./processors/delete-build-definition"
 
 export default () => {
   registerTransformer(
@@ -22,6 +26,8 @@ export default () => {
   )
 
   registerActionProcessor(
+    new ApplyBuildDefinition(),
+    new DeleteBuildDefinition(),
     new GetAllBuildDefinitions(),
     new GetOneBuildDefinition(),
     new ApplyReleaseDefinition(),
@@ -32,6 +38,8 @@ export default () => {
 
   registerReporter(
     new GetBuildDefinitionReporter(),
+    new GetBuildDefinitionYamlReporter(),
+    new GetBuildDefinitionJsonReporter(),
     new GetReleaseDefinitionReporter(),
     new GetReleaseDefinitionYamlReporter(),
     new GetReleaseDefinitionJsonReporter(),

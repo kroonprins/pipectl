@@ -23,7 +23,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
       } else {
         try {
           await api.updateReleaseDefinition(releaseDefinition, project)
-          return { info: `Successfully updated ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
+          return { info: `Successfully updated release definition ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
         } catch (e) {
           return { error: e }
         }
@@ -34,7 +34,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
       } else {
         try {
           const createdReleaseDefinition = await api.createReleaseDefinition(releaseDefinition, project)
-          return { info: `Successfully created ${createdReleaseDefinition.id} (${createdReleaseDefinition.name})` }
+          return { info: `Successfully created release definition ${createdReleaseDefinition.id} (${createdReleaseDefinition.name})` }
         } catch (e) {
           return { error: e }
         }

@@ -32,9 +32,19 @@ class BuildApi {
     return api.getDefinitions(project, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, true, false, undefined, undefined, undefined)
   }
 
+  async createBuildDefinition(buildDefinition: BuildDefinition, project: string) {
+    const api = await this.getApi()
+    return api.createDefinition(buildDefinition, project)
+  }
+
   async updateBuildDefinition(buildDefinition: BuildDefinition, project: string) {
     const api = await this.getApi()
     return api.updateDefinition(buildDefinition, project, buildDefinition.id!)
+  }
+
+  async deleteBuildDefinition(buildDefinitionId: number, project: string) {
+    const api = await this.getApi()
+    return api.deleteDefinition(project, buildDefinitionId)
   }
 }
 

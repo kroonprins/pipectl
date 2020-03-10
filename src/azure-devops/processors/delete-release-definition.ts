@@ -19,7 +19,7 @@ class DeleteReleaseDefinition implements ActionProcessor {
       else {
         try {
           await api.deleteReleaseDefinition(existingReleaseDefinition.id!, project)
-          return { info: `Successfully deleted ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
+          return { info: `Successfully deleted release definition ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
         }
         catch (e) {
           return { error: e }

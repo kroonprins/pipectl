@@ -2,6 +2,79 @@ import { ProcessResult, TransformedDefinition, Definition } from "../../core/mod
 import { AzureReleaseDefinition } from "../model/azure-release-definition"
 import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
 import { Action, CommonArguments, GetArguments } from "../../core/actions/model"
+import { AzureBuildDefinition } from "../model/azure-build-definition"
+import { GetBuildDefinitionProcessResult } from "../model/get-build-definition-process-result"
+
+const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): object => {
+  const azureBuildDefinition = transformedDefinition as AzureBuildDefinition
+  const definitions: Definition[] = (processResult as GetBuildDefinitionProcessResult).buildDefinitions!
+    .map(buildDefinition => {
+      return {
+        apiVersion: azureBuildDefinition.apiVersion,
+        kind: azureBuildDefinition.kind,
+        metadata: {
+          namespace: azureBuildDefinition.project
+        },
+        spec: buildDefinition,
+      }
+    })
+    .map(definition => { // TODO
+      if ((args as GetArguments).export) {
+        return removeFieldsFromBuildDefinitionForExport(definition)
+      }
+      return definition
+    })
+  if (definitions.length > 1) {
+    return {
+      apiVersion: azureBuildDefinition.apiVersion,
+      items: definitions
+    }
+  } else {
+    return definitions[0]
+  }
+}
+
+/* tslint:disable:no-string-literal */
+const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Definition => {
+  // TODO more elegant way :)
+  const spec = definition.spec as any
+  delete spec['_links']
+  for(const variableGroup of spec['variableGroups']) {
+    delete variableGroup['variables']
+    delete variableGroup['type']
+    delete variableGroup['name'] // TODO update when variable groups can be specified by name
+  }
+  delete spec['authoredBy']
+  delete spec['url']
+  delete spec['uri']
+  delete spec['queueStatus']
+  delete spec['revision']
+  delete spec['createdDate']
+  delete spec['project']['name'] // TODO update when variable groups can be specified by name
+  delete spec['project']['url']
+  delete spec['project']['state']
+  delete spec['project']['revision']
+  delete spec['project']['visibility']
+  delete spec['project']['lastUpdateTime']
+  delete spec['queue']['_links']
+  delete spec['queue']['name']
+  delete spec['queue']['url']
+  delete spec['queue']['pool']
+  delete spec['repository']['name']
+  delete spec['repository']['url']
+
+  for(const phase of spec['process']['phases']) {
+    delete phase['refName']
+    for(const step of phase['steps']) {
+      delete step['refName']
+      delete step['condition']
+      delete phase['refName']
+      delete phase['refName']
+    }
+  }
+
+  return definition
+}
 
 const transformGetReleaseDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): object => {
   const azureReleaseDefinition = transformedDefinition as AzureReleaseDefinition
@@ -18,7 +91,7 @@ const transformGetReleaseDefinitionProcessResultForReporting = (processResult: P
     })
     .map(definition => {
       if ((args as GetArguments).export) {
-        return removeFieldsForExport(definition)
+        return removeFieldsFromReleaseDefinitionForExport(definition)
       }
       return definition
     })
@@ -33,7 +106,7 @@ const transformGetReleaseDefinitionProcessResultForReporting = (processResult: P
 }
 
 /* tslint:disable:no-string-literal */
-const removeFieldsForExport = (definition: Definition): Definition => {
+const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Definition => {
   // TODO more elegant way :)
   const spec = definition.spec as any
   delete spec['source']
@@ -55,20 +128,50 @@ const removeFieldsForExport = (definition: Definition): Definition => {
     delete environment['rank']
     delete environment['owner']
     delete environment['deployStep']
+    delete environment['currentRelease']
+    delete environment['badgeUrl']
     for(const deployPhase of environment['deployPhases']) {
       delete deployPhase['rank']
       delete deployPhase['refName']
-      delete deployPhase['currentRelease']
-      delete deployPhase['badgeUrl']
       for(const workflowTask of deployPhase['workflowTasks']) {
         delete workflowTask['refName']
       }
     }
+    if(environment['preDeployApprovals']['approvals']) {
+      for(const approval of environment['preDeployApprovals']['approvals']) {
+        delete approval['rank']
+        delete approval['id']
+        if(approval['approver']) {
+          delete approval['approver']['displayName']
+          delete approval['approver']['url']
+          delete approval['approver']['_links']
+          delete approval['approver']['uniqueName']
+          delete approval['approver']['imageUrl']
+          delete approval['approver']['descriptor']
+        }
+      }
+    }
+    if(environment['postDeployApprovals']['approvals']) {
+      for(const approval of environment['postDeployApprovals']['approvals']) {
+        delete approval['rank']
+        delete approval['id']
+        if(approval['approver']) {
+          delete approval['approver']['displayName']
+          delete approval['approver']['url']
+          delete approval['approver']['_links']
+          delete approval['approver']['uniqueName']
+          delete approval['approver']['imageUrl']
+          delete approval['approver']['descriptor']
+        }
+      }
+    }
   }
+  delete spec['_links']
 
   return definition
 }
 
 export {
-  transformGetReleaseDefinitionProcessResultForReporting
+  transformGetBuildDefinitionProcessResultForReporting,
+  transformGetReleaseDefinitionProcessResultForReporting,
 }
