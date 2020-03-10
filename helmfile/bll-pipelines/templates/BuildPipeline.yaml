@@ -8,49 +8,21 @@ metadata:
 spec:
   name: Test via API for bll-contracting
   path: \Other\Poc
-  type: 2 # default 2 (=build)
   project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd # default
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: '$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)'
   triggers:
-    - branchFilters: # default [ +refs/heads/* ]
+    - branchFilters:
         - +refs/heads/rc*
         - +refs/heads/feature/*
         - +refs/heads/renovate/*
-      pathFilters: [] # default []
-      batchChanges: true # default true
-      maxConcurrentBuildsPerBranch: 1 # default 1
-      pollingInterval: 0 # default 0
       triggerType: 2
-  variables:
-    system.debug: # no need to specify?
-      value: 'true'
-      allowOverride: true
   variableGroups:
     - id: 33
-  retentionRules:
-    - branches:
-        - +refs/heads/*
-      artifacts: []
-      artifactTypesToDelete:
-        - FilePath
-        - SymbolStore
-      daysToKeep: 10
-      minimumToKeep: 1
-      deleteBuildRecord: true
-      deleteTestResults: true
-  buildNumberFormat: '$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)'
-  jobAuthorizationScope: 1 # default 1 (=project scope)
-  jobTimeoutInMinutes: 60 # default 60
-  jobCancelTimeoutInMinutes: 5 # default 5
   process:
     phases:
       - steps:
-          - environment: {}
-            enabled: true # default
-            continueOnError: false # default
-            alwaysRun: false # default
-            displayName: Maven pom.xml
-            timeoutInMinutes: 0 # default
+          - displayName: Maven pom.xml
             task:
               id: ac4ee482-65da-4485-a532-7b085873e532 # TODO by name
               versionSpec: 3.*
@@ -60,12 +32,7 @@ spec:
               publishJUnitResults: 'false'
               jdkVersion: '1.11'
               mavenFeedAuthenticate: 'true'
-          - environment: {}
-            enabled: true
-            continueOnError: false
-            alwaysRun: false
-            displayName: 'Publish Artifact: k8s'
-            timeoutInMinutes: 0
+          - displayName: 'Publish Artifact: k8s'
             task:
               id: 2ff763a7-ce83-4e1f-bc89-0ae63477cebe
               versionSpec: 1.*
@@ -73,23 +40,13 @@ spec:
             inputs:
               PathtoPublish: k8s
               ArtifactName: k8s
-          - environment: {}
-            enabled: true
-            continueOnError: true
-            alwaysRun: true
-            displayName: 'Task group: Publish api-definitions Artifact '
-            timeoutInMinutes: 0
+          - displayName: 'Task group: Publish api-definitions artifact '
             task:
               id: 2793ff62-78af-4351-bdbc-03da6a37eda4
               versionSpec: 1.*
               definitionType: metaTask
             inputs: {}
-          - environment: {}
-            enabled: true
-            continueOnError: true
-            alwaysRun: true
-            displayName: 'Task group: Build and push Docker image to ALM Nexus'
-            timeoutInMinutes: 0
+          - displayName: 'Task group: Build and push Docker image to ALM Nexus'
             task:
               id: 001f6df6-2576-4520-ae2f-897b788a6017
               versionSpec: 1.*
@@ -99,30 +56,7 @@ spec:
               docker.baseimage: $(OPENJDK11_BASE_IMAGE)
               dockerfile: ''
               image.name: bll-contracting
-        name: Phase 1
-        target:
-          executionOptions:
-            type: 0
-          allowScriptsAuthAccessOption: false
-          type: 1
-        jobAuthorizationScope: projectCollection # default
-        jobCancelTimeoutInMinutes: 1 # default 1
-    type: 1 # default 1
   repository:
-    properties:
-      cleanOptions: '1'
-      labelSources: '0'
-      labelSourcesFormat: $(build.buildNumber)
-      reportBuildStatus: 'true'
-      gitLfsSupport: 'false'
-      skipSyncSource: 'false'
-      checkoutNestedSubmodules: 'false'
-      fetchDepth: '0'
     id: 6c68508f-62a2-4d9f-9707-9f2d2a418147 # by name
-    type: TfsGit # default
-    defaultBranch: refs/heads/master # default
-    clean: 'true' # default true
-    checkoutSubmodules: false # default false
-  quality: 1 # default 1
   queue:
     id: 43

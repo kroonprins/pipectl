@@ -17,10 +17,12 @@ import { GetBuildDefinitionJsonReporter } from "./reporters/get-build-definition
 import { GetBuildDefinitionYamlReporter } from "./reporters/get-build-definition-yaml-reporter"
 import { ApplyBuildDefinition } from "./processors/apply-build-definition"
 import { DeleteBuildDefinition } from "./processors/delete-build-definition"
+import { ApplyBuildDefinitionTransformer } from "./transformers/apply-build-definition-transformer"
 
 export default () => {
   registerTransformer(
     new BuildDefinitionTransformer(),
+    new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
     new ApplyReleaseDefinitionTransformer(),
   )
