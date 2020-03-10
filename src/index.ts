@@ -30,7 +30,6 @@ program
   .option('-o, --output <output>', 'todo')
   .action(_delete)
 
-
 program
   .command('get <kind> [name]')
   // .option('-f, --filename <fileOption>', 'todo.', multiple) // TODO
