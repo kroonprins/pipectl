@@ -1,8 +1,8 @@
-import { TransformedDefinition, TransformedDefinitionGroup, TransformedDefinitionGroupItem } from "./model"
 import { Action, CommonArguments } from "./actions/model"
+import { Definition, DefinitionGroup, DefinitionGroupItem } from "./model"
 import { groupers } from "./registration"
 
-const group = (definitions: TransformedDefinition[], action: Action, args: CommonArguments): TransformedDefinitionGroup[] => {
+const group = (definitions: Definition[], action: Action, args: CommonArguments): DefinitionGroup[] => {
   return definitions
     .map(definition => {
       const grouper = groupers()
@@ -15,16 +15,16 @@ const group = (definitions: TransformedDefinition[], action: Action, args: Commo
       return knownGroups.map(knownGroup => {
         return {
           name: knownGroup,
-          transformedDefinitions: knownGroup === _group ? [definition] : []
+          definitions: knownGroup === _group ? [definition] : []
         }
-      }) as TransformedDefinitionGroupItem[]
+      }) as DefinitionGroupItem[]
     })
-    .reduce<TransformedDefinitionGroup[]>((acc, val) => {
+    .reduce<DefinitionGroup[]>((acc, val) => {
       val.forEach((item, index) => {
         if (index >= acc.length) {
           acc.push({ items: [item] })
         } else {
-          if (!item.transformedDefinitions.length) {
+          if (!item.definitions.length) {
             return
           }
           const groupAtIndex = acc[index]
@@ -34,7 +34,7 @@ const group = (definitions: TransformedDefinition[], action: Action, args: Commo
           } else {
             const indexExisting = groupAtIndex.items.findIndex(groupItem => item.name === groupItem.name)
             if (indexExisting !== -1) {
-              groupAtIndex.items[indexExisting].transformedDefinitions.push(...item.transformedDefinitions)
+              groupAtIndex.items[indexExisting].definitions.push(...item.definitions)
             } else {
               groupAtIndex.items = [item]
             }
@@ -45,6 +45,5 @@ const group = (definitions: TransformedDefinition[], action: Action, args: Commo
     }, [])
 }
 
-export {
-  group
-}
+export { group }
+

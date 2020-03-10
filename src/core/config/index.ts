@@ -1,6 +1,6 @@
-import { load } from 'js-yaml'
 import { readFileSync } from 'fs'
-import { Config, ContextConfig, UserConfig, ServerConfig } from './model'
+import { load } from 'js-yaml'
+import { Config, ContextConfig, ServerConfig, UserConfig } from './model'
 
 let config: Config
 
@@ -49,9 +49,5 @@ const defaultNamespace = () => {
   return currentContext().context.namespace
 }
 
-export {
-  initialize,
-  currentUser,
-  currentServer,
-  defaultNamespace
-}
+export { initialize, currentUser, currentServer, defaultNamespace }
+

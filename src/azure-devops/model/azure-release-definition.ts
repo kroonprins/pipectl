@@ -7,6 +7,4 @@ class AzureReleaseDefinition extends AzureDefinition<ReleaseDefinition> {
   }
 }
 
-export {
-  AzureReleaseDefinition
-}
+export { AzureReleaseDefinition }

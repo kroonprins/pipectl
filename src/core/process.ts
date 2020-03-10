@@ -1,9 +1,9 @@
-import { transform } from "./transform"
-import { Definition, TransformedDefinition, TransformedDefinitionGroup } from "./model"
-import { CommonArguments, Action } from "./actions/model"
-import { applySelector, completeDefinitions, filterOutDuplicates } from './util'
-import { processors, reporters } from "./registration"
+import { Action, CommonArguments } from "./actions/model"
 import { group } from "./group"
+import { Definition, DefinitionGroup, TransformedDefinition } from "./model"
+import { processors, reporters } from "./registration"
+import { transform } from "./transform"
+import { applySelector, completeDefinitions, filterOutDuplicates } from './util'
 
 const process = async (definitions: Definition[], action: Action, args: CommonArguments) => {
   // filter selector
@@ -12,26 +12,28 @@ const process = async (definitions: Definition[], action: Action, args: CommonAr
   // validate & complete
   const completedDefinitions = completeDefinitions(selectedDefinitions, args)
 
-  // transform
-  const transformedDefinitions: TransformedDefinition[] = await transform(completedDefinitions, action, args)
-
-  // duplicate removal
-  const definitionsWithoutDuplicates = filterOutDuplicates(transformedDefinitions)
-
   // group
-  const groupedDefinitions = group(definitionsWithoutDuplicates, action, args)
+  const groupedDefinitions = group(completedDefinitions, action, args)
 
   // process & report
   await processAction(groupedDefinitions, action, args)
 }
 
-const processAction = async (groups: TransformedDefinitionGroup[], action: Action, args: CommonArguments) => {
+const processAction = async (groups: DefinitionGroup[], action: Action, args: CommonArguments) => {
   for (const definitionGroup of groups) {
     await Promise.all(definitionGroup.items
-      .flatMap(groupItem => {
+      .flatMap(async groupItem => {
         /* tslint:disable-next-line:no-console */ // TODO
         console.log(`Processing group ${groupItem.name}`)
-        return groupItem.transformedDefinitions
+
+        // transform
+        const transformedDefinitions: TransformedDefinition[] = await transform(groupItem.definitions, action, args)
+
+        // duplicate removal
+        const definitionsWithoutDuplicates = filterOutDuplicates(transformedDefinitions)
+
+        // process & report
+        return Promise.all(definitionsWithoutDuplicates
           .flatMap(async definition => {
             const processor = processors()
               .find(p => p.canProcess(definition, action, args))
@@ -44,11 +46,10 @@ const processAction = async (groups: TransformedDefinitionGroup[], action: Actio
               throw new Error('TODO no reporter registered')
             }
             return reporter.report(processResult, definition, action, args)
-          })
+          }))
       }))
   }
 }
 
-export {
-  process
-}
+export { process }
+

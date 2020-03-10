@@ -1,12 +1,12 @@
-import { Definition } from "../../core/model"
+import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess } from "azure-devops-node-api/interfaces/BuildInterfaces"
 import { Action, CommonArguments } from "../../core/actions/model"
-import { isAzureDevOps } from "../util"
+import { Definition } from "../../core/model"
 import { Kind } from "../model"
+import { isAzureDevOps } from "../util"
 import { BuildDefinitionTransformer } from "./build-definition-transformer"
-import { BuildDefinition, DefinitionTriggerType, ContinuousIntegrationTrigger, BuildAuthorizationScope, DefinitionQuality, DesignerProcess, AgentPoolQueueTarget } from "azure-devops-node-api/interfaces/BuildInterfaces"
 
 class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
-  canTransform(definition: Definition, action: Action, args: CommonArguments): boolean {
+  canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
     return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.BUILD_DEFINITION && action === Action.APPLY
   }
   protected async setBuildDefinitionDefaults(definition: Definition): Promise<BuildDefinition> {
@@ -110,6 +110,5 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
   }
 }
 
-export {
-  ApplyBuildDefinitionTransformer,
-}
+export { ApplyBuildDefinitionTransformer }
+

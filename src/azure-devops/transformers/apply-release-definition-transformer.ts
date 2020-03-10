@@ -1,13 +1,13 @@
-import { Definition } from "../../core/model"
-import { Action, CommonArguments } from "../../core/actions/model"
-import { isAzureDevOps } from "../util"
-import { Kind } from "../model"
 import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
+import { Action, CommonArguments } from "../../core/actions/model"
+import { Definition } from "../../core/model"
 import { buildApi } from "../adapters/build-api"
+import { Kind } from "../model"
+import { isAzureDevOps } from "../util"
 import { ReleaseDefinitionTransformer } from "./release-definition-transformer"
 
 class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { // TODO instead of this, maybe possible to have multiple transformers applied (first ReleaseDefinitionTransformer for all then this one if action === Action.APPLY)?
-  canTransform(definition: Definition, action: Action, args: CommonArguments): boolean {
+  canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
     return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.RELEASE_DEFINITION && action === Action.APPLY
   }
   protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
@@ -125,6 +125,5 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
   }
 }
 
-export {
-  ApplyReleaseDefinitionTransformer,
-}
+export { ApplyReleaseDefinitionTransformer }
+

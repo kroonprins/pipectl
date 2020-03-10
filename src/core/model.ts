@@ -20,32 +20,32 @@ interface MetaData {
   // TODO annotations?
 }
 
-/* tslint:disable:no-empty-interface */
-interface TransformedDefinition extends UniqueId {
-
-}
-
-interface TransformedDefinitionGroupItem {
+interface DefinitionGroupItem {
   name: string,
-  transformedDefinitions: TransformedDefinition[],
+  definitions: Definition[],
 }
 
-interface TransformedDefinitionGroup {
-  items: TransformedDefinitionGroupItem[],
+interface DefinitionGroup {
+  items: DefinitionGroupItem[],
+}
+
+interface DefinitionGrouper {
+  canGroup(definition: Definition, action: Action, args: CommonArguments): boolean
+  group(definition: Definition, action: Action, args: CommonArguments): [string, string[]]
 }
 
 interface UniqueId {
   uniqueId(): string
 }
 
+/* tslint:disable:no-empty-interface */
+interface TransformedDefinition extends UniqueId {
+
+}
+
 interface DefinitionTransformer {
   canTransform(definition: Definition, action: Action, args: CommonArguments): boolean
   transform(definition: Definition, action: Action, args: CommonArguments): Promise<TransformedDefinition>
-}
-
-interface DefinitionGrouper {
-  canGroup(definition: TransformedDefinition, action: Action, args: CommonArguments): boolean
-  group(definition: TransformedDefinition, action: Action, args: CommonArguments): [string, string[]]
 }
 
 interface ActionProcessor {
@@ -63,15 +63,5 @@ interface Reporter {
   report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void>
 }
 
-export {
-  Resource,
-  Definition,
-  TransformedDefinition,
-  DefinitionTransformer,
-  TransformedDefinitionGroup,
-  TransformedDefinitionGroupItem,
-  DefinitionGrouper,
-  ActionProcessor,
-  ProcessResult,
-  Reporter,
-}
+export { Resource, Definition, DefinitionGrouper, DefinitionGroup, DefinitionGroupItem, TransformedDefinition, DefinitionTransformer, ActionProcessor, ProcessResult, Reporter }
+

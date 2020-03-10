@@ -1,15 +1,15 @@
-import { DefinitionTransformer, Definition, TransformedDefinition } from "../../core/model"
-import { isAzureDevOps } from "../util"
+import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces"
+import { Action, CommonArguments } from "../../core/actions/model"
+import { Definition, DefinitionTransformer } from "../../core/model"
 import { Kind } from '../model'
 import { AzureBuildDefinition } from "../model/azure-build-definition"
-import { Action, CommonArguments } from "../../core/actions/model"
-import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces"
+import { isAzureDevOps } from "../util"
 
 class BuildDefinitionTransformer implements DefinitionTransformer {
-  canTransform(definition: Definition, action: Action, args: CommonArguments): boolean {
+  canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
     return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.BUILD_DEFINITION && action !== Action.APPLY
   }
-  async transform(definition: Definition, action: Action, args: CommonArguments) {
+  async transform(definition: Definition, _action: Action, _args: CommonArguments) {
     const transformedSpec = await this.setBuildDefinitionDefaults(definition)
     return new AzureBuildDefinition(definition.apiVersion, definition.kind as Kind, definition.metadata.namespace, transformedSpec) // TODO "as Kind"
   }
@@ -22,6 +22,5 @@ class BuildDefinitionTransformer implements DefinitionTransformer {
   }
 }
 
-export {
-  BuildDefinitionTransformer,
-}
+export { BuildDefinitionTransformer }
+
