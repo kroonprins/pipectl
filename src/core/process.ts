@@ -41,7 +41,8 @@ const processAction = async (groups: DefinitionGroup[], action: Action, args: Co
               throw new Error('TODO no processor registered')
             }
             const processResult = await processor.process(definition, action, args)
-            const reporter = reporters().find(r => r.canReport(processResult, definition, action, args))
+            const reporter = reporters()
+              .find(r => r.canReport(processResult, definition, action, args))
             if (!reporter) {
               throw new Error('TODO no reporter registered')
             }

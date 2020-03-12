@@ -1,4 +1,113 @@
 ---
+# Source: bll-common/templates/BuildPipeline-Nightly.yaml
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: bll
+    component: bll-contracting
+    type: nightly
+spec:
+  name: Test via API for bll-contracting Nightly
+  path: \Other\POC\Nightly builds
+  project:
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  triggers:
+    - schedules:
+        - branchFilters:
+          - +refs/heads/master
+          - +refs/heads/rc
+          timeZoneId: Romance Standard Time
+          startHours: 0
+          startMinutes: 0
+      triggerType: 8
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  process:
+    phases:
+      - steps:
+          - displayName: Prepare analysis on SonarQube
+            task:
+              id: 15b84ca1-b62f-4a2a-a403-89b77a063157
+              versionSpec: 4.*
+              definitionType: task
+            inputs:
+              SonarQube: 3866cf2d-2198-4655-b8f1-9fd6cedecac2
+              scannerMode: Other
+              configMode: file
+              configFile: sonar-project.properties
+              cliProjectKey: ''
+              projectKey: ''
+              cliProjectName: ''
+              projectName: ''
+              cliProjectVersion: '1.0'
+              projectVersion: '1.0'
+              cliSources: .
+              extraProperties: |-
+                # Additional properties that will be passed to the scanner,
+                # Put one key=value per line, example:
+                # sonar.exclusions=**/*.bin
+                sonar.coverage.exclusions=**/resources/**
+          - displayName: Maven pom.xml
+            task:
+              id: ac4ee482-65da-4485-a532-7b085873e532
+              versionSpec: 3.*
+              definitionType: task
+            inputs:
+              mavenPOMFile: pom.xml
+              goals: clean package
+              options: >-
+                -Dmaven.test.failure.ignore=true -Drevision=$(Build.BuildNumber)
+                -Dsonar.branch.name=
+                -Dsonar.projectKey=com.electrabel.channels.web:bll-contracting:$(Build.SourceBranchName)
+                -Dsonar.projectName="bll-contracting $(Build.SourceBranchName)"
+              publishJUnitResults: 'true'
+              testResultsFiles: '**/TEST-*.xml'
+              codeCoverageTool: JaCoCo
+              classFilter: '+:com.engie.*,-:*.resources.*'
+              failIfCoverageEmpty: 'false'
+              javaHomeSelection: JDKVersion
+              jdkVersion: '1.11'
+              mavenOpts: '-Xmx1024m'
+              mavenFeedAuthenticate: 'true'
+              skipEffectivePom: 'false'
+              sqAnalysisEnabled: 'true'
+              sqMavenPluginVersionChoice: latest
+              checkstyleAnalysisEnabled: 'false'
+              pmdAnalysisEnabled: 'false'
+              findbugsAnalysisEnabled: 'false'
+  repository:
+    id: 6c68508f-62a2-4d9f-9707-9f2d2a418147
+  queue:
+    id: 43
+---
+# Source: bll-common/templates/BuildPipeline-Release-Client.yaml
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: bll
+    component: bll-contracting
+    type: release-client
+spec:
+  name: Test via API for bll-contracting Release
+  path: \Other\POC
+  project:
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  process:
+    phases:
+      - steps:
+          - displayName: 'Task group: Maven release'
+            task:
+              id: b880882f-e197-4652-bfad-5510bd41908c
+              versionSpec: 2.*
+              definitionType: metaTask
+  repository:
+    id: 6c68508f-62a2-4d9f-9707-9f2d2a418147
+  queue:
+    id: 43
+---
 # Source: bll-common/templates/BuildPipeline.yaml
 apiVersion: azure-devops
 kind: BuildDefinition
@@ -6,6 +115,7 @@ metadata:
   labels:
     group: bll
     component: bll-contracting
+    type: CI
 spec:
   name: Test via API for bll-contracting
   path: \Other\POC
@@ -46,7 +156,6 @@ spec:
               id: 2793ff62-78af-4351-bdbc-03da6a37eda4
               versionSpec: 1.*
               definitionType: metaTask
-            inputs: {}
           - displayName: 'Task group: Build and push Docker image to ALM Nexus'
             task:
               id: 001f6df6-2576-4520-ae2f-897b788a6017
@@ -421,6 +530,115 @@ spec:
         id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
 
 ---
+# Source: bll-common/templates/BuildPipeline-Nightly.yaml
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: bll
+    component: bll-contact
+    type: nightly
+spec:
+  name: Test via API for bll-contact Nightly
+  path: \Other\POC\Nightly builds
+  project:
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  triggers:
+    - schedules:
+        - branchFilters:
+          - +refs/heads/master
+          - +refs/heads/rc
+          timeZoneId: Romance Standard Time
+          startHours: 0
+          startMinutes: 0
+      triggerType: 8
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  process:
+    phases:
+      - steps:
+          - displayName: Prepare analysis on SonarQube
+            task:
+              id: 15b84ca1-b62f-4a2a-a403-89b77a063157
+              versionSpec: 4.*
+              definitionType: task
+            inputs:
+              SonarQube: 3866cf2d-2198-4655-b8f1-9fd6cedecac2
+              scannerMode: Other
+              configMode: file
+              configFile: sonar-project.properties
+              cliProjectKey: ''
+              projectKey: ''
+              cliProjectName: ''
+              projectName: ''
+              cliProjectVersion: '1.0'
+              projectVersion: '1.0'
+              cliSources: .
+              extraProperties: |-
+                # Additional properties that will be passed to the scanner,
+                # Put one key=value per line, example:
+                # sonar.exclusions=**/*.bin
+                sonar.coverage.exclusions=**/resources/**
+          - displayName: Maven pom.xml
+            task:
+              id: ac4ee482-65da-4485-a532-7b085873e532
+              versionSpec: 3.*
+              definitionType: task
+            inputs:
+              mavenPOMFile: pom.xml
+              goals: clean package
+              options: >-
+                -Dmaven.test.failure.ignore=true -Drevision=$(Build.BuildNumber)
+                -Dsonar.branch.name=
+                -Dsonar.projectKey=com.electrabel.channels.web:bll-contact:$(Build.SourceBranchName)
+                -Dsonar.projectName="bll-contact $(Build.SourceBranchName)"
+              publishJUnitResults: 'true'
+              testResultsFiles: '**/TEST-*.xml'
+              codeCoverageTool: JaCoCo
+              classFilter: '+:com.engie.*,-:*.resources.*'
+              failIfCoverageEmpty: 'false'
+              javaHomeSelection: JDKVersion
+              jdkVersion: '1.11'
+              mavenOpts: '-Xmx1024m'
+              mavenFeedAuthenticate: 'true'
+              skipEffectivePom: 'false'
+              sqAnalysisEnabled: 'true'
+              sqMavenPluginVersionChoice: latest
+              checkstyleAnalysisEnabled: 'false'
+              pmdAnalysisEnabled: 'false'
+              findbugsAnalysisEnabled: 'false'
+  repository:
+    id: 60f95ef8-bd9a-4ade-87b2-751753700cb3
+  queue:
+    id: 43
+---
+# Source: bll-common/templates/BuildPipeline-Release-Client.yaml
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: bll
+    component: bll-contact
+    type: release-client
+spec:
+  name: Test via API for bll-contact Release
+  path: \Other\POC
+  project:
+    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  process:
+    phases:
+      - steps:
+          - displayName: 'Task group: Maven release'
+            task:
+              id: b880882f-e197-4652-bfad-5510bd41908c
+              versionSpec: 2.*
+              definitionType: metaTask
+  repository:
+    id: 60f95ef8-bd9a-4ade-87b2-751753700cb3
+  queue:
+    id: 43
+---
 # Source: bll-common/templates/BuildPipeline.yaml
 apiVersion: azure-devops
 kind: BuildDefinition
@@ -428,6 +646,7 @@ metadata:
   labels:
     group: bll
     component: bll-contact
+    type: CI
 spec:
   name: Test via API for bll-contact
   path: \Other\POC
@@ -468,7 +687,6 @@ spec:
               id: 2793ff62-78af-4351-bdbc-03da6a37eda4
               versionSpec: 1.*
               definitionType: metaTask
-            inputs: {}
           - displayName: 'Task group: Build and push Docker image to ALM Nexus'
             task:
               id: 001f6df6-2576-4520-ae2f-897b788a6017

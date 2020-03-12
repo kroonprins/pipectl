@@ -1,0 +1,82 @@
+{{ if .Values.build.nightlyBuildPipeline }}
+---
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: {{ .Values.group }}
+    component: {{ .Release.Name }}
+    type: nightly
+spec:
+  name: {{ coalesce .Values.build.nightlyBuildPipeline.name (cat .Values.build.name "Nightly") (cat .Release.Name "Nightly") }}
+  path: {{ default .Values.build.path .Values.build.nightlyBuildPipeline.path }}
+  project:
+    id: {{ .Values.project.id }}
+  buildNumberFormat: {{ .Values.build.buildNameFormat }}
+  triggers:
+    - schedules:
+        - branchFilters:
+{{ .Values.build.nightlyBuildPipeline.triggers.schedule.branchFilters | toYaml | indent 10 }}
+          timeZoneId: {{ .Values.build.nightlyBuildPipeline.triggers.schedule.timeZoneId }}
+          startHours: {{ .Values.build.nightlyBuildPipeline.triggers.schedule.startHours }}
+          startMinutes: {{ .Values.build.nightlyBuildPipeline.triggers.schedule.startMinutes }}
+      triggerType: 8
+  process:
+    phases:
+      - steps:
+          - displayName: Prepare analysis on SonarQube
+            task:
+              id: 15b84ca1-b62f-4a2a-a403-89b77a063157
+              versionSpec: 4.*
+              definitionType: task
+            inputs:
+              SonarQube: 3866cf2d-2198-4655-b8f1-9fd6cedecac2
+              scannerMode: Other
+              configMode: file
+              configFile: sonar-project.properties
+              cliProjectKey: ''
+              projectKey: ''
+              cliProjectName: ''
+              projectName: ''
+              cliProjectVersion: '1.0'
+              projectVersion: '1.0'
+              cliSources: .
+              extraProperties: |-
+                # Additional properties that will be passed to the scanner,
+                # Put one key=value per line, example:
+                # sonar.exclusions=**/*.bin
+                sonar.coverage.exclusions=**/resources/**
+          - displayName: Maven pom.xml
+            task:
+              id: ac4ee482-65da-4485-a532-7b085873e532
+              versionSpec: 3.*
+              definitionType: task
+            inputs:
+              mavenPOMFile: pom.xml
+              goals: clean package
+              options: >-
+                -Dmaven.test.failure.ignore=true -Drevision=$(Build.BuildNumber)
+                -Dsonar.branch.name=
+                -Dsonar.projectKey=com.electrabel.channels.web:{{ .Release.Name }}:$(Build.SourceBranchName)
+                -Dsonar.projectName="{{ .Release.Name }} $(Build.SourceBranchName)"
+              publishJUnitResults: 'true'
+              testResultsFiles: '**/TEST-*.xml'
+              codeCoverageTool: JaCoCo
+              classFilter: '+:com.engie.*,-:*.resources.*'
+              failIfCoverageEmpty: 'false'
+              javaHomeSelection: JDKVersion
+              jdkVersion: '{{ .Values.build.jdkVersion }}'
+              mavenOpts: '-Xmx1024m'
+              mavenFeedAuthenticate: 'true'
+              skipEffectivePom: 'false'
+              sqAnalysisEnabled: 'true'
+              sqMavenPluginVersionChoice: latest
+              checkstyleAnalysisEnabled: 'false'
+              pmdAnalysisEnabled: 'false'
+              findbugsAnalysisEnabled: 'false'
+  repository:
+    id: {{ .Values.build.repository }}
+  queue:
+    id: {{ .Values.build.agentPool }}
+
+{{ end }}
