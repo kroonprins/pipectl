@@ -1,4 +1,4 @@
-import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess } from "azure-devops-node-api/interfaces/BuildInterfaces"
+import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger } from "azure-devops-node-api/interfaces/BuildInterfaces"
 import { Action, CommonArguments } from "../../core/actions/model"
 import { Definition } from "../../core/model"
 import { Kind } from "../model"
@@ -24,7 +24,19 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
           if (!continuousIntegrationTrigger.hasOwnProperty('batchChanges')) continuousIntegrationTrigger.batchChanges = true
           if (!continuousIntegrationTrigger.hasOwnProperty('maxConcurrentBuildsPerBranch')) continuousIntegrationTrigger.maxConcurrentBuildsPerBranch = 1
           if (!continuousIntegrationTrigger.hasOwnProperty('pollingInterval')) continuousIntegrationTrigger.pollingInterval = 0
-        }
+        } else if (trigger.triggerType === DefinitionTriggerType.Schedule) {
+          const scheduleTrigger = trigger as ScheduleTrigger
+          if (scheduleTrigger.schedules && scheduleTrigger.schedules.length) {
+            for (const schedule of scheduleTrigger.schedules) {
+              if (!schedule.hasOwnProperty('pathFiltscheduleOnlyWithChangesers')) schedule.scheduleOnlyWithChanges = true
+              if (!schedule.hasOwnProperty('branchFilters')) schedule.branchFilters = ['+refs/heads/master']
+              if (!schedule.hasOwnProperty('daysToBuild')) schedule.daysToBuild = ScheduleDays.Monday + ScheduleDays.Tuesday + ScheduleDays.Wednesday + ScheduleDays.Thursday + ScheduleDays.Friday
+              if (!schedule.hasOwnProperty('startHours')) schedule.startHours = 0
+              if (!schedule.hasOwnProperty('startMinutes')) schedule.startMinutes = 0
+              if (!schedule.hasOwnProperty('timeZoneId')) schedule.timeZoneId = 'UTC' // Timezone column on this page https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones, TODO can get it from script execution environment?
+            }
+          }
+        } // TODO other trigger types
       }
     }
 
@@ -42,7 +54,7 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
       if (!repository.hasOwnProperty('type')) repository.type = 'TfsGit'
 
       const defaultProperties = {
-        cleanOptions: '1',
+        cleanOptions: '3',
         labelSources: '0',
         labelSourcesFormat: '$(build.buildNumber)',
         reportBuildStatus: 'true',

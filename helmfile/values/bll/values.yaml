@@ -4,14 +4,31 @@ build:
   path: \Other\POC
   buildNameFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   triggers:
-    branchFilters:
-      - +refs/heads/rc*
-      - +refs/heads/feature/*
-      - +refs/heads/renovate/*
+    continuousIntegration:
+      branchFilters:
+        - +refs/heads/rc*
+        - +refs/heads/feature/*
+        - +refs/heads/renovate/*
   agentPool: 43
   variableGroups:
     - id: 33
   jdkVersion: '1.11'
+
+  releaseClientBuildPipeline:
+    enabled: false
+    path: \Other\POC
+
+  nightlyBuildPipeline:
+    enabled: true
+    path: \Other\POC\Nightly builds
+    triggers:
+      schedule:
+        branchFilters:
+          - +refs/heads/master
+          - +refs/heads/rc
+        timeZoneId: Romance Standard Time
+        startHours: 0
+        startMinutes: 0
 
 release:
   path: \Other\POC

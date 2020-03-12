@@ -5,6 +5,7 @@ metadata:
   labels:
     group: {{ .Values.group }}
     component: {{ .Release.Name }}
+    type: CI
 spec:
   name: {{ default .Release.Name .Values.build.name }}
   path: {{ .Values.build.path }}
@@ -13,7 +14,7 @@ spec:
   buildNumberFormat: {{ .Values.build.buildNameFormat }}
   triggers:
     - branchFilters:
-{{ .Values.build.triggers.branchFilters | toYaml | indent 8 }}
+{{ .Values.build.triggers.continuousIntegration.branchFilters | toYaml | indent 8 }}
       triggerType: 2
   variableGroups:
 {{ .Values.build.variableGroups | toYaml | indent 4 }}
@@ -43,7 +44,6 @@ spec:
               id: 2793ff62-78af-4351-bdbc-03da6a37eda4
               versionSpec: 1.*
               definitionType: metaTask
-            inputs: {}
           - displayName: 'Task group: Build and push Docker image to ALM Nexus'
             task:
               id: 001f6df6-2576-4520-ae2f-897b788a6017

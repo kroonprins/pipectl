@@ -1,0 +1,29 @@
+{{ if .Values.build.releaseClientBuildPipeline }}
+---
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    group: {{ .Values.group }}
+    component: {{ .Release.Name }}
+    type: release-client
+spec:
+  name: {{ coalesce .Values.build.releaseClientBuildPipeline.name (cat .Values.build.name "Release") (cat .Release.Name "Release") }}
+  path: {{ default .Values.build.path .Values.build.releaseClientBuildPipeline.path }}
+  project:
+    id: {{ .Values.project.id }}
+  buildNumberFormat: {{ .Values.build.buildNameFormat }}
+  process:
+    phases:
+      - steps:
+          - displayName: 'Task group: Maven release'
+            task:
+              id: b880882f-e197-4652-bfad-5510bd41908c
+              versionSpec: 2.*
+              definitionType: metaTask
+  repository:
+    id: {{ .Values.build.repository }}
+  queue:
+    id: {{ .Values.build.agentPool }}
+
+{{ end }}

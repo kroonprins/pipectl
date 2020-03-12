@@ -38,11 +38,14 @@ const transformGetBuildDefinitionProcessResultForReporting = (processResult: Pro
 const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Definition => {
   // TODO more elegant way :)
   const spec = definition.spec as any
+  delete spec['id']
   delete spec['_links']
-  for (const variableGroup of spec['variableGroups']) {
-    delete variableGroup['variables']
-    delete variableGroup['type']
-    delete variableGroup['name'] // TODO update when variable groups can be specified by name
+  if (spec.hasOwnProperty('variableGroups')) {
+    for (const variableGroup of spec['variableGroups']) {
+      delete variableGroup['variables']
+      delete variableGroup['type']
+      delete variableGroup['name'] // TODO update when variable groups can be specified by name
+    }
   }
   delete spec['authoredBy']
   delete spec['url']
