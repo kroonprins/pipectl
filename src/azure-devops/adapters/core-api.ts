@@ -6,7 +6,7 @@ class CoreApi {
 
   private _coreApi: ICoreApi | null = null
 
-  private async getApi(): Promise<ICoreApi> {
+  /*private*/ async getApi(): Promise<ICoreApi> {
     if (!this._coreApi) {
       this._coreApi = await azureConnection.get().getCoreApi()
     }

@@ -6,7 +6,7 @@ class BuildApi {
 
   private _buildApi: IBuildApi | null = null
 
-  private async getApi(): Promise<IBuildApi> {
+  /*private*/ async getApi(): Promise<IBuildApi> {
     if (!this._buildApi) {
       this._buildApi = await azureConnection.get().getBuildApi()
     }

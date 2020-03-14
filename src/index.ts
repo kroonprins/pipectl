@@ -3,6 +3,7 @@ import bootstrapAzureDevOps from './azure-devops/bootstrap'
 import apply from './core/actions/apply'
 import _delete from './core/actions/delete'
 import get from './core/actions/get'
+import test from './core/actions/test'
 import bootstrapCore from './core/bootstrap'
 import { initialize as initializeConfig } from './core/config'
 import { multiple } from './core/util/commander'
@@ -41,6 +42,10 @@ program
   .option('-o, --output <output>', 'todo')
   .option('--export', 'todo')
   .action(get)
+
+program
+  .command('test')
+  .action(test)
 
 program
   .parseAsync(process.argv)
