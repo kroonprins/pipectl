@@ -6,8 +6,8 @@ const filter = (transformedDefinitions: TransformedDefinition[], action: Action,
   return transformedDefinitions
     .flatMap(transformedDefinition => {
       const shouldFilter = filters()
-        .some(f => f.canFilter(transformedDefinition, transformedDefinitions, action, args) ? f.filter(transformedDefinition, transformedDefinitions, action, args) : false)
-      return shouldFilter ? [] : [transformedDefinition]
+        .every(f => f.canFilter(transformedDefinition, transformedDefinitions, action, args) ? f.filter(transformedDefinition, transformedDefinitions, action, args) : true)
+      return shouldFilter ? [transformedDefinition] : []
     })
 }
 

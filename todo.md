@@ -1,10 +1,14 @@
-* diff
-* no api call if no diff
+* diff (+no api call if no diff)
 * support
-  * --selector / -l (basic implementation done)
   * --timeout
   * --validate
 * transformations:
   * variable groups by name
   * task group by name
 * tags creation does not seem to work via api. If they would work the selector for "get" could be implemented
+* context / config commands
+* create command to create a build/release/pull request approval/... ?
+* describe command
+* edit command
+* logs command
+* choose logger and add debug logging

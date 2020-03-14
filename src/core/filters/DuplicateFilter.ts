@@ -12,9 +12,9 @@ class DuplicateFilter implements DefinitionFilter {
     if (firstIndex >= 0 && transformedDefinitions[firstIndex] !== transformedDefinition) {
       /* tslint:disable-next-line:no-console */ // TODO
       console.log(`WARN duplicate definition for TODO (${uniqueId}). Only one will be processed`)
-      return true
+      return false
     }
-    return false
+    return true
   }
 }
 
