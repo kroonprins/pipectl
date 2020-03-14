@@ -2,6 +2,7 @@ import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInter
 import { Action, CommonArguments } from "../../core/actions/model"
 import { Definition } from "../../core/model"
 import { buildApi } from "../adapters/build-api"
+import { coreApi } from "../adapters/core-api"
 import { Kind } from "../model"
 import { isAzureDevOps } from "../util"
 import { ReleaseDefinitionTransformer } from "./release-definition-transformer"
@@ -106,10 +107,16 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
         artifact.definitionReference!['defaultVersionType'] = defaultVersionType
 
         // TODO handle errors if missing things
+        if (!artifact.definitionReference!.hasOwnProperty('project')) {
+          artifact.definitionReference!['project'] = { id: await coreApi.findProjectIdByName(definition.metadata.namespace) }
+        } else if (!artifact.definitionReference!['project']['id']) {
+          artifact.definitionReference!['project']['id'] = await coreApi.findProjectIdByName(artifact.definitionReference!['project']['name'] || definition.metadata.namespace)
+        }
+        delete artifact.definitionReference!['project']['name']
         if (!artifact.definitionReference!['definition']['id']) {
           const buildName = artifact.definitionReference!['definition']['name']!
           const buildPath = (artifact.definitionReference!['definition'] as any)['path']
-          const project = artifact.definitionReference!['project']['id'] || artifact.definitionReference!['project']['name'] || definition.metadata.namespace
+          const project = artifact.definitionReference!['project']['id']!
           const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(buildName, buildPath, project)
           if (buildDefinition) {
             artifact.definitionReference!['definition']['id'] = buildDefinition.id?.toString()

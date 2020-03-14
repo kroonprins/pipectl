@@ -22,7 +22,6 @@ spec:
           startHours: 0
           startMinutes: 0
       triggerType: 8
-  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   process:
     phases:
       - steps:
@@ -93,7 +92,7 @@ spec:
   name: Test via API for bll-contracting Release
   path: \Other\POC
   project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+    id: Webfoundation
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   process:
     phases:
@@ -553,7 +552,6 @@ spec:
           startHours: 0
           startMinutes: 0
       triggerType: 8
-  buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   process:
     phases:
       - steps:
@@ -624,7 +622,7 @@ spec:
   name: Test via API for bll-contact Release
   path: \Other\POC
   project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
+    id: Webfoundation
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   process:
     phases:
