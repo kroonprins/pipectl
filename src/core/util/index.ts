@@ -1,6 +1,6 @@
 import { CommonArguments } from "../actions/model"
 import { defaultNamespace } from "../config"
-import { Definition, TransformedDefinition } from "../model"
+import { Definition } from "../model"
 
 const completeDefinitions = (definitions: Definition[], args: CommonArguments): Definition[] => { // TODO better name for this
   return definitions
@@ -26,34 +26,5 @@ const namespace = (args: CommonArguments): string => {
   throw new Error('Can not determine the namespace.') // TODO global fallback "default" ?
 }
 
-class Definitions {
-  private definitions: Map<string, TransformedDefinition>
-
-  constructor() {
-    this.definitions = new Map<string, TransformedDefinition>()
-  }
-
-  add(...definitions: TransformedDefinition[]): Definitions {
-    for (const definition of definitions) {
-      const key: string = definition.uniqueId()
-      if (this.definitions.has(key)) {
-        /* tslint:disable-next-line:no-console */ // TODO
-        console.log(`WARN duplicate definition for TODO (${key}). Only one will be processed`)
-      } else {
-        this.definitions.set(key, definition)
-      }
-    }
-    return this
-  }
-
-  list(): TransformedDefinition[] {
-    return [...this.definitions.values()]
-  }
-}
-
-const filterOutDuplicates = (definitions: TransformedDefinition[]): TransformedDefinition[] => {
-  return new Definitions().add(...definitions).list()
-}
-
-export { completeDefinitions, filterOutDuplicates, namespace }
+export { completeDefinitions, namespace }
 

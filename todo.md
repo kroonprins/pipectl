@@ -8,3 +8,4 @@
   * variable groups by name
   * task group by name
 * check tags. If we can add tags from the labels, then the --selector could also work on "get"
+* memoize core api get project by name

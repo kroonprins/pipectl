@@ -1,8 +1,11 @@
-import { registerFallbackReporter, registerFallbackSelector } from "./registration"
+import { DuplicateFilter } from "./filters/DuplicateFilter"
+import { SelectorFilter } from "./filters/SelectorFilter"
+import { registerFallbackReporter, registerFilter } from "./registration"
 import { FallbackReporter } from "./reporter"
-import { DefaultSelector } from "./selector"
 
 export default () => {
-  registerFallbackSelector(new DefaultSelector())
+  registerFilter(new SelectorFilter())
+  registerFilter(new DuplicateFilter())
+
   registerFallbackReporter(new FallbackReporter())
 }

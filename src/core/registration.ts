@@ -1,4 +1,4 @@
-import { ActionProcessor, DefinitionGrouper, DefinitionSelector, DefinitionTransformer, Reporter } from "./model"
+import { ActionProcessor, DefinitionFilter, DefinitionGrouper, DefinitionTransformer, Reporter } from "./model"
 
 class Registrations<T> {
   private _registrations: T[] = []
@@ -17,17 +17,6 @@ class Registrations<T> {
     }
     return Object.freeze([...this._registrations])
   }
-}
-
-const _selectors = new Registrations<DefinitionSelector>()
-const registerSelector = (...s: DefinitionSelector[]): void => {
-  _selectors.register(...s)
-}
-const registerFallbackSelector = (s: DefinitionSelector): void => {
-  _selectors.registerFallback(s)
-}
-const selectors = (): readonly DefinitionSelector[] => {
-  return _selectors.get()
 }
 
 const _groupers = new Registrations<DefinitionGrouper>()
@@ -52,6 +41,17 @@ const transformers = (): readonly DefinitionTransformer[] => {
   return _transformers.get()
 }
 
+const _filters = new Registrations<DefinitionFilter>()
+const registerFilter = (...s: DefinitionFilter[]): void => {
+  _filters.register(...s)
+}
+const registerFallbackFilter = (s: DefinitionFilter): void => {
+  _filters.registerFallback(s)
+}
+const filters = (): readonly DefinitionFilter[] => {
+  return _filters.get()
+}
+
 const _actionProcessors = new Registrations<ActionProcessor>()
 const registerActionProcessor = (...p: ActionProcessor[]): void => {
   _actionProcessors.register(...p)
@@ -74,5 +74,5 @@ const reporters = (): readonly Reporter[] => {
   return _reporters.get()
 }
 
-export { registerSelector, registerFallbackSelector, selectors, registerGrouper, registerFallbackGrouper, groupers, registerTransformer, registerFallbackTransformer, transformers, registerActionProcessor, registerFallbackActionProcessor, processors, registerReporter, registerFallbackReporter, reporters }
+export { registerGrouper, registerFallbackGrouper, groupers, registerTransformer, registerFallbackTransformer, transformers, registerFilter, registerFallbackFilter, filters, registerActionProcessor, registerFallbackActionProcessor, processors, registerReporter, registerFallbackReporter, reporters }
 
