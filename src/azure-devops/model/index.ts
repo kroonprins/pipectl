@@ -1,7 +1,8 @@
-import { TransformedDefinition } from "../../core/model"
+import { Definition, TransformedDefinition } from "../../core/model"
 
 abstract class AzureDefinition<T> implements TransformedDefinition {
   constructor(
+    public sourceDefinition: Definition,
     public apiVersion: string, // TODO public?
     public kind: Kind,
     public project: string,
@@ -17,3 +18,4 @@ enum Kind {
 }
 
 export { AzureDefinition, Kind }
+

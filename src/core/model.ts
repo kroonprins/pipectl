@@ -29,11 +29,6 @@ interface DefinitionGroup {
   items: DefinitionGroupItem[],
 }
 
-interface DefinitionSelector {
-  canSelect(definition: Definition, action: Action, args: CommonArguments): boolean
-  select(definition: Definition, action: Action, args: CommonArguments): boolean
-}
-
 interface DefinitionGrouper {
   canGroup(definition: Definition, action: Action, args: CommonArguments): boolean
   group(definition: Definition, action: Action, args: CommonArguments): [string, string[]]
@@ -45,12 +40,17 @@ interface UniqueId {
 
 /* tslint:disable:no-empty-interface */
 interface TransformedDefinition extends UniqueId {
-
+  sourceDefinition: Definition
 }
 
 interface DefinitionTransformer {
   canTransform(definition: Definition, action: Action, args: CommonArguments): boolean
   transform(definition: Definition, action: Action, args: CommonArguments): Promise<TransformedDefinition>
+}
+
+interface DefinitionFilter {
+  canFilter(transformedDefinition: TransformedDefinition, transformedDefinitions: TransformedDefinition[], action: Action, args: CommonArguments): boolean
+  filter(transformedDefinition: TransformedDefinition, transformedDefinitions: TransformedDefinition[], action: Action, args: CommonArguments): boolean
 }
 
 interface ActionProcessor {
@@ -68,5 +68,5 @@ interface Reporter {
   report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void>
 }
 
-export { Resource, Definition, DefinitionSelector, DefinitionGrouper, DefinitionGroup, DefinitionGroupItem, TransformedDefinition, DefinitionTransformer, ActionProcessor, ProcessResult, Reporter }
+export { Resource, Definition, DefinitionFilter, DefinitionGrouper, DefinitionGroup, DefinitionGroupItem, TransformedDefinition, DefinitionTransformer, ActionProcessor, ProcessResult, Reporter }
 

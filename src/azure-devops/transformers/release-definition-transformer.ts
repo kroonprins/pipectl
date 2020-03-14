@@ -11,7 +11,7 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
   }
   async transform(definition: Definition, _action: Action, _args: CommonArguments) {
     const transformedSpec = await this.setReleaseDefinitionDefaults(definition)
-    return new AzureReleaseDefinition(definition.apiVersion, definition.kind as Kind, definition.metadata.namespace, transformedSpec) // TODO "as Kind"
+    return new AzureReleaseDefinition(definition, definition.apiVersion, definition.kind as Kind, definition.metadata.namespace, transformedSpec) // TODO "as Kind"
   }
   protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
     // TODO clone?

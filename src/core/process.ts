@@ -1,17 +1,14 @@
 import { Action, CommonArguments } from "./actions/model"
+import { filter } from "./filter"
 import { group } from "./group"
 import { Definition, DefinitionGroup, TransformedDefinition } from "./model"
 import { processors, reporters } from "./registration"
-import { select } from "./selector"
 import { transform } from "./transform"
-import { completeDefinitions, filterOutDuplicates } from './util'
+import { completeDefinitions } from './util'
 
 const process = async (definitions: Definition[], action: Action, args: CommonArguments) => {
-  // filter selector
-  const selectedDefinitions = select(definitions, action, args)
-
   // validate & complete
-  const completedDefinitions = completeDefinitions(selectedDefinitions, args)
+  const completedDefinitions = completeDefinitions(definitions, args)
 
   // group
   const groupedDefinitions = group(completedDefinitions, action, args)
@@ -30,11 +27,11 @@ const processAction = async (groups: DefinitionGroup[], action: Action, args: Co
         // transform
         const transformedDefinitions: TransformedDefinition[] = await transform(groupItem.definitions, action, args)
 
-        // duplicate removal
-        const definitionsWithoutDuplicates = filterOutDuplicates(transformedDefinitions)
+        // filter
+        const filteredDefinitions = filter(transformedDefinitions, action, args)
 
         // process & report
-        return Promise.all(definitionsWithoutDuplicates
+        return Promise.all(filteredDefinitions
           .flatMap(async definition => {
             const processor = processors()
               .find(p => p.canProcess(definition, action, args))
