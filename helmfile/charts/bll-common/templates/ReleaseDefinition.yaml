@@ -124,5 +124,3 @@ spec:
       definition:
         name: {{ .Values.build.name }}
         path:  {{ .Values.build.path }}
-      project:
-        id: {{ .Values.project.id }}

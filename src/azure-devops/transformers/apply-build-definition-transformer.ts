@@ -1,6 +1,7 @@
 import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger } from "azure-devops-node-api/interfaces/BuildInterfaces"
 import { Action, CommonArguments } from "../../core/actions/model"
 import { Definition } from "../../core/model"
+import { coreApi } from "../adapters/core-api"
 import { Kind } from "../model"
 import { isAzureDevOps } from "../util"
 import { BuildDefinitionTransformer } from "./build-definition-transformer"
@@ -15,6 +16,8 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
     // TODO find elegant way to achieve the below
 
     if (!updatedSpec.hasOwnProperty('type')) updatedSpec.type = 2 // non-yaml
+
+    if (!updatedSpec.hasOwnProperty('project')) updatedSpec.project = { id: await coreApi.findProjectIdByName(definition.metadata.namespace) }
 
     if (updatedSpec.hasOwnProperty('triggers')) {
       for (const trigger of updatedSpec.triggers!) {

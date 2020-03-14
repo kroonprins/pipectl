@@ -9,8 +9,6 @@ metadata:
 spec:
   name: {{ default .Release.Name .Values.build.name }}
   path: {{ .Values.build.path }}
-  project:
-    id: {{ .Values.project.id }}
   buildNumberFormat: {{ .Values.build.buildNameFormat }}
   triggers:
     - branchFilters:
