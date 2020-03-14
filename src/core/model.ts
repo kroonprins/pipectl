@@ -29,6 +29,11 @@ interface DefinitionGroup {
   items: DefinitionGroupItem[],
 }
 
+interface DefinitionSelector {
+  canSelect(definition: Definition, action: Action, args: CommonArguments): boolean
+  select(definition: Definition, action: Action, args: CommonArguments): boolean
+}
+
 interface DefinitionGrouper {
   canGroup(definition: Definition, action: Action, args: CommonArguments): boolean
   group(definition: Definition, action: Action, args: CommonArguments): [string, string[]]
@@ -63,5 +68,5 @@ interface Reporter {
   report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void>
 }
 
-export { Resource, Definition, DefinitionGrouper, DefinitionGroup, DefinitionGroupItem, TransformedDefinition, DefinitionTransformer, ActionProcessor, ProcessResult, Reporter }
+export { Resource, Definition, DefinitionSelector, DefinitionGrouper, DefinitionGroup, DefinitionGroupItem, TransformedDefinition, DefinitionTransformer, ActionProcessor, ProcessResult, Reporter }
 

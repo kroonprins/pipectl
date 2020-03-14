@@ -6,7 +6,7 @@ metadata:
   labels:
     group: {{ .Values.group }}
     component: {{ .Release.Name }}
-    type: release-client
+    type: release-client-build
 spec:
   name: {{ coalesce .Values.build.releaseClientBuildPipeline.name (cat .Values.build.name "Release") (cat .Release.Name "Release") }}
   path: {{ default .Values.build.path .Values.build.releaseClientBuildPipeline.path }}

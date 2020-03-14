@@ -3,10 +3,12 @@ import bootstrapAzureDevOps from './azure-devops/bootstrap'
 import apply from './core/actions/apply'
 import _delete from './core/actions/delete'
 import get from './core/actions/get'
+import bootstrapCore from './core/bootstrap'
 import { initialize as initializeConfig } from './core/config'
 import { multiple } from './core/util/commander'
 
 initializeConfig()
+bootstrapCore()
 bootstrapAzureDevOps()
 
 const program = new Command()

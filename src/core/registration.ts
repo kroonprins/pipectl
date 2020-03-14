@@ -1,62 +1,78 @@
-import { Action, CommonArguments } from "./actions/model"
-import { ActionProcessor, DefinitionGrouper, DefinitionTransformer, ProcessResult, Reporter, TransformedDefinition } from "./model"
+import { ActionProcessor, DefinitionGrouper, DefinitionSelector, DefinitionTransformer, Reporter } from "./model"
 
-const _transformers: DefinitionTransformer[] = []
+class Registrations<T> {
+  private _registrations: T[] = []
+  private _fallbackRegistration: T | undefined
 
-const registerTransformer = (...definitionTransformers: DefinitionTransformer[]): void => {
-  _transformers.push(...definitionTransformers)
-}
-
-const transformers = (): readonly DefinitionTransformer[] => {
-  return Object.freeze(_transformers)
-}
-
-const _groupers: DefinitionGrouper[] = []
-
-const registerGrouper = (...definitionGroupers: DefinitionGrouper[]): void => {
-  _groupers.push(...definitionGroupers)
-}
-
-const groupers = (): readonly DefinitionGrouper[] => {
-  return Object.freeze(_groupers)
-}
-
-const _actionProcessors: ActionProcessor[] = []
-
-const registerActionProcessor = (...actionProcessors: ActionProcessor[]): void => {
-  _actionProcessors.push(...actionProcessors)
-}
-
-const processors = (): readonly ActionProcessor[] => {
-  return Object.freeze(_actionProcessors)
-}
-
-const _reporters: Reporter[] = []
-
-const registerReporter = (...r: Reporter[]): void => {
-  _reporters.push(...r)
-}
-
-/* tslint:disable:new-parens no-console */ // TODO
-const FallbackReporter = new class implements Reporter {
-  canReport() {
-    return true
+  register(...r: T[]): void {
+    this._registrations.push(...r)
   }
-  async report(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, action: Action, _args: CommonArguments) {
-    if (processResult.error) {
-      console.log(`Error occurred for the action ${action}: ${processResult.error.message}`)
-    } else if (processResult.info) {
-      console.log(processResult.info)
+  registerFallback(r: T): void {
+    this._fallbackRegistration = r
+  }
+
+  get(): readonly T[] {
+    if (this._fallbackRegistration) {
+      return Object.freeze([...this._registrations, this._fallbackRegistration])
     }
+    return Object.freeze([...this._registrations])
   }
 }
 
+const _selectors = new Registrations<DefinitionSelector>()
+const registerSelector = (...s: DefinitionSelector[]): void => {
+  _selectors.register(...s)
+}
+const registerFallbackSelector = (s: DefinitionSelector): void => {
+  _selectors.registerFallback(s)
+}
+const selectors = (): readonly DefinitionSelector[] => {
+  return _selectors.get()
+}
+
+const _groupers = new Registrations<DefinitionGrouper>()
+const registerGrouper = (...g: DefinitionGrouper[]): void => {
+  _groupers.register(...g)
+}
+const registerFallbackGrouper = (g: DefinitionGrouper): void => {
+  _groupers.registerFallback(g)
+}
+const groupers = (): readonly DefinitionGrouper[] => {
+  return _groupers.get()
+}
+
+const _transformers = new Registrations<DefinitionTransformer>()
+const registerTransformer = (...t: DefinitionTransformer[]): void => {
+  _transformers.register(...t)
+}
+const registerFallbackTransformer = (t: DefinitionTransformer): void => {
+  _transformers.registerFallback(t)
+}
+const transformers = (): readonly DefinitionTransformer[] => {
+  return _transformers.get()
+}
+
+const _actionProcessors = new Registrations<ActionProcessor>()
+const registerActionProcessor = (...p: ActionProcessor[]): void => {
+  _actionProcessors.register(...p)
+}
+const registerFallbackActionProcessor = (p: ActionProcessor): void => {
+  _actionProcessors.registerFallback(p)
+}
+const processors = (): readonly ActionProcessor[] => {
+  return _actionProcessors.get()
+}
+
+const _reporters = new Registrations<Reporter>()
+const registerReporter = (...r: Reporter[]): void => {
+  _reporters.register(...r)
+}
+const registerFallbackReporter = (r: Reporter): void => {
+  _reporters.registerFallback(r)
+}
 const reporters = (): readonly Reporter[] => {
-  if (_reporters[_reporters.length - 1] !== FallbackReporter) {
-    _reporters.push(FallbackReporter)
-  }
-  return Object.freeze(_reporters)
+  return _reporters.get()
 }
 
-export { registerTransformer, transformers, registerGrouper, groupers, registerActionProcessor, processors, registerReporter, reporters }
+export { registerSelector, registerFallbackSelector, selectors, registerGrouper, registerFallbackGrouper, groupers, registerTransformer, registerFallbackTransformer, transformers, registerActionProcessor, registerFallbackActionProcessor, processors, registerReporter, registerFallbackReporter, reporters }
 

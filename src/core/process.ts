@@ -2,12 +2,13 @@ import { Action, CommonArguments } from "./actions/model"
 import { group } from "./group"
 import { Definition, DefinitionGroup, TransformedDefinition } from "./model"
 import { processors, reporters } from "./registration"
+import { select } from "./selector"
 import { transform } from "./transform"
-import { applySelector, completeDefinitions, filterOutDuplicates } from './util'
+import { completeDefinitions, filterOutDuplicates } from './util'
 
 const process = async (definitions: Definition[], action: Action, args: CommonArguments) => {
   // filter selector
-  const selectedDefinitions = applySelector(definitions, args)
+  const selectedDefinitions = select(definitions, action, args)
 
   // validate & complete
   const completedDefinitions = completeDefinitions(selectedDefinitions, args)

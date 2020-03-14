@@ -5,7 +5,7 @@ metadata:
   labels:
     group: {{ .Values.group }}
     component: {{ .Release.Name }}
-    type: CI
+    type: ci-build
 spec:
   name: {{ default .Release.Name .Values.build.name }}
   path: {{ .Values.build.path }}
