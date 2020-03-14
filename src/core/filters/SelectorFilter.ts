@@ -7,13 +7,26 @@ class SelectorFilter implements DefinitionFilter {
   }
   filter(transformedDefinition: TransformedDefinition, _transformedDefinitions: TransformedDefinition[], _action: Action, args: CommonArguments): boolean {
     if (!args.selector) {
-      return false
+      return true
     }
-    const [labelName, labelValue] = args.selector.split("=") // TODO manage multiple, manage == and !=
-    if (transformedDefinition.sourceDefinition.metadata.labels && transformedDefinition.sourceDefinition.metadata.labels[labelName] === labelValue) {
-      return false
-    }
-    return true
+
+    return args.selector.split(',')
+      .map(selector => {
+        if (selector.indexOf('=') === -1 || (selector.indexOf('=') !== selector.lastIndexOf('=') && selector.indexOf('=') !== selector.lastIndexOf('=') - 1)) {
+          /* tslint:disable-next-line:no-console */ // TODOs
+          console.log(`WARN invalid selector syntax ${selector}`)
+          return true
+        }
+        if (selector.indexOf('!=') !== -1) {
+          const [labelName, labelValue] = selector.split("!=")
+          return !(transformedDefinition.sourceDefinition.metadata.labels && transformedDefinition.sourceDefinition.metadata.labels[labelName] === labelValue)
+        } else {
+          const [labelName, singleEqual, doubleEqual] = selector.split("=")
+          const labelValue = doubleEqual ? doubleEqual : singleEqual
+          return transformedDefinition.sourceDefinition.metadata.labels && transformedDefinition.sourceDefinition.metadata.labels[labelName] === labelValue
+        }
+      })
+      .every(selectorMatch => selectorMatch)
   }
 }
 
