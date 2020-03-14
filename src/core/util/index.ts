@@ -2,20 +2,6 @@ import { CommonArguments } from "../actions/model"
 import { defaultNamespace } from "../config"
 import { Definition, TransformedDefinition } from "../model"
 
-const applySelector = (definitions: Definition[], args: CommonArguments): Definition[] => {
-  return definitions.
-    filter(definition => {
-      if (!args.selector) {
-        return true
-      }
-      const [labelName, labelValue] = args.selector.split("=") // TODO manage multiple
-      if (definition.metadata.labels && definition.metadata.labels[labelName] === labelValue) {
-        return true
-      }
-      return false
-    })
-}
-
 const completeDefinitions = (definitions: Definition[], args: CommonArguments): Definition[] => { // TODO better name for this
   return definitions
     .map(definition => {
@@ -69,5 +55,5 @@ const filterOutDuplicates = (definitions: TransformedDefinition[]): TransformedD
   return new Definitions().add(...definitions).list()
 }
 
-export { applySelector, completeDefinitions, filterOutDuplicates, namespace }
+export { completeDefinitions, filterOutDuplicates, namespace }
 

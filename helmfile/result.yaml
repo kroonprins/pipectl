@@ -6,12 +6,10 @@ metadata:
   labels:
     group: bll
     component: bll-contracting
-    type: nightly
+    type: nightly-build
 spec:
   name: Test via API for bll-contracting Nightly
   path: \Other\POC\Nightly builds
-  project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   triggers:
     - schedules:
@@ -87,12 +85,10 @@ metadata:
   labels:
     group: bll
     component: bll-contracting
-    type: release-client
+    type: release-client-build
 spec:
   name: Test via API for bll-contracting Release
   path: \Other\POC
-  project:
-    id: Webfoundation
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   process:
     phases:
@@ -114,12 +110,10 @@ metadata:
   labels:
     group: bll
     component: bll-contracting
-    type: CI
+    type: ci-build
 spec:
   name: Test via API for bll-contracting
   path: \Other\POC
-  project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   triggers:
     - branchFilters:
@@ -525,8 +519,6 @@ spec:
       definition:
         name: Test via API for bll-contracting
         path:  \Other\POC
-      project:
-        id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
 
 ---
 # Source: bll-common/templates/BuildPipeline-Nightly.yaml
@@ -536,12 +528,10 @@ metadata:
   labels:
     group: bll
     component: bll-contact
-    type: nightly
+    type: nightly-build
 spec:
   name: Test via API for bll-contact Nightly
   path: \Other\POC\Nightly builds
-  project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   triggers:
     - schedules:
@@ -617,12 +607,10 @@ metadata:
   labels:
     group: bll
     component: bll-contact
-    type: release-client
+    type: release-client-build
 spec:
   name: Test via API for bll-contact Release
   path: \Other\POC
-  project:
-    id: Webfoundation
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   process:
     phases:
@@ -644,12 +632,10 @@ metadata:
   labels:
     group: bll
     component: bll-contact
-    type: CI
+    type: ci-build
 spec:
   name: Test via API for bll-contact
   path: \Other\POC
-  project:
-    id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
   buildNumberFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
   triggers:
     - branchFilters:
@@ -979,6 +965,4 @@ spec:
       definition:
         name: Test via API for bll-contact
         path:  \Other\POC
-      project:
-        id: 5a4ec25a-2f9d-4947-9937-d4347eaceadd
 

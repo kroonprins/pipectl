@@ -6,7 +6,7 @@ metadata:
   labels:
     group: {{ .Values.group }}
     component: {{ .Release.Name }}
-    type: nightly
+    type: nightly-build
 spec:
   name: {{ coalesce .Values.build.nightlyBuildPipeline.name (cat .Values.build.name "Nightly") (cat .Release.Name "Nightly") }}
   path: {{ default .Values.build.path .Values.build.nightlyBuildPipeline.path }}
