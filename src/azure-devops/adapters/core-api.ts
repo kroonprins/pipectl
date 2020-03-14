@@ -1,4 +1,5 @@
 import { ICoreApi } from "azure-devops-node-api/CoreApi"
+import memoize from 'p-memoize'
 import { azureConnection } from "./connection"
 
 class CoreApi {
@@ -12,7 +13,9 @@ class CoreApi {
     return this._coreApi
   }
 
-  async findProjectIdByName(name: string): Promise<string> {
+  findProjectIdByName = memoize(this._findProjectIdByName)
+
+  async _findProjectIdByName(name: string): Promise<string> {
     const api = await this.getApi()
     const search = await api.getProjects()
     if (search && search.length) {
