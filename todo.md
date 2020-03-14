@@ -7,4 +7,4 @@
 * transformations:
   * variable groups by name
   * task group by name
-* check tags. If we can add tags from the labels, then the --selector could also work on "get"
+* tags creation does not seem to work via api. If they would work the selector for "get" could be implemented
