@@ -17,7 +17,11 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
 
     if (!updatedSpec.hasOwnProperty('type')) updatedSpec.type = 2 // non-yaml
 
-    if (!updatedSpec.hasOwnProperty('project')) updatedSpec.project = { id: await coreApi.findProjectIdByName(definition.metadata.namespace) }
+    if (!updatedSpec.hasOwnProperty('project')) {
+      updatedSpec.project = { id: await coreApi.findProjectIdByName(definition.metadata.namespace) }
+    } else if (!updatedSpec.project!.id) {
+      updatedSpec.project!.id = await coreApi.findProjectIdByName(updatedSpec.project!.name || definition.metadata.namespace)
+    }
 
     if (updatedSpec.hasOwnProperty('triggers')) {
       for (const trigger of updatedSpec.triggers!) {
