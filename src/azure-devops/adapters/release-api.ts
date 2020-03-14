@@ -6,7 +6,7 @@ class ReleaseApi {
 
   private _releaseApi: IReleaseApi | null = null
 
-  private async getApi(): Promise<IReleaseApi> {
+  /*private*/ async getApi(): Promise<IReleaseApi> {
     if (!this._releaseApi) {
       this._releaseApi = await azureConnection.get().getReleaseApi()
     }
