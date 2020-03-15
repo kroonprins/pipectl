@@ -1,6 +1,6 @@
-import { CommonArguments } from "../actions/model"
-import { defaultNamespace } from "../config"
-import { Definition } from "../model"
+import { CommonArguments } from '../actions/model'
+import { defaultNamespace } from '../config'
+import { Definition } from '../model'
 
 const completeDefinitions = (definitions: Definition[], args: CommonArguments): Definition[] => { // TODO better name for this
   return definitions

@@ -1,4 +1,4 @@
-import { ActionProcessor, DefinitionFilter, DefinitionGrouper, DefinitionTransformer, Reporter } from "./model"
+import { ActionProcessor, DefinitionFilter, DefinitionGrouper, DefinitionTransformer, Reporter } from './model'
 
 class Registrations<T> {
   private _registrations: T[] = []

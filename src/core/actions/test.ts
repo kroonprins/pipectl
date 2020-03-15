@@ -1,4 +1,4 @@
-import log from "loglevel"
+import log from 'loglevel'
 
 export default async (arg1: any, arg2: any, arg3: any) => {
   log.info(`arg1: ${arg1}`)

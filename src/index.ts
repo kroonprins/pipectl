@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import log from "loglevel"
+import log from 'loglevel'
 import bootstrapAzureDevOps from './azure-devops/bootstrap'
 import apply from './core/actions/apply'
 import _delete from './core/actions/delete'
@@ -50,7 +50,7 @@ addCommands(
 program
   .parseAsync(process.argv)
   .catch((e: Error) => {
-    log.error("ERROR 👎")
+    log.error('ERROR 👎')
     log.error(e/*.message*/)
   })
 

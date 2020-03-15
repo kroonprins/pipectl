@@ -1,7 +1,7 @@
-import { Action, CommonArguments } from "../../core/actions/model"
-import { Definition, DefinitionGrouper } from "../../core/model"
-import { Kind } from "../model"
-import { isAzureDevOps } from "../util"
+import { Action, CommonArguments } from '../../core/actions/model'
+import { Definition, DefinitionGrouper } from '../../core/model'
+import { Kind } from '../model'
+import { isAzureDevOps } from '../util'
 
 class ApplyAzureDefinitionGrouper implements DefinitionGrouper {
   canGroup(definition: Definition, action: Action, _args: CommonArguments): boolean {

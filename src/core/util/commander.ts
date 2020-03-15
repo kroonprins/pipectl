@@ -1,5 +1,5 @@
-import { Command } from "commander"
-import log from "loglevel"
+import { Command } from 'commander'
+import log from 'loglevel'
 
 function multiple(value: string, previous: string[] = []) {
   return previous.concat([value])

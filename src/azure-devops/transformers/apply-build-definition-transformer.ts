@@ -1,10 +1,10 @@
-import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger } from "azure-devops-node-api/interfaces/BuildInterfaces"
-import { Action, CommonArguments } from "../../core/actions/model"
-import { Definition } from "../../core/model"
-import { coreApi } from "../adapters/core-api"
-import { Kind } from "../model"
-import { isAzureDevOps } from "../util"
-import { BuildDefinitionTransformer } from "./build-definition-transformer"
+import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { Action, CommonArguments } from '../../core/actions/model'
+import { Definition } from '../../core/model'
+import { coreApi } from '../adapters/core-api'
+import { Kind } from '../model'
+import { isAzureDevOps } from '../util'
+import { BuildDefinitionTransformer } from './build-definition-transformer'
 
 class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
   canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {

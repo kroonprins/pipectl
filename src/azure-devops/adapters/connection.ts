@@ -1,5 +1,5 @@
-import { getBasicHandler, getHandlerFromToken, WebApi } from "azure-devops-node-api"
-import { currentServer, currentUser } from "../../core/config"
+import { getBasicHandler, getHandlerFromToken, WebApi } from 'azure-devops-node-api'
+import { currentServer, currentUser } from '../../core/config'
 
 class AzureConnection {
   private _connection: WebApi | null = null

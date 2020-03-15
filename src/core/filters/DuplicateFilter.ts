@@ -1,6 +1,6 @@
-import log from "loglevel"
-import { Action, CommonArguments } from "../actions/model"
-import { DefinitionFilter, TransformedDefinition } from "../model"
+import log from 'loglevel'
+import { Action, CommonArguments } from '../actions/model'
+import { DefinitionFilter, TransformedDefinition } from '../model'
 
 class DuplicateFilter implements DefinitionFilter {
   canFilter(_transformedDefinition: TransformedDefinition, _transformedDefinitions: TransformedDefinition[], _action: Action, _args: CommonArguments): boolean {

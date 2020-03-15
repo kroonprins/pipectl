@@ -1,6 +1,6 @@
-import log from "loglevel"
-import { Action, CommonArguments } from "../actions/model"
-import { DefinitionFilter, TransformedDefinition } from "../model"
+import log from 'loglevel'
+import { Action, CommonArguments } from '../actions/model'
+import { DefinitionFilter, TransformedDefinition } from '../model'
 
 class SelectorFilter implements DefinitionFilter {
   canFilter(_transformedDefinition: TransformedDefinition, _transformedDefinitions: TransformedDefinition[], action: Action, _args: CommonArguments): boolean {
@@ -18,10 +18,10 @@ class SelectorFilter implements DefinitionFilter {
           return true
         }
         if (selector.indexOf('!=') !== -1) {
-          const [labelName, labelValue] = selector.split("!=")
+          const [labelName, labelValue] = selector.split('!=')
           return !(transformedDefinition.sourceDefinition.metadata.labels && transformedDefinition.sourceDefinition.metadata.labels[labelName] === labelValue)
         } else {
-          const [labelName, singleEqual, doubleEqual] = selector.split("=")
+          const [labelName, singleEqual, doubleEqual] = selector.split('=')
           const labelValue = doubleEqual ? doubleEqual : singleEqual
           return transformedDefinition.sourceDefinition.metadata.labels && transformedDefinition.sourceDefinition.metadata.labels[labelName] === labelValue
         }

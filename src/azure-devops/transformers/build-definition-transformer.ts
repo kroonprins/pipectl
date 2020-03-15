@@ -1,9 +1,9 @@
-import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces"
-import { Action, CommonArguments } from "../../core/actions/model"
-import { Definition, DefinitionTransformer } from "../../core/model"
+import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { Action, CommonArguments } from '../../core/actions/model'
+import { Definition, DefinitionTransformer } from '../../core/model'
 import { Kind } from '../model'
-import { AzureBuildDefinition } from "../model/azure-build-definition"
-import { isAzureDevOps } from "../util"
+import { AzureBuildDefinition } from '../model/azure-build-definition'
+import { isAzureDevOps } from '../util'
 
 class BuildDefinitionTransformer implements DefinitionTransformer {
   canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
@@ -17,7 +17,7 @@ class BuildDefinitionTransformer implements DefinitionTransformer {
     // TODO clone?
     const updatedSpec = definition.spec as BuildDefinition
     if (!updatedSpec.hasOwnProperty('path'))
-      updatedSpec.path = "\\"
+      updatedSpec.path = '\\'
 
     if (definition.metadata.labels) {
       const tags = Object.entries(definition.metadata.labels).map(([k, v]) => `${k}=${v}`)

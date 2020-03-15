@@ -1,6 +1,6 @@
-import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
-import { IReleaseApi } from "azure-devops-node-api/ReleaseApi"
-import { azureConnection } from "./connection"
+import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import { IReleaseApi } from 'azure-devops-node-api/ReleaseApi'
+import { azureConnection } from './connection'
 
 class ReleaseApi {
 

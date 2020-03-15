@@ -1,6 +1,6 @@
-import { ICoreApi } from "azure-devops-node-api/CoreApi"
+import { ICoreApi } from 'azure-devops-node-api/CoreApi'
 import memoize from 'p-memoize'
-import { azureConnection } from "./connection"
+import { azureConnection } from './connection'
 
 class CoreApi {
 

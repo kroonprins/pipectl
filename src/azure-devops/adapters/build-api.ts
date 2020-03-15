@@ -1,6 +1,6 @@
-import { IBuildApi } from "azure-devops-node-api/BuildApi"
-import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces"
-import { azureConnection } from "./connection"
+import { IBuildApi } from 'azure-devops-node-api/BuildApi'
+import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { azureConnection } from './connection'
 
 class BuildApi {
 

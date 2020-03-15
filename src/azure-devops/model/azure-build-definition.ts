@@ -1,5 +1,5 @@
-import { BuildDefinition } from "azure-devops-node-api/interfaces/BuildInterfaces"
-import { AzureDefinition } from "."
+import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { AzureDefinition } from '.'
 
 class AzureBuildDefinition extends AzureDefinition<BuildDefinition> {
   uniqueId(): string {

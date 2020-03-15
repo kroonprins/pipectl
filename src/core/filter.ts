@@ -1,6 +1,6 @@
-import { Action, CommonArguments } from "./actions/model"
-import { TransformedDefinition } from "./model"
-import { filters } from "./registration"
+import { Action, CommonArguments } from './actions/model'
+import { TransformedDefinition } from './model'
+import { filters } from './registration'
 
 const filter = (transformedDefinitions: TransformedDefinition[], action: Action, args: CommonArguments): TransformedDefinition[] => {
   return transformedDefinitions

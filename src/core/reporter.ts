@@ -1,6 +1,6 @@
-import log from "loglevel"
-import { Action, CommonArguments } from "./actions/model"
-import { ProcessResult, Reporter, TransformedDefinition } from "./model"
+import log from 'loglevel'
+import { Action, CommonArguments } from './actions/model'
+import { ProcessResult, Reporter, TransformedDefinition } from './model'
 
 class FallbackReporter implements Reporter {
   canReport(_processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, _args: CommonArguments): boolean {

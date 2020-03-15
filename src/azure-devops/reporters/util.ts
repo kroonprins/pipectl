@@ -1,9 +1,9 @@
-import { Action, CommonArguments, GetArguments } from "../../core/actions/model"
-import { Definition, ProcessResult, TransformedDefinition } from "../../core/model"
-import { AzureBuildDefinition } from "../model/azure-build-definition"
-import { AzureReleaseDefinition } from "../model/azure-release-definition"
-import { GetBuildDefinitionProcessResult } from "../model/get-build-definition-process-result"
-import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
+import { Action, CommonArguments, GetArguments } from '../../core/actions/model'
+import { Definition, ProcessResult, TransformedDefinition } from '../../core/model'
+import { AzureBuildDefinition } from '../model/azure-build-definition'
+import { AzureReleaseDefinition } from '../model/azure-release-definition'
+import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
+import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 
 const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): object => {
   const azureBuildDefinition = transformedDefinition as AzureBuildDefinition

@@ -1,8 +1,8 @@
-import { Action, GetArguments } from "../../core/actions/model"
-import { ActionProcessor, TransformedDefinition } from "../../core/model"
-import { releaseApi } from "../adapters/release-api"
-import { AzureReleaseDefinition } from "../model/azure-release-definition"
-import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
+import { Action, GetArguments } from '../../core/actions/model'
+import { ActionProcessor, TransformedDefinition } from '../../core/model'
+import { releaseApi } from '../adapters/release-api'
+import { AzureReleaseDefinition } from '../model/azure-release-definition'
+import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 
 class GetOneReleaseDefinition implements ActionProcessor {
   canProcess(transformedDefinition: TransformedDefinition, action: Action, args: GetArguments): boolean {
