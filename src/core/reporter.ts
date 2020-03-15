@@ -7,6 +7,7 @@ class FallbackReporter implements Reporter {
     return true
   }
   async report(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, action: Action, _args: CommonArguments): Promise<void> {
+    log.debug(`[FallbackReporter] reporting process result`)
     if (processResult.error) {
       log.error(`Error occurred for the action ${action}: ${processResult.error.message}`)
     } else if (processResult.info) {

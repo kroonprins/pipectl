@@ -40,6 +40,8 @@ interface UniqueId {
 
 interface TransformedDefinition extends UniqueId {
   sourceDefinition: Definition
+
+  shortName(): string
 }
 
 interface DefinitionTransformer {
