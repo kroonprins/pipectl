@@ -1,3 +1,4 @@
+import log from "loglevel"
 import { Action, CommonArguments } from "../actions/model"
 import { DefinitionFilter, TransformedDefinition } from "../model"
 
@@ -13,8 +14,7 @@ class SelectorFilter implements DefinitionFilter {
     return args.selector.split(',')
       .map(selector => {
         if (selector.indexOf('=') === -1 || (selector.indexOf('=') !== selector.lastIndexOf('=') && selector.indexOf('=') !== selector.lastIndexOf('=') - 1)) {
-          /* tslint:disable-next-line:no-console */ // TODOs
-          console.log(`WARN invalid selector syntax ${selector}`)
+          log.warn(`WARN invalid selector syntax ${selector}`)
           return true
         }
         if (selector.indexOf('!=') !== -1) {

@@ -1,3 +1,4 @@
+import log from "loglevel"
 import { Action, CommonArguments } from "./actions/model"
 import { Definition, DefinitionGroup, DefinitionGroupItem } from "./model"
 import { groupers } from "./registration"
@@ -29,8 +30,7 @@ const group = (definitions: Definition[], action: Action, args: CommonArguments)
           }
           const groupAtIndex = acc[index]
           if (!groupAtIndex) {
-            /* tslint:disable-next-line:no-console */
-            console.log('wtf, this shouldn\'t happen...')
+            log.error('wtf, this shouldn\'t happen...')
           } else {
             const indexExisting = groupAtIndex.items.findIndex(groupItem => item.name === groupItem.name)
             if (indexExisting !== -1) {
