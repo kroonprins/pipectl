@@ -1,3 +1,4 @@
+import log from "loglevel"
 import { Action, CommonArguments } from "../actions/model"
 import { DefinitionFilter, TransformedDefinition } from "../model"
 
@@ -10,8 +11,7 @@ class DuplicateFilter implements DefinitionFilter {
     const uniqueIds = transformedDefinitions.map(t => t.uniqueId())
     const firstIndex = uniqueIds.findIndex(u => u === uniqueId)
     if (firstIndex >= 0 && transformedDefinitions[firstIndex] !== transformedDefinition) {
-      /* tslint:disable-next-line:no-console */ // TODO
-      console.log(`WARN duplicate definition for TODO (${uniqueId}). Only one will be processed`)
+      log.warn(`WARN duplicate definition for TODO (${uniqueId}). Only one will be processed`)
       return false
     }
     return true

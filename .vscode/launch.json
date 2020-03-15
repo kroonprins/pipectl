@@ -13,7 +13,9 @@
         "apply",
         "-f",
         "helmfile/result.yaml",
-        "--dry-run"
+        "--dry-run",
+        "--log-level",
+        "debug"
       ],
       "runtimeArgs": [
         "--nolazy",
@@ -37,7 +39,9 @@
       "request": "launch",
       "args": [
         "${workspaceRoot}/src/index.ts",
-        "test"
+        "test",
+        "--log-level",
+        "debug"
       ],
       "runtimeArgs": [
         "--nolazy",

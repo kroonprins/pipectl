@@ -1,27 +1,27 @@
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
+import log from "loglevel"
 import { Config, ContextConfig, ServerConfig, UserConfig } from './model'
 
 let config: Config
 
-/* tslint:disable:no-console */ // TODO
 const initialize = () => {
 
   const location = configFileLocation()
 
   config = load((readFileSync(location)).toString()) as Config // TODO sync?
 
-  console.log(`Loaded configuration from ${location}`)
-  console.log(` Current context ${config['current-context']}`)
+  log.debug(`Loaded configuration from ${location}`)
+  log.debug(` Current context ${config['current-context']}`)
   const namespace = defaultNamespace()
   if (namespace) {
-    console.log(` Default namespace: ${namespace}`)
+    log.debug(` Default namespace: ${namespace}`)
   }
-  console.log(` Server type: ${currentServer().type}`)
-  console.log(` Base url: ${currentServer()['base-url']}`)
-  console.log(` Auth type: ${currentUser()['auth-provider'].name}`)
-  console.log()
-  console.log()
+  log.debug(` Server type: ${currentServer().type}`)
+  log.debug(` Base url: ${currentServer()['base-url']}`)
+  log.debug(` Auth type: ${currentUser()['auth-provider'].name}`)
+  log.debug()
+  log.debug()
 }
 
 const configFileLocation = () => {

@@ -1,3 +1,4 @@
+import log from "loglevel"
 import { Action, CommonArguments } from "./actions/model"
 import { filter } from "./filter"
 import { group } from "./group"
@@ -21,8 +22,7 @@ const processAction = async (groups: DefinitionGroup[], action: Action, args: Co
   for (const definitionGroup of groups) {
     await Promise.all(definitionGroup.items
       .flatMap(async groupItem => {
-        /* tslint:disable-next-line:no-console */ // TODO
-        console.log(`Processing group ${groupItem.name}`)
+        log.debug(`Processing group ${groupItem.name}`)
 
         // transform
         const transformedDefinitions: TransformedDefinition[] = await transform(groupItem.definitions, action, args)
