@@ -10,6 +10,7 @@ abstract class AzureDefinition<T> implements TransformedDefinition {
   ) { }
 
   abstract uniqueId(): string
+  abstract shortName(): string
 }
 
 enum Kind {

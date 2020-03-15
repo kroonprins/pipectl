@@ -13,7 +13,7 @@ interface ApplyArguments extends CommonArguments {
 
 interface GetArguments extends CommonArguments {
   kind: string,
-  name?: string, // number for azure devops
+  name?: string,
   export?: boolean
 }
 
