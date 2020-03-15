@@ -1,7 +1,7 @@
-import log from "loglevel"
-import { Action, CommonArguments } from "./actions/model"
-import { Definition, DefinitionGroup, DefinitionGroupItem } from "./model"
-import { groupers } from "./registration"
+import log from 'loglevel'
+import { Action, CommonArguments } from './actions/model'
+import { Definition, DefinitionGroup, DefinitionGroupItem } from './model'
+import { groupers } from './registration'
 
 const group = (definitions: Definition[], action: Action, args: CommonArguments): DefinitionGroup[] => {
   return definitions

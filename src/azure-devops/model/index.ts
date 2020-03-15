@@ -1,4 +1,4 @@
-import { Definition, TransformedDefinition } from "../../core/model"
+import { Definition, TransformedDefinition } from '../../core/model'
 
 abstract class AzureDefinition<T> implements TransformedDefinition {
   constructor(
@@ -13,8 +13,8 @@ abstract class AzureDefinition<T> implements TransformedDefinition {
 }
 
 enum Kind {
-  BUILD_DEFINITION = "BuildDefinition",
-  RELEASE_DEFINITION = "ReleaseDefinition",
+  BUILD_DEFINITION = 'BuildDefinition',
+  RELEASE_DEFINITION = 'ReleaseDefinition',
 }
 
 export { AzureDefinition, Kind }

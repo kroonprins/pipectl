@@ -1,8 +1,8 @@
-import log from "loglevel"
+import log from 'loglevel'
 
 const initializeLogging = () => {
   log.setDefaultLevel('info')
 }
 
-
 export { initializeLogging }
+

@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { load } from 'js-yaml'
-import log from "loglevel"
+import log from 'loglevel'
 import { Config, ContextConfig, ServerConfig, UserConfig } from './model'
 
 let config: Config

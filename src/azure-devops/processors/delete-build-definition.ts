@@ -1,7 +1,7 @@
-import { Action, ApplyArguments } from "../../core/actions/model"
-import { ActionProcessor, ProcessResult, TransformedDefinition } from "../../core/model"
-import { buildApi } from "../adapters/build-api"
-import { AzureBuildDefinition } from "../model/azure-build-definition"
+import { Action, ApplyArguments } from '../../core/actions/model'
+import { ActionProcessor, ProcessResult, TransformedDefinition } from '../../core/model'
+import { buildApi } from '../adapters/build-api'
+import { AzureBuildDefinition } from '../model/azure-build-definition'
 
 class DeleteBuildDefinition implements ActionProcessor {
   canProcess(transformedDefinition: TransformedDefinition, action: Action, _args: ApplyArguments): boolean {

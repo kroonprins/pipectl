@@ -1,10 +1,10 @@
-import log from "loglevel"
-import { Action, CommonArguments } from "./actions/model"
-import { filter } from "./filter"
-import { group } from "./group"
-import { Definition, DefinitionGroup, TransformedDefinition } from "./model"
-import { processors, reporters } from "./registration"
-import { transform } from "./transform"
+import log from 'loglevel'
+import { Action, CommonArguments } from './actions/model'
+import { filter } from './filter'
+import { group } from './group'
+import { Definition, DefinitionGroup, TransformedDefinition } from './model'
+import { processors, reporters } from './registration'
+import { transform } from './transform'
 import { completeDefinitions } from './util'
 
 const process = async (definitions: Definition[], action: Action, args: CommonArguments) => {

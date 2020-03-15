@@ -22,7 +22,7 @@ const inputDefinitions = async (args: Arguments) => {
 }
 
 const getFileOptionHandler = async (fileOption: string) => {
-  if (fileOption === "-") {
+  if (fileOption === '-') {
     return stdin
   }
   try {
@@ -49,7 +49,7 @@ const file: FileOptionHandler = async (fileOption: string) => {
 }
 
 const directory: FileOptionHandler = async () => {
-  throw Error("Not supported yet")
+  throw Error('Not supported yet')
 }
 
 export { inputDefinitions }

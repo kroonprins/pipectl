@@ -1,8 +1,8 @@
-import { Action, GetArguments } from "../../core/actions/model"
-import { ActionProcessor, TransformedDefinition } from "../../core/model"
-import { buildApi } from "../adapters/build-api"
-import { AzureBuildDefinition } from "../model/azure-build-definition"
-import { GetBuildDefinitionProcessResult } from "../model/get-build-definition-process-result"
+import { Action, GetArguments } from '../../core/actions/model'
+import { ActionProcessor, TransformedDefinition } from '../../core/model'
+import { buildApi } from '../adapters/build-api'
+import { AzureBuildDefinition } from '../model/azure-build-definition'
+import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
 
 class GetOneBuildDefinition implements ActionProcessor {
   canProcess(transformedDefinition: TransformedDefinition, action: Action, args: GetArguments): boolean {

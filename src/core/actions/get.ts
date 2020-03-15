@@ -1,8 +1,8 @@
-import { currentServer } from "../config"
-import { Definition } from "../model"
+import { currentServer } from '../config'
+import { Definition } from '../model'
 import { process } from '../process'
 import { namespace } from '../util'
-import { Action, GetArguments } from "./model"
+import { Action, GetArguments } from './model'
 
 export default async (kind: string, name: string, args: GetArguments) => {
   args.name = name

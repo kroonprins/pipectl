@@ -1,7 +1,7 @@
-import log from "loglevel"
-import { Action, CommonArguments } from "../../core/actions/model"
-import { ProcessResult, Reporter, TransformedDefinition } from "../../core/model"
-import { GetReleaseDefinitionProcessResult } from "../model/get-release-definition-process-result"
+import log from 'loglevel'
+import { Action, CommonArguments } from '../../core/actions/model'
+import { ProcessResult, Reporter, TransformedDefinition } from '../../core/model'
+import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 
 class GetReleaseDefinitionReporter implements Reporter {
   canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {

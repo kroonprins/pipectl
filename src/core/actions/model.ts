@@ -3,7 +3,7 @@ interface CommonArguments {
   recursive?: boolean,
   selector?: string,
   namespace?: string,
-  output?: "yaml" | "json"
+  output?: 'yaml' | 'json'
 }
 
 interface ApplyArguments extends CommonArguments {
@@ -18,9 +18,9 @@ interface GetArguments extends CommonArguments {
 }
 
 enum Action {
-  APPLY = "apply",
-  DELETE = "delete",
-  GET = "get"
+  APPLY = 'apply',
+  DELETE = 'delete',
+  GET = 'get'
 }
 
 // tslint:disable-next-line: semicolon // TODO why does visual studio code insist on the semicolon :'(

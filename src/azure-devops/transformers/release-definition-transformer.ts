@@ -1,9 +1,9 @@
-import { ReleaseDefinition } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
-import { Action, CommonArguments } from "../../core/actions/model"
-import { Definition, DefinitionTransformer } from "../../core/model"
+import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import { Action, CommonArguments } from '../../core/actions/model'
+import { Definition, DefinitionTransformer } from '../../core/model'
 import { Kind } from '../model'
-import { AzureReleaseDefinition } from "../model/azure-release-definition"
-import { isAzureDevOps } from "../util"
+import { AzureReleaseDefinition } from '../model/azure-release-definition'
+import { isAzureDevOps } from '../util'
 
 class ReleaseDefinitionTransformer implements DefinitionTransformer {
   canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
@@ -17,7 +17,7 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
     // TODO clone?
     const updatedSpec = definition.spec as ReleaseDefinition
     if (!updatedSpec.hasOwnProperty('path'))
-      updatedSpec.path = "\\"
+      updatedSpec.path = '\\'
 
     if (definition.metadata.labels) {
       const tags = Object.entries(definition.metadata.labels).map(([k, v]) => `${k}=${v}`)

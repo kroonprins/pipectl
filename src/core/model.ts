@@ -1,4 +1,4 @@
-import { Action, CommonArguments } from "./actions/model"
+import { Action, CommonArguments } from './actions/model'
 
 interface Resource {
   apiVersion: string
@@ -38,7 +38,6 @@ interface UniqueId {
   uniqueId(): string
 }
 
-/* tslint:disable:no-empty-interface */
 interface TransformedDefinition extends UniqueId {
   sourceDefinition: Definition
 }
