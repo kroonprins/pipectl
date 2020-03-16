@@ -51,7 +51,8 @@ release:
     BLL_JWKS_SIGNATURE: $(bll-jwks-signature)
 
   stages:
-    - name: INT-WE
+    1_INT_NE:
+      name: INT-WE
       variables:
         BLL_LOG_LEVEL: DEBUG
       variableGroups:
@@ -63,7 +64,8 @@ release:
       esb: ihn519
       preApprovers: []
       postApprovers: []
-    - name: INT-NE
+    2_INT_NE:
+      name: INT-NE
       variables:
         BLL_LOG_LEVEL: DEBUG
       variableGroups:
@@ -75,7 +77,8 @@ release:
       esb: ihn519
       preApprovers: []
       postApprovers: []
-    - name: ACC-WE
+    3_ACC_WE:
+      name: ACC-WE
       variables:
         BLL_LOG_LEVEL: DEBUG
       variableGroups: # [114, 27] I don't have access
@@ -88,7 +91,8 @@ release:
       preApprovers:
         - "c48d7901-feca-403b-b698-cf99c6e7d602"
       postApprovers: []
-    - name: ACC-NE
+    4_ACC_NE:
+      name: ACC-NE
       variableGroups: # [114, 26] I don't have access
         - 113
         - 23
@@ -99,7 +103,8 @@ release:
       preApprovers:
         - "c48d7901-feca-403b-b698-cf99c6e7d602"
       postApprovers: []
-    - name: PRD-WE
+    5_PRD_WE:
+      name: PRD-WE
       variableGroups: # [115, 28] I don't have access
         - 113
         - 25
@@ -110,7 +115,8 @@ release:
       preApprovers:
         - "e9a38fdf-a890-4227-909e-c438dc074464"
       postApprovers: []
-    - name: PRD-NE
+    6_PRD_NE:
+      name: PRD-NE
       variableGroups: # [115, 29] I don't have access
         - 113
         - 23
