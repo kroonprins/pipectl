@@ -22,16 +22,16 @@ spec:
     {{ end }}
   {{ end -}}
   environments:
-  {{ range $stage := .Values.release.stages -}}
+  {{ range $stageId, $stage := .Values.release.stages -}}
   - name: {{ $stage.name }}
     retentionPolicy:
       releasesToKeep: 10
     {{ if $stage.variables -}}
     variables:
-      {{ range $name, $value := $stage.variables -}}
+    {{- range $name, $value := $stage.variables }}
       {{ $name }}:
         value: {{ $value }}
-      {{- end }}
+    {{- end }}
     {{ end -}}
     {{ if $stage.variableGroups -}}
     variableGroups:

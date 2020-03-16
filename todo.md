@@ -11,5 +11,4 @@
 * describe command
 * edit command
 * logs command
-* add debug logging
 * dynamic imports to bootstrap azure-devops?
