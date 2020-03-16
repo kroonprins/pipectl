@@ -1,3 +1,4 @@
+import log from 'loglevel'
 import { Action, CommonArguments, GetArguments } from '../../core/actions/model'
 import { Definition, ProcessResult, TransformedDefinition } from '../../core/model'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
@@ -36,6 +37,7 @@ const transformGetBuildDefinitionProcessResultForReporting = (processResult: Pro
 
 /* tslint:disable:no-string-literal */
 const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Definition => {
+  log.debug(`[removeFieldsFromBuildDefinitionForExport] before[${JSON.stringify(definition)}]`)
   // TODO more elegant way :)
   const spec = definition.spec as any
   delete spec['id']
@@ -76,6 +78,7 @@ const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Defin
     }
   }
 
+  log.debug(`[removeFieldsFromBuildDefinitionForExport] after[${JSON.stringify(definition)}]`)
   return definition
 }
 
@@ -110,6 +113,7 @@ const transformGetReleaseDefinitionProcessResultForReporting = (processResult: P
 
 /* tslint:disable:no-string-literal */
 const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Definition => {
+  log.debug(`[removeFieldsFromReleaseDefinitionForExport] before[${JSON.stringify(definition)}]`)
   // TODO more elegant way :)
   const spec = definition.spec as any
   delete spec['source']
@@ -171,6 +175,7 @@ const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Def
   }
   delete spec['_links']
 
+  log.debug(`[removeFieldsFromReleaseDefinitionForExport] after[${JSON.stringify(definition)}]`)
   return definition
 }
 

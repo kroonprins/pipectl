@@ -1,3 +1,4 @@
+import log from 'loglevel'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition, DefinitionGrouper } from '../../core/model'
 import { Kind } from '../model'
@@ -8,6 +9,7 @@ class ApplyAzureDefinitionGrouper implements DefinitionGrouper {
     return isAzureDevOps(definition.apiVersion) && action === Action.APPLY
   }
   group(definition: Definition, _action: Action, _args: CommonArguments): [string, string[]] {
+    log.debug(`[ApplyAzureDefinitionGrouper] ${definition.kind}`)
     return [
       definition.kind,
       [Kind.BUILD_DEFINITION, Kind.RELEASE_DEFINITION]

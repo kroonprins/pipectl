@@ -13,6 +13,7 @@ const group = (definitions: Definition[], action: Action, args: CommonArguments)
       }
 
       const [_group, knownGroups] = grouper.group(definition, action, args)
+      log.debug(`[group] group[${_group}], knownGroup[${knownGroups}] for ${JSON.stringify(definition)}`)
       return knownGroups.map(knownGroup => {
         return {
           name: knownGroup,
@@ -21,11 +22,16 @@ const group = (definitions: Definition[], action: Action, args: CommonArguments)
       }) as DefinitionGroupItem[]
     })
     .reduce<DefinitionGroup[]>((acc, val) => {
+      log.debug(`[group] reducing acc[${JSON.stringify(acc)}], val[${JSON.stringify(val)}]`)
       val.forEach((item, index) => {
+        log.debug(`[group] definition group item item[${JSON.stringify(item)}], val[${index}]`)
         if (index >= acc.length) {
+          log.debug('[group] initial call, first fill of the accumulator')
           acc.push({ items: [item] })
         } else {
+          log.debug('[group] add items definitions to the accumulator')
           if (!item.definitions.length) {
+            log.debug('[group] skipping because definitions empty')
             return
           }
           const groupAtIndex = acc[index]
@@ -34,13 +40,16 @@ const group = (definitions: Definition[], action: Action, args: CommonArguments)
           } else {
             const indexExisting = groupAtIndex.items.findIndex(groupItem => item.name === groupItem.name)
             if (indexExisting !== -1) {
+              log.debug('[group] group item exists in accumulator, adding definitions to its items list')
               groupAtIndex.items[indexExisting].definitions.push(...item.definitions)
             } else {
+              log.debug('[group] group item does not yet exist in accumulator, initializing its items list with definitions')
               groupAtIndex.items = [item]
             }
           }
         }
       })
+      log.debug(`[group] accumulator value[${JSON.stringify(acc)}]`)
       return acc
     }, [])
 }

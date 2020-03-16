@@ -1,3 +1,4 @@
+import log from 'loglevel'
 import { Action, ApplyArguments } from '../../core/actions/model'
 import { ActionProcessor, ProcessResult, TransformedDefinition } from '../../core/model'
 import { releaseApi } from '../adapters/release-api'
@@ -10,6 +11,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
   }
 
   async process(azureReleaseDefinition: AzureReleaseDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
+    log.debug(`[ApplyReleaseDefinition] ${JSON.stringify(azureReleaseDefinition)}`)
     const api = releaseApi
     const releaseDefinition = azureReleaseDefinition.spec
     const project = azureReleaseDefinition.project

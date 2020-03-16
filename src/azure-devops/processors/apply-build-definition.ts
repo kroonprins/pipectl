@@ -1,3 +1,4 @@
+import log from 'loglevel'
 import { Action, ApplyArguments } from '../../core/actions/model'
 import { ActionProcessor, ProcessResult, TransformedDefinition } from '../../core/model'
 import { buildApi } from '../adapters/build-api'
@@ -10,6 +11,7 @@ class ApplyBuildDefinition implements ActionProcessor {
   }
 
   async process(azureBuildDefinition: AzureBuildDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
+    log.debug(`[ApplyBuildDefinition] ${JSON.stringify(azureBuildDefinition)}`)
     const api = buildApi
     const buildDefinition = azureBuildDefinition.spec
     const project = azureBuildDefinition.project

@@ -1,13 +1,17 @@
+import log from 'loglevel'
 import { Action, ApplyArguments } from '../../core/actions/model'
 import { ActionProcessor, ProcessResult, TransformedDefinition } from '../../core/model'
 import { releaseApi } from '../adapters/release-api'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
 
 class DeleteReleaseDefinition implements ActionProcessor {
+
   canProcess(transformedDefinition: TransformedDefinition, action: Action, _args: ApplyArguments): boolean {
     return transformedDefinition instanceof AzureReleaseDefinition && action === Action.DELETE
   }
+
   async process(azureReleaseDefinition: AzureReleaseDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
+    log.debug(`[DeleteReleaseDefinition] ${JSON.stringify(azureReleaseDefinition)}`)
     const api = releaseApi
     const releaseDefinition = azureReleaseDefinition.spec
     const project = azureReleaseDefinition.project

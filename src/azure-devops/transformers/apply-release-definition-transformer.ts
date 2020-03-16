@@ -1,4 +1,5 @@
 import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import log from 'loglevel'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition } from '../../core/model'
 import { buildApi } from '../adapters/build-api'
@@ -8,10 +9,13 @@ import { isAzureDevOps } from '../util'
 import { ReleaseDefinitionTransformer } from './release-definition-transformer'
 
 class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { // TODO instead of this, maybe possible to have multiple transformers applied (first ReleaseDefinitionTransformer for all then this one if action === Action.APPLY)?
+
   canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
     return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.RELEASE_DEFINITION && action === Action.APPLY
   }
+
   protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
+    log.debug(`[ApplyReleaseDefinitionTransformer.setReleaseDefinitionDefaults] before[${JSON.stringify(definition)}]`)
     const updatedSpec = await super.setReleaseDefinitionDefaults(definition)
 
     // TODO find elegant way to achieve the below
@@ -128,6 +132,8 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
     }
     /* tslint:enable */
 
+
+    log.debug(`[ApplyReleaseDefinitionTransformer.setReleaseDefinitionDefaults] after[${JSON.stringify(updatedSpec)}]`)
     return updatedSpec
   }
 }
