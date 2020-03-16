@@ -1,4 +1,5 @@
 import { getBasicHandler, getHandlerFromToken, WebApi } from 'azure-devops-node-api'
+import log from 'loglevel'
 import { currentServer, currentUser } from '../../core/config'
 
 class AzureConnection {
@@ -6,6 +7,7 @@ class AzureConnection {
 
   public get(): WebApi {
     if (!this._connection) {
+      log.debug('Creating Azure connection')
       this._connection = new WebApi(currentServer()['base-url'], this.getAuthProvider())
     }
     return this._connection
@@ -16,8 +18,10 @@ class AzureConnection {
     switch (user['auth-provider'].name) {
       case 'azure-devops-username':
         // TODO prompt if not present?
+        log.debug('Using Azure getBasicHandler')
         return getBasicHandler(user['auth-provider'].config.name!, user['auth-provider'].config.password!)
       case 'azure-devops-personal-access-token':
+        log.debug('Using Azure getHandlerFromToken')
         return getHandlerFromToken(user['auth-provider'].config.token!)
       default:
         throw new Error(`Unhandled authentication provider ${user['auth-provider'].name}`)
@@ -28,3 +32,4 @@ class AzureConnection {
 const azureConnection = new AzureConnection()
 
 export { AzureConnection, azureConnection }
+

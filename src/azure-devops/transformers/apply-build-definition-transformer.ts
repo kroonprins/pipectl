@@ -1,4 +1,5 @@
 import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import log from 'loglevel'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition } from '../../core/model'
 import { coreApi } from '../adapters/core-api'
@@ -7,10 +8,13 @@ import { isAzureDevOps } from '../util'
 import { BuildDefinitionTransformer } from './build-definition-transformer'
 
 class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
+
   canTransform(definition: Definition, action: Action, _args: CommonArguments): boolean {
     return isAzureDevOps(definition.apiVersion) && definition.kind === Kind.BUILD_DEFINITION && action === Action.APPLY
   }
+
   protected async setBuildDefinitionDefaults(definition: Definition): Promise<BuildDefinition> {
+    log.debug(`[ApplyBuildDefinitionTransformer.setBuildDefinitionDefaults] before[${JSON.stringify(definition)}]`)
     const updatedSpec = await super.setBuildDefinitionDefaults(definition)
 
     // TODO find elegant way to achieve the below
@@ -125,6 +129,7 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
       ]
     }
 
+    log.debug(`[ApplyBuildDefinitionTransformer.setBuildDefinitionDefaults] after[${JSON.stringify(updatedSpec)}]`)
     return updatedSpec
   }
 }

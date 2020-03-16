@@ -1,4 +1,5 @@
 import { ICoreApi } from 'azure-devops-node-api/CoreApi'
+import log from 'loglevel'
 import memoize from 'p-memoize'
 import { azureConnection } from './connection'
 
@@ -8,7 +9,9 @@ class CoreApi {
 
   /*private*/ async getApi(): Promise<ICoreApi> {
     if (!this._coreApi) {
+      log.debug('Initializing Core API')
       this._coreApi = await azureConnection.get().getCoreApi()
+      log.debug('Initialized Core API')
     }
     return this._coreApi
   }
@@ -16,6 +19,7 @@ class CoreApi {
   findProjectIdByName = memoize(this._findProjectIdByName)
 
   async _findProjectIdByName(name: string): Promise<string> {
+    log.debug(`[CoreApi._findProjectIdByName] name[${name}]`)
     const api = await this.getApi()
     const search = await api.getProjects()
     if (search && search.length) {
