@@ -3,6 +3,7 @@ import log from 'loglevel'
 import { isNumber } from 'util'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition } from '../../core/model'
+import { agentPoolApi } from '../adapters/agent-pool-api'
 import { coreApi } from '../adapters/core-api'
 import { variableGroupApi } from '../adapters/variable-group-api'
 import { Kind } from '../model'
@@ -149,6 +150,11 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
         variableGroups.push(variableGroup)
       }
       updatedSpec.variableGroups = variableGroups
+    }
+
+    if (updatedSpec.hasOwnProperty('queue') && updatedSpec.queue && !updatedSpec.queue.hasOwnProperty('id') && updatedSpec.queue.hasOwnProperty('name')) {
+      updatedSpec.queue.id = await agentPoolApi.findAgentPoolIdByName(updatedSpec.queue.name!, updatedSpec.project!.id!)
+      delete updatedSpec.queue.name
     }
 
     log.debug(`[ApplyBuildDefinitionTransformer.setBuildDefinitionDefaults] after[${JSON.stringify(updatedSpec)}]`)

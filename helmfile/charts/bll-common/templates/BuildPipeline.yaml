@@ -55,5 +55,5 @@ spec:
   repository:
     id: {{ .Values.build.repository }}
   queue:
-    id: {{ .Values.build.agentPool }}
+    name: {{ .Values.build.agentPool }}
 

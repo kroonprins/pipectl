@@ -1,8 +1,9 @@
-import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import { AgentBasedDeployPhase, ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import log from 'loglevel'
 import { isNumber } from 'util'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition } from '../../core/model'
+import { agentPoolApi } from '../adapters/agent-pool-api'
 import { buildApi } from '../adapters/build-api'
 import { coreApi } from '../adapters/core-api'
 import { variableGroupApi } from '../adapters/variable-group-api'
@@ -41,14 +42,24 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
       if (!retentionPolicy.hasOwnProperty('retainBuild')) retentionPolicy.retainBuild = true
       environment.retentionPolicy = retentionPolicy
 
-      environment.deployPhases?.forEach((deployPhase, deployPhaseIndex) => {
+
+      for (const [deployPhaseIndex, deployPhase] of (environment.deployPhases || []).entries()) {
         if (!deployPhase.hasOwnProperty('rank')) deployPhase.rank = deployPhaseIndex + 1
         if (!deployPhase.hasOwnProperty('phaseType')) deployPhase.phaseType = 1 // AgentBasedDeployment
 
         deployPhase.workflowTasks?.forEach(workflowTask => {
           if (!workflowTask.hasOwnProperty('enabled')) workflowTask.enabled = true
         })
-      })
+
+        if (deployPhase.hasOwnProperty('deploymentInput')) {
+          if (deployPhase.phaseType === 1) {
+            const deploymentInput = (deployPhase as AgentBasedDeployPhase).deploymentInput!
+            if (deploymentInput.hasOwnProperty('queueId') && deploymentInput.queueId && !isNumber(deploymentInput.queueId)) {
+              deploymentInput.queueId = await agentPoolApi.findAgentPoolIdByName(deploymentInput.queueId, definition.metadata.namespace)
+            }
+          } // TODO handle other phaseType
+        }
+      }
 
       if (!environment.hasOwnProperty('preDeployApprovals')
         || !environment.preDeployApprovals
