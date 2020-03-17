@@ -1,0 +1,79 @@
+build:
+  buildNameFormat: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:_r)
+  agentPool: Default-Linux
+
+release:
+  releaseNameFormat: Release-$(rev:r)
+  description: Created via script
+
+  stages:
+    1_INT_NE:
+      name: INT-WE
+      variables:
+        BLL_LOG_LEVEL: DEBUG
+      variableGroups:
+        - Config INT
+        - Config INT-WE
+      agentPool: MS-NONPRD-WE
+      vault: webfoundation-int-akv
+      azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+      preApprovers: []
+      postApprovers: []
+    2_INT_NE:
+      name: INT-NE
+      variables:
+        BLL_LOG_LEVEL: DEBUG
+      variableGroups:
+        - Config INT
+        - Config INT-NE
+      agentPool: MS-NONPRD-NE
+      vault: webfoundation-int-akv
+      azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+      preApprovers: []
+      postApprovers: []
+    3_ACC_WE:
+      name: ACC-WE
+      variables:
+        BLL_LOG_LEVEL: DEBUG
+      variableGroups: # [Config ACC, Config ACC-WE] I don't have access
+        - Config INT
+        - Config INT-WE
+      agentPool: MS-NONPRD-WE
+      vault: webfoundation-acc-akv
+      azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+      preApprovers:
+        - "c48d7901-feca-403b-b698-cf99c6e7d602"
+      postApprovers: []
+    4_ACC_NE:
+      name: ACC-NE
+      variableGroups: # [Config ACC, Config ACC-NE] I don't have access
+        - Config INT
+        - Config INT-NE
+      agentPool: MS-NONPRD-NE
+      vault: webfoundation-acc-akv
+      azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
+      preApprovers:
+        - "c48d7901-feca-403b-b698-cf99c6e7d602"
+      postApprovers: []
+    5_PRD_WE:
+      name: PRD-WE
+      variableGroups: # [Config PRD, Config PRD-WE] I don't have access
+        - Config INT
+        - Config INT-WE
+      agentPool: MS-NONPRD-WE # MS-PRD-WE I don't have access
+      vault: webfoundation-prd-akv
+      azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
+      preApprovers:
+        - "e9a38fdf-a890-4227-909e-c438dc074464"
+      postApprovers: []
+    6_PRD_NE:
+      name: PRD-NE
+      variableGroups: # [Config PRD, Config PRD-NE] I don't have access
+        - Config INT
+        - Config INT-NE
+      agentPool: MS-NONPRD-NE # MS-PRD-NE I don't have access
+      vault: webfoundation-prd-akv
+      azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
+      preApprovers:
+        - "e9a38fdf-a890-4227-909e-c438dc074464"
+      postApprovers: []

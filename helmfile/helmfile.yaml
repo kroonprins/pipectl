@@ -1,17 +1,12 @@
 {{ $project := "Webfoundation" }}
-{{ $common_values_file := "./values/values.yaml" }}
-
-{{ $bll_values_file := "./values/bll/values.yaml" }}
-{{ $bll_common_chart := "./charts/bll-common" }}
-{{ $bll_group := "api" }}
 
 templates:
   bll: &bll
     missingFileHandler: Warn
-    chart: {{ $bll_common_chart }}
+    chart: "./charts/bll-common"
     namespace: {{ $project }}
     labels:
-      group: {{ $bll_group }}
+      group: "api"
       component: "{{`{{ .Release.Name }}`}}"
     values:
       - "./values/values.yaml"
