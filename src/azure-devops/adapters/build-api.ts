@@ -9,9 +9,9 @@ class BuildApi {
 
   /*private*/ async getApi(): Promise<IBuildApi> {
     if (!this._buildApi) {
-      log.debug('Initializing Build API')
+      log.debug('Initializing BuildAPI')
       this._buildApi = await azureConnection.get().getBuildApi()
-      log.debug('Initialized Build API')
+      log.debug('Initialized BuildAPI')
     }
     return this._buildApi
   }

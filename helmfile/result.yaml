@@ -122,7 +122,7 @@ spec:
         - +refs/heads/renovate/*
       triggerType: 2
   variableGroups:
-    - id: 33
+    - Docker Builds
   process:
     phases:
       - steps:
@@ -201,8 +201,8 @@ spec:
       BLL_LOG_LEVEL:
         value: DEBUG
     variableGroups:
-    - 113
-    - 25
+    - Config INT
+    - Config INT-WE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -251,8 +251,8 @@ spec:
       BLL_LOG_LEVEL:
         value: DEBUG
     variableGroups:
-    - 113
-    - 23
+    - Config INT
+    - Config INT-NE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -301,8 +301,8 @@ spec:
       BLL_LOG_LEVEL:
         value: DEBUG
     variableGroups:
-    - 113
-    - 25
+    - Config INT
+    - Config INT-WE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -354,8 +354,8 @@ spec:
     retentionPolicy:
       releasesToKeep: 10
     variableGroups:
-    - 113
-    - 23
+    - Config INT
+    - Config INT-NE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -407,8 +407,8 @@ spec:
     retentionPolicy:
       releasesToKeep: 10
     variableGroups:
-    - 113
-    - 25
+    - Config INT
+    - Config INT-WE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -460,8 +460,8 @@ spec:
     retentionPolicy:
       releasesToKeep: 10
     variableGroups:
-    - 113
-    - 23
+    - Config INT
+    - Config INT-NE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -644,7 +644,7 @@ spec:
         - +refs/heads/renovate/*
       triggerType: 2
   variableGroups:
-    - id: 33
+    - Docker Builds
   process:
     phases:
       - steps:
@@ -719,8 +719,8 @@ spec:
       BLL_LOG_LEVEL:
         value: DEBUG
     variableGroups:
-    - 113
-    - 25
+    - Config INT
+    - Config INT-WE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -757,8 +757,8 @@ spec:
       BLL_LOG_LEVEL:
         value: DEBUG
     variableGroups:
-    - 113
-    - 23
+    - Config INT
+    - Config INT-NE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -795,8 +795,8 @@ spec:
       BLL_LOG_LEVEL:
         value: DEBUG
     variableGroups:
-    - 113
-    - 25
+    - Config INT
+    - Config INT-WE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -836,8 +836,8 @@ spec:
     retentionPolicy:
       releasesToKeep: 10
     variableGroups:
-    - 113
-    - 23
+    - Config INT
+    - Config INT-NE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -877,8 +877,8 @@ spec:
     retentionPolicy:
       releasesToKeep: 10
     variableGroups:
-    - 113
-    - 25
+    - Config INT
+    - Config INT-WE
     deployPhases:
     - name: Agent phase
       deploymentInput:
@@ -918,8 +918,8 @@ spec:
     retentionPolicy:
       releasesToKeep: 10
     variableGroups:
-    - 113
-    - 23
+    - Config INT
+    - Config INT-NE
     deployPhases:
     - name: Agent phase
       deploymentInput:

@@ -1,8 +1,10 @@
-import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DesignerProcess, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import log from 'loglevel'
+import { isNumber } from 'util'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition } from '../../core/model'
 import { coreApi } from '../adapters/core-api'
+import { variableGroupApi } from '../adapters/variable-group-api'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 import { BuildDefinitionTransformer } from './build-definition-transformer'
@@ -127,6 +129,26 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
           deleteTestResults: true,
         }
       ]
+    }
+
+    if (updatedSpec.hasOwnProperty('variableGroups') && updatedSpec.variableGroups && updatedSpec.variableGroups.length) {
+      const variableGroups: VariableGroup[] = []
+      for (let variableGroup of updatedSpec.variableGroups) {
+        if (!variableGroup.id) {
+          if (variableGroup.name) {
+            variableGroup.id = await variableGroupApi.findVariableGroupIdByName(variableGroup.name, updatedSpec.project!.id!)
+          } else if (typeof variableGroup === 'string' || isNumber(variableGroup)) {
+            if (isNumber(variableGroup)) {
+              variableGroup = { id: variableGroup }
+            } else {
+              variableGroup = { id: await variableGroupApi.findVariableGroupIdByName(variableGroup, updatedSpec.project!.id!) }
+            }
+          }
+        }
+        delete variableGroup.name
+        variableGroups.push(variableGroup)
+      }
+      updatedSpec.variableGroups = variableGroups
     }
 
     log.debug(`[ApplyBuildDefinitionTransformer.setBuildDefinitionDefaults] after[${JSON.stringify(updatedSpec)}]`)

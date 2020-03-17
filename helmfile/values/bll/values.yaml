@@ -11,7 +11,7 @@ build:
         - +refs/heads/renovate/*
   agentPool: 43
   variableGroups:
-    - id: 33
+    - Docker Builds
   jdkVersion: '1.11'
 
   releaseClientBuildPipeline:
@@ -56,8 +56,8 @@ release:
       variables:
         BLL_LOG_LEVEL: DEBUG
       variableGroups:
-        - 113
-        - 25
+        - Config INT
+        - Config INT-WE
       agentPool: 165 # MS-NONPROD-WE
       vault: webfoundation-int-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -69,8 +69,8 @@ release:
       variables:
         BLL_LOG_LEVEL: DEBUG
       variableGroups:
-        - 113
-        - 23
+        - Config INT
+        - Config INT-NE
       agentPool: 164 # MS-NONPROD-NE
       vault: webfoundation-int-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -81,9 +81,9 @@ release:
       name: ACC-WE
       variables:
         BLL_LOG_LEVEL: DEBUG
-      variableGroups: # [114, 27] I don't have access
-        - 113
-        - 25
+      variableGroups: # [Config ACC, Config ACC-WE] I don't have access
+        - Config INT
+        - Config INT-WE
       agentPool: 165 # MS-NONPROD-WE
       vault: webfoundation-acc-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -93,9 +93,9 @@ release:
       postApprovers: []
     4_ACC_NE:
       name: ACC-NE
-      variableGroups: # [114, 26] I don't have access
-        - 113
-        - 23
+      variableGroups: # [Config ACC, Config ACC-NE] I don't have access
+        - Config INT
+        - Config INT-NE
       agentPool: 164 # MS-NONPROD-NE
       vault: webfoundation-acc-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
@@ -105,9 +105,9 @@ release:
       postApprovers: []
     5_PRD_WE:
       name: PRD-WE
-      variableGroups: # [115, 28] I don't have access
-        - 113
-        - 25
+      variableGroups: # [Config PRD, Config PRD-WE] I don't have access
+        - Config INT
+        - Config INT-WE
       agentPool: 165 # 168 I don't have access # MS-PROD-WE
       vault: webfoundation-prd-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
@@ -117,9 +117,9 @@ release:
       postApprovers: []
     6_PRD_NE:
       name: PRD-NE
-      variableGroups: # [115, 29] I don't have access
-        - 113
-        - 23
+      variableGroups: # [Config PRD, Config PRD-NE] I don't have access
+        - Config INT
+        - Config INT-NE
       agentPool: 164 # 167 I don't have access # MS-PROD-NE
       vault: webfoundation-prd-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
