@@ -35,9 +35,7 @@ spec:
     {{ end -}}
     {{ if $stage.variableGroups -}}
     variableGroups:
-    {{ range $variableGroup := $stage.variableGroups -}}
-    - {{ $variableGroup }}
-    {{ end -}}
+{{ $stage.variableGroups | toYaml | indent 4 }}
     {{ end -}}
     deployPhases:
     - name: Agent phase

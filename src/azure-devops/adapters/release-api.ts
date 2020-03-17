@@ -9,9 +9,9 @@ class ReleaseApi {
 
   /*private*/ async getApi(): Promise<IReleaseApi> {
     if (!this._releaseApi) {
-      log.debug('Initializing Release API')
+      log.debug('Initializing ReleaseAPI')
       this._releaseApi = await azureConnection.get().getReleaseApi()
-      log.debug('Initialized Release API')
+      log.debug('Initialized ReleaseAPI')
     }
     return this._releaseApi
   }

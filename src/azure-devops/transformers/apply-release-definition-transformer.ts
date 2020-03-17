@@ -1,9 +1,11 @@
 import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import log from 'loglevel'
+import { isNumber } from 'util'
 import { Action, CommonArguments } from '../../core/actions/model'
 import { Definition } from '../../core/model'
 import { buildApi } from '../adapters/build-api'
 import { coreApi } from '../adapters/core-api'
+import { variableGroupApi } from '../adapters/variable-group-api'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 import { ReleaseDefinitionTransformer } from './release-definition-transformer'
@@ -20,7 +22,7 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
 
     // TODO find elegant way to achieve the below
 
-    updatedSpec.environments?.forEach((environment, index) => {
+    for (const [index, environment] of (updatedSpec.environments || []).entries()) {
       if (!environment.hasOwnProperty('rank')) environment.rank = index + 1
 
       const environmentOptions = environment.environmentOptions || {}
@@ -99,7 +101,18 @@ class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { /
         if (!approvalOptions.hasOwnProperty('releaseCreatorCanBeApprover')) approvalOptions.releaseCreatorCanBeApprover = false
         environment.postDeployApprovals.approvalOptions = approvalOptions
       }
-    })
+
+      if (environment.hasOwnProperty('variableGroups') && environment.variableGroups && environment.variableGroups.length) {
+        const variableGroups: number[] = []
+        for (let variableGroup of environment.variableGroups) {
+          if (!isNumber(variableGroup)) {
+            variableGroup = await variableGroupApi.findVariableGroupIdByName(variableGroup, definition.metadata.namespace)
+          }
+          variableGroups.push(variableGroup)
+        }
+        environment.variableGroups = variableGroups
+      }
+    }
 
     /* tslint:disable:no-string-literal */ // TODO
     for (const artifact of updatedSpec.artifacts || []) {

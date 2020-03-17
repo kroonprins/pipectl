@@ -9,16 +9,16 @@ class CoreApi {
 
   /*private*/ async getApi(): Promise<ICoreApi> {
     if (!this._coreApi) {
-      log.debug('Initializing Core API')
+      log.debug('Initializing CoreAPI')
       this._coreApi = await azureConnection.get().getCoreApi()
-      log.debug('Initialized Core API')
+      log.debug('Initialized CoreAPI')
     }
     return this._coreApi
   }
 
   findProjectIdByName = memoize(this._findProjectIdByName)
 
-  async _findProjectIdByName(name: string): Promise<string> {
+  private async _findProjectIdByName(name: string): Promise<string> {
     log.debug(`[CoreApi._findProjectIdByName] name[${name}]`)
     const api = await this.getApi()
     const search = await api.getProjects()
