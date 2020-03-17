@@ -9,7 +9,7 @@ build:
         - +refs/heads/rc*
         - +refs/heads/feature/*
         - +refs/heads/renovate/*
-  agentPool: 43
+  agentPool: Default-Linux
   variableGroups:
     - Docker Builds
   jdkVersion: '1.11'
@@ -58,7 +58,7 @@ release:
       variableGroups:
         - Config INT
         - Config INT-WE
-      agentPool: 165 # MS-NONPROD-WE
+      agentPool: MS-NONPRD-WE
       vault: webfoundation-int-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
       esb: ihn519
@@ -71,7 +71,7 @@ release:
       variableGroups:
         - Config INT
         - Config INT-NE
-      agentPool: 164 # MS-NONPROD-NE
+      agentPool: MS-NONPRD-NE
       vault: webfoundation-int-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
       esb: ihn519
@@ -84,7 +84,7 @@ release:
       variableGroups: # [Config ACC, Config ACC-WE] I don't have access
         - Config INT
         - Config INT-WE
-      agentPool: 165 # MS-NONPROD-WE
+      agentPool: MS-NONPRD-WE
       vault: webfoundation-acc-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
       esb: hhn544
@@ -96,7 +96,7 @@ release:
       variableGroups: # [Config ACC, Config ACC-NE] I don't have access
         - Config INT
         - Config INT-NE
-      agentPool: 164 # MS-NONPROD-NE
+      agentPool: MS-NONPRD-NE
       vault: webfoundation-acc-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a
       esb: hhn544
@@ -108,7 +108,7 @@ release:
       variableGroups: # [Config PRD, Config PRD-WE] I don't have access
         - Config INT
         - Config INT-WE
-      agentPool: 165 # 168 I don't have access # MS-PROD-WE
+      agentPool: MS-NONPRD-WE # MS-PRD-WE I don't have access
       vault: webfoundation-prd-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
       esb: gim597
@@ -120,7 +120,7 @@ release:
       variableGroups: # [Config PRD, Config PRD-NE] I don't have access
         - Config INT
         - Config INT-NE
-      agentPool: 164 # 167 I don't have access # MS-PROD-NE
+      agentPool: MS-NONPRD-NE # MS-PRD-NE I don't have access
       vault: webfoundation-prd-akv
       azureSubscription: 6714e6c3-6518-4050-90ec-ed7288c13b3a # f9da387b-09b3-4d7a-aea4-6a95dd060a16 I don't have access
       esb: gim597

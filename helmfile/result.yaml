@@ -76,7 +76,7 @@ spec:
   repository:
     id: 6c68508f-62a2-4d9f-9707-9f2d2a418147
   queue:
-    id: 43
+    id: Default-Linux
 ---
 # Source: bll-common/templates/BuildPipeline-Release-Client.yaml
 apiVersion: azure-devops
@@ -101,7 +101,7 @@ spec:
   repository:
     id: 6c68508f-62a2-4d9f-9707-9f2d2a418147
   queue:
-    id: 43
+    id: Default-Linux
 ---
 # Source: bll-common/templates/BuildPipeline.yaml
 apiVersion: azure-devops
@@ -162,7 +162,7 @@ spec:
   repository:
     id: 6c68508f-62a2-4d9f-9707-9f2d2a418147
   queue:
-    id: 43
+    name: Default-Linux
 ---
 # Source: bll-common/templates/ReleaseDefinition.yaml
 apiVersion: azure-devops/v0.1
@@ -206,7 +206,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 165
+        queueId: MS-NONPRD-WE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -256,7 +256,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 164
+        queueId: MS-NONPRD-NE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -306,7 +306,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 165
+        queueId: MS-NONPRD-WE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -359,7 +359,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 164
+        queueId: MS-NONPRD-NE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -412,7 +412,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 165
+        queueId: MS-NONPRD-WE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -465,7 +465,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 164
+        queueId: MS-NONPRD-NE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -598,7 +598,7 @@ spec:
   repository:
     id: 60f95ef8-bd9a-4ade-87b2-751753700cb3
   queue:
-    id: 43
+    id: Default-Linux
 ---
 # Source: bll-common/templates/BuildPipeline-Release-Client.yaml
 apiVersion: azure-devops
@@ -623,7 +623,7 @@ spec:
   repository:
     id: 60f95ef8-bd9a-4ade-87b2-751753700cb3
   queue:
-    id: 43
+    id: Default-Linux
 ---
 # Source: bll-common/templates/BuildPipeline.yaml
 apiVersion: azure-devops
@@ -684,7 +684,7 @@ spec:
   repository:
     id: 60f95ef8-bd9a-4ade-87b2-751753700cb3
   queue:
-    id: 43
+    name: Default-Linux
 ---
 # Source: bll-common/templates/ReleaseDefinition.yaml
 apiVersion: azure-devops/v0.1
@@ -724,7 +724,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 165
+        queueId: MS-NONPRD-WE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -762,7 +762,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 164
+        queueId: MS-NONPRD-NE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -800,7 +800,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 165
+        queueId: MS-NONPRD-WE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -841,7 +841,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 164
+        queueId: MS-NONPRD-NE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -882,7 +882,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 165
+        queueId: MS-NONPRD-WE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
@@ -923,7 +923,7 @@ spec:
     deployPhases:
     - name: Agent phase
       deploymentInput:
-        queueId: 164
+        queueId: MS-NONPRD-NE
       workflowTasks:
       - taskId: 1e244d32-2dd4-4165-96fb-b7441ca9331e
         version: 1.*
