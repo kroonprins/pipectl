@@ -1,4 +1,4 @@
-
+import { Command } from 'commander'
 import { registerActionProcessor, registerGrouper, registerReporter, registerTransformer } from 'pipectl-core/src/registration'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
@@ -20,7 +20,6 @@ import { ApplyBuildDefinitionTransformer } from './transformers/apply-build-defi
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
-import { Command } from 'commander'
 
 export default (_program: Command) => {
   registerGrouper(

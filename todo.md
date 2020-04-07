@@ -13,9 +13,9 @@
 * describe command
 * edit command
 * logs command
-* dynamic imports to bootstrap azure-devops?
 * in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
 * commit hooks via husky, semantic versioning, prettier, tralala
 
 * don't use import statements with src of other package
 * check if shared dependencies can be in top level package.json only
+* check if pipectl-azure-devops can be removed from package.json of pipectl (which then needs to be installed globally)

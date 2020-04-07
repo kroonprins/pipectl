@@ -45,7 +45,11 @@ const currentServer = () => {
     .find(server => server.name === currentServerRef) as ServerConfig).server// TODO error handling not found
 }
 
+const currentPlugins = () => {
+  return currentContext().context.plugins || []
+}
+
 const defaultNamespace = () => currentContext().context.namespace
 
-export { initialize, currentUser, currentServer, defaultNamespace }
+export { initialize, currentUser, currentServer, currentPlugins, defaultNamespace }
 
