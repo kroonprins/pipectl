@@ -5,6 +5,10 @@
   "scripts": {
     "build": "tsc"
   },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
   "devDependencies": {},
   "dependencies": {
     "@types/js-yaml": "^3.12.2",

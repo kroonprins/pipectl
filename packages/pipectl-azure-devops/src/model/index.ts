@@ -1,4 +1,4 @@
-import { Definition, TransformedDefinition } from 'pipectl-core/src/model'
+import { Definition, TransformedDefinition } from 'pipectl-core/dist/model'
 
 abstract class AzureDefinition<T> implements TransformedDefinition {
   constructor(

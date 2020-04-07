@@ -2,7 +2,13 @@
   "name": "pipectl",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "bin": {
+    "pipectl": "./dist/index.js"
+  },
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc"

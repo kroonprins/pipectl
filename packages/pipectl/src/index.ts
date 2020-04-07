@@ -1,11 +1,13 @@
+#!/usr/bin/env node
+
 import { Command } from 'commander'
-import apply from 'pipectl-core/src/actions/apply'
-import _delete from 'pipectl-core/src/actions/delete'
-import get from 'pipectl-core/src/actions/get'
-import { bootstrapCore, BootstrapFunction } from 'pipectl-core/src/bootstrap'
-import { currentPlugins, initialize as initializeConfig } from 'pipectl-core/src/config'
-import { addCommands, multiple } from 'pipectl-core/src/util/commander'
-import { initializeLogging, log } from 'pipectl-core/src/util/logging'
+import apply from 'pipectl-core/dist/actions/apply'
+import _delete from 'pipectl-core/dist/actions/delete'
+import get from 'pipectl-core/dist/actions/get'
+import { bootstrapCore, BootstrapFunction } from 'pipectl-core/dist/bootstrap'
+import { currentPlugins, initialize as initializeConfig } from 'pipectl-core/dist/config'
+import { addCommands, multiple } from 'pipectl-core/dist/util/commander'
+import { initializeLogging, log } from 'pipectl-core/dist/util/logging'
 
 (async () => {
   try {
@@ -45,7 +47,7 @@ import { initializeLogging, log } from 'pipectl-core/src/util/logging'
 
     await Promise.all(
       currentPlugins().map(async (plugin) => {
-        const bootstrapFunction = ((await import(`${plugin}/src/bootstrap`)).default as unknown) as BootstrapFunction
+        const bootstrapFunction = ((await import(`${plugin}/dist/bootstrap`)).default as unknown) as BootstrapFunction
         return bootstrapFunction(program)
       })
     )
