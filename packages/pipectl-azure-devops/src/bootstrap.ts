@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import { registerActionProcessor, registerGrouper, registerReporter, registerTransformer } from 'pipectl-core/src/registration'
+import { registerActionProcessor, registerGrouper, registerReporter, registerTransformer } from 'pipectl-core/dist/registration'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
 import { ApplyBuildDefinition } from './processors/apply-build-definition'

@@ -5,6 +5,10 @@
   "scripts": {
     "build": "tsc"
   },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
   "devDependencies": {},
   "dependencies": {
     "pipectl-core": "0.0.1",

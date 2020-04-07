@@ -1,4 +1,4 @@
-import { log } from 'pipectl-core/src/util/logging'
+import { log } from 'pipectl-core/dist/util/logging'
 import { azureConnection } from '../adapters/connection'
 
 export default async () => {

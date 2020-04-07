@@ -17,5 +17,4 @@
 * commit hooks via husky, semantic versioning, prettier, tralala
 
 * don't use import statements with src of other package
-* check if shared dependencies can be in top level package.json only
 * check if pipectl-azure-devops can be removed from package.json of pipectl (which then needs to be installed globally)

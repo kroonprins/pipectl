@@ -1,6 +1,6 @@
 import { ITaskAgentApi } from 'azure-devops-node-api/TaskAgentApi'
 import memoize from 'p-memoize'
-import { log } from 'pipectl-core/src/util/logging'
+import { log } from 'pipectl-core/dist/util/logging'
 import { azureConnection } from './connection'
 
 class AgentPoolApi {

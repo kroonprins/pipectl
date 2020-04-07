@@ -1,6 +1,6 @@
-import { Action, CommonArguments } from 'pipectl-core/src/actions/model'
-import { Definition, DefinitionGrouper } from 'pipectl-core/src/model'
-import { log } from 'pipectl-core/src/util/logging'
+import { Action, CommonArguments } from 'pipectl-core/dist/actions/model'
+import { Definition, DefinitionGrouper } from 'pipectl-core/dist/model'
+import { log } from 'pipectl-core/dist/util/logging'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 
