@@ -14,6 +14,7 @@ interface Context {
   server: string
   namespace?: string
   user: string
+  plugins: string[]
 }
 
 interface ContextConfig {
