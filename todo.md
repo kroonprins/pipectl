@@ -16,5 +16,7 @@
 * in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
 * commit hooks via husky, semantic versioning, prettier, tralala
 
-* don't use import statements with src of other package
-* check if pipectl-azure-devops can be removed from package.json of pipectl (which then needs to be installed globally)
+* check if pipectl-azure-devops can be removed from package.json of pipectl, different options would be:
+  * install the plugin globally and the ctl globally with npm in -g
+  * with npx for a local package.json containing the plugin and the ctl in the dependencies
+  * with one-off npx if the pluging is installed globally?
