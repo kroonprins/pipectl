@@ -20,8 +20,9 @@ import { ApplyBuildDefinitionTransformer } from './transformers/apply-build-defi
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
+import { Command } from 'commander'
 
-export default () => {
+export default (_program: Command) => {
   registerGrouper(
     new AzureDefinitionGrouper(),
     new ApplyAzureDefinitionGrouper(),
