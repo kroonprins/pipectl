@@ -12,8 +12,6 @@ import { initializeLogging } from './core/util/logging'
 
 initializeLogging()
 initializeConfig()
-bootstrapCore()
-bootstrapAzureDevOps()
 
 const program = new Command()
 addCommands(
@@ -46,6 +44,9 @@ addCommands(
     .command('test')
     .action(test)
 )
+
+bootstrapCore()
+bootstrapAzureDevOps(program)
 
 program
   .parseAsync(process.argv)
