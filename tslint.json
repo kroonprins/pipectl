@@ -14,5 +14,10 @@
       "single"
     ]
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+        "**/node_modules/**"
+    ]
+}
 }

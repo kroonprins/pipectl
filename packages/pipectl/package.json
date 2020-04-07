@@ -1,0 +1,22 @@
+{
+  "name": "pipectl",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.7",
+    "ts-node": "^8.6.2",
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "pipectl-core": "0.0.1",
+    "pipectl-azure-devops": "0.0.1",
+    "commander": "^4.1.1",
+    "loglevel": "^1.6.7"
+  }
+}
