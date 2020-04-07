@@ -13,18 +13,15 @@ class GetOneReleaseDefinition implements ActionProcessor {
 
   async process(azureReleaseDefinition: AzureReleaseDefinition, _action: Action, args: GetArguments): Promise<GetReleaseDefinitionProcessResult> {
     log.debug(`[GetOneReleaseDefinition] ${JSON.stringify(azureReleaseDefinition)}`)
-    const api = releaseApi
-    const project = azureReleaseDefinition.project
     try {
-      const releaseDefinition = await api.findReleaseDefinitionById(Number(args.name), project)
+      const project = azureReleaseDefinition.project
+      const releaseDefinition = await releaseApi.findReleaseDefinitionById(Number(args.name), project)
       if (releaseDefinition) {
         return new GetReleaseDefinitionProcessResult([releaseDefinition])
-      }
-      else {
+      } else {
         return { error: new Error(`Release definition '${args.name}' does not exist in project '${project}'.`) }
       }
-    }
-    catch (e) {
+    } catch (e) {
       return { error: e }
     }
   }

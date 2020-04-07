@@ -13,18 +13,15 @@ class GetOneBuildDefinition implements ActionProcessor {
 
   async process(azureBuildDefinition: AzureBuildDefinition, _action: Action, args: GetArguments): Promise<GetBuildDefinitionProcessResult> {
     log.debug(`[GetOneBuildDefinition] ${JSON.stringify(azureBuildDefinition)}`)
-    const api = buildApi
-    const project = azureBuildDefinition.project
     try {
-      const buildDefinition = await api.findBuildDefinitionById(Number(args.name), project)
+      const project = azureBuildDefinition.project
+      const buildDefinition = await buildApi.findBuildDefinitionById(Number(args.name), project)
       if (buildDefinition) {
         return new GetBuildDefinitionProcessResult([buildDefinition])
-      }
-      else {
+      } else {
         return { error: new Error(`Build definition '${args.name}' does not exist in project '${project}'.`) }
       }
-    }
-    catch (e) {
+    } catch (e) {
       return { error: e }
     }
   }

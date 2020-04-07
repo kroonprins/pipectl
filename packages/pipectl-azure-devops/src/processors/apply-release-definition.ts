@@ -12,11 +12,10 @@ class ApplyReleaseDefinition implements ActionProcessor {
 
   async process(azureReleaseDefinition: AzureReleaseDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
     log.debug(`[ApplyReleaseDefinition] ${JSON.stringify(azureReleaseDefinition)}`)
-    const api = releaseApi
     const releaseDefinition = azureReleaseDefinition.spec
     const project = azureReleaseDefinition.project
 
-    const existingReleaseDefinition = await api.findReleaseDefinitionByNameAndPath(releaseDefinition.name!, releaseDefinition.path!, project)
+    const existingReleaseDefinition = await releaseApi.findReleaseDefinitionByNameAndPath(releaseDefinition.name!, releaseDefinition.path!, project)
     if (existingReleaseDefinition) {
       releaseDefinition.id = existingReleaseDefinition.id
       releaseDefinition.revision = existingReleaseDefinition.revision
@@ -24,7 +23,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
         return { info: `Release definition ${releaseDefinition.name} update skipped because dry run.` }
       } else {
         try {
-          await api.updateReleaseDefinition(releaseDefinition, project)
+          await releaseApi.updateReleaseDefinition(releaseDefinition, project)
           return { info: `Successfully updated release definition ${existingReleaseDefinition.id} (${existingReleaseDefinition.name})` }
         } catch (e) {
           return { error: e }
@@ -35,7 +34,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
         return { info: `Release definition ${releaseDefinition.name} creation skipped because dry run.` }
       } else {
         try {
-          const createdReleaseDefinition = await api.createReleaseDefinition(releaseDefinition, project)
+          const createdReleaseDefinition = await releaseApi.createReleaseDefinition(releaseDefinition, project)
           return { info: `Successfully created release definition ${createdReleaseDefinition.id} (${createdReleaseDefinition.name})` }
         } catch (e) {
           return { error: e }

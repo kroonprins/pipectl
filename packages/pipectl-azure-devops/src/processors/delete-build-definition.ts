@@ -12,25 +12,21 @@ class DeleteBuildDefinition implements ActionProcessor {
 
   async process(azureBuildDefinition: AzureBuildDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
     log.debug(`[DeleteBuildDefinition] ${JSON.stringify(azureBuildDefinition)}`)
-    const api = buildApi
     const buildDefinition = azureBuildDefinition.spec
     const project = azureBuildDefinition.project
-    const existingBuildDefinition = await api.findBuildDefinitionByNameAndPath(buildDefinition.name!, buildDefinition.path!, project)
+    const existingBuildDefinition = await buildApi.findBuildDefinitionByNameAndPath(buildDefinition.name!, buildDefinition.path!, project)
     if (existingBuildDefinition) {
       if (args.dryRun) {
         return { info: `Build definition ${buildDefinition.name} deletion skipped because dry run.` }
-      }
-      else {
+      } else {
         try {
-          await api.deleteBuildDefinition(existingBuildDefinition.id!, project)
+          await buildApi.deleteBuildDefinition(existingBuildDefinition.id!, project)
           return { info: `Successfully deleted build definition ${existingBuildDefinition.id} (${existingBuildDefinition.name})` }
-        }
-        catch (e) {
+        } catch (e) {
           return { error: e }
         }
       }
-    }
-    else {
+    } else {
       return { info: `Build definition ${buildDefinition.name} not deleted because it does not exist.` }
     }
   }

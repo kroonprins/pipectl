@@ -12,11 +12,10 @@ class ApplyBuildDefinition implements ActionProcessor {
 
   async process(azureBuildDefinition: AzureBuildDefinition, _action: Action, args: ApplyArguments): Promise<ProcessResult> {
     log.debug(`[ApplyBuildDefinition] ${JSON.stringify(azureBuildDefinition)}`)
-    const api = buildApi
     const buildDefinition = azureBuildDefinition.spec
     const project = azureBuildDefinition.project
 
-    const existingBuildDefinition = await api.findBuildDefinitionByNameAndPath(buildDefinition.name!, buildDefinition.path!, project)
+    const existingBuildDefinition = await buildApi.findBuildDefinitionByNameAndPath(buildDefinition.name!, buildDefinition.path!, project)
     if (existingBuildDefinition) {
       buildDefinition.id = existingBuildDefinition.id
       buildDefinition.revision = existingBuildDefinition.revision
@@ -24,7 +23,7 @@ class ApplyBuildDefinition implements ActionProcessor {
         return { info: `Build definition ${buildDefinition.name} update skipped because dry run.` }
       } else {
         try {
-          await api.updateBuildDefinition(buildDefinition, project)
+          await buildApi.updateBuildDefinition(buildDefinition, project)
           return { info: `Successfully updated build definition ${existingBuildDefinition.id} (${existingBuildDefinition.name})` }
         } catch (e) {
           return { error: e }
@@ -35,7 +34,7 @@ class ApplyBuildDefinition implements ActionProcessor {
         return { info: `Build definition ${buildDefinition.name} creation skipped because dry run.` }
       } else {
         try {
-          const createdBuildDefinition = await api.createBuildDefinition(buildDefinition, project)
+          const createdBuildDefinition = await buildApi.createBuildDefinition(buildDefinition, project)
           return { info: `Successfully created build definition ${createdBuildDefinition.id} (${createdBuildDefinition.name})` }
         } catch (e) {
           return { error: e }
