@@ -13,18 +13,15 @@ class GetAllBuildDefinitions implements ActionProcessor {
 
   async process(azureBuildDefinition: AzureBuildDefinition, _action: Action, _args: GetArguments): Promise<GetBuildDefinitionProcessResult> {
     log.debug(`[GetAllBuildDefinitions] ${JSON.stringify(azureBuildDefinition)}`)
-    const api = buildApi
-    const project = azureBuildDefinition.project
     try {
-      const buildDefinitions = await api.findAllBuildDefinitions(project)
+      const project = azureBuildDefinition.project
+      const buildDefinitions = await buildApi.findAllBuildDefinitions(project)
       if (buildDefinitions) {
         return new GetBuildDefinitionProcessResult(buildDefinitions)
+      } else {
+        return new GetBuildDefinitionProcessResult([])
       }
-      else {
-        return { buildDefinitions: [] }
-      }
-    }
-    catch (e) {
+    } catch (e) {
       return { error: e }
     }
   }

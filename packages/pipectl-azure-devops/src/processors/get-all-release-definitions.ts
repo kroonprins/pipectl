@@ -13,18 +13,15 @@ class GetAllReleaseDefinitions implements ActionProcessor {
 
   async process(azureReleaseDefinition: AzureReleaseDefinition, _action: Action, _args: GetArguments): Promise<GetReleaseDefinitionProcessResult> {
     log.debug(`[GetAllReleaseDefinitions] ${JSON.stringify(azureReleaseDefinition)}`)
-    const api = releaseApi
-    const project = azureReleaseDefinition.project
     try {
-      const releaseDefinitions = await api.findAllReleaseDefinitions(project)
+      const project = azureReleaseDefinition.project
+      const releaseDefinitions = await releaseApi.findAllReleaseDefinitions(project)
       if (releaseDefinitions) {
         return new GetReleaseDefinitionProcessResult(releaseDefinitions)
+      } else {
+        return new GetReleaseDefinitionProcessResult([])
       }
-      else {
-        return { releaseDefinitions: [] }
-      }
-    }
-    catch (e) {
+    } catch (e) {
       return { error: e }
     }
   }
