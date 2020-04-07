@@ -1,4 +1,3 @@
-import { log } from './util/logging'
 import { Action, CommonArguments } from './actions/model'
 import { filter } from './filter'
 import { group } from './group'
@@ -6,6 +5,7 @@ import { Definition, DefinitionGroup, TransformedDefinition } from './model'
 import { processors, reporters } from './registration'
 import { transform } from './transform'
 import { completeDefinitions } from './util'
+import { log } from './util/logging'
 
 const process = async (definitions: Definition[], action: Action, args: CommonArguments) => {
   log.debug('[Process] complete and validate definitions')

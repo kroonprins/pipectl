@@ -6,3 +6,4 @@ class GetReleaseDefinitionProcessResult extends ProcessResult {
 }
 
 export { GetReleaseDefinitionProcessResult }
+

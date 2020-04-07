@@ -1,6 +1,6 @@
-import { getBasicHandler, getPersonalAccessTokenHandler, getBearerHandler, WebApi } from 'azure-devops-node-api'
-import { log } from 'pipectl-core/src/util/logging'
+import { getBasicHandler, getBearerHandler, getPersonalAccessTokenHandler, WebApi } from 'azure-devops-node-api'
 import { currentServer, currentUser } from 'pipectl-core/src/config'
+import { log } from 'pipectl-core/src/util/logging'
 
 class AzureConnection {
   private _connection: WebApi | null = null

@@ -1,7 +1,7 @@
-import { log } from './util/logging'
 import { Action, CommonArguments } from './actions/model'
 import { TransformedDefinition } from './model'
 import { filters } from './registration'
+import { log } from './util/logging'
 
 const filter = (transformedDefinitions: TransformedDefinition[], action: Action, args: CommonArguments): TransformedDefinition[] => {
   return transformedDefinitions

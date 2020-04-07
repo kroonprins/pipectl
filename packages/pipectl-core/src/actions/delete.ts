@@ -1,5 +1,5 @@
-import { log } from '../util/logging'
 import { process } from '../process'
+import { log } from '../util/logging'
 import { inputDefinitions as inputDefinitionsFromYaml } from '../util/yaml'
 import { Action, ApplyArguments } from './model'
 import { stringifyApplyArguments } from './util'

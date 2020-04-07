@@ -1,6 +1,6 @@
-import { log } from 'pipectl-core/src/util/logging'
 import { Action, GetArguments } from 'pipectl-core/src/actions/model'
 import { ActionProcessor, TransformedDefinition } from 'pipectl-core/src/model'
+import { log } from 'pipectl-core/src/util/logging'
 import { releaseApi } from '../adapters/release-api'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'

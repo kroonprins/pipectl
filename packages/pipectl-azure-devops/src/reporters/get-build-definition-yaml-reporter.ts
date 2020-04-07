@@ -1,7 +1,7 @@
 import { safeDump } from 'js-yaml'
-import { log } from 'pipectl-core/src/util/logging'
 import { Action, CommonArguments } from 'pipectl-core/src/actions/model'
 import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/src/model'
+import { log } from 'pipectl-core/src/util/logging'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
 import { transformGetBuildDefinitionProcessResultForReporting } from './util'
 

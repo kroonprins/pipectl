@@ -1,7 +1,7 @@
 import { safeDump } from 'js-yaml'
-import { log } from 'pipectl-core/src/util/logging'
 import { Action, CommonArguments } from 'pipectl-core/src/actions/model'
 import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/src/model'
+import { log } from 'pipectl-core/src/util/logging'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 import { transformGetReleaseDefinitionProcessResultForReporting } from './util'
 

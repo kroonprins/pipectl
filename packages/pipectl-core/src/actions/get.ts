@@ -1,8 +1,8 @@
-import { log } from '../util/logging'
 import { currentServer } from '../config'
 import { Definition } from '../model'
 import { process } from '../process'
 import { namespace } from '../util'
+import { log } from '../util/logging'
 import { Action, GetArguments } from './model'
 import { stringifyGetArguments } from './util'
 

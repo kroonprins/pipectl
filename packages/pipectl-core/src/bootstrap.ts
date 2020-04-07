@@ -1,8 +1,8 @@
+import { Command } from 'commander'
 import { DuplicateFilter } from './filters/DuplicateFilter'
 import { SelectorFilter } from './filters/SelectorFilter'
 import { registerFallbackReporter, registerFilter } from './registration'
 import { FallbackReporter } from './reporter'
-import { Command } from 'commander'
 
 type BootstrapFunction = (command: Command) => void
 
@@ -14,3 +14,4 @@ const bootstrapCore: BootstrapFunction = (_command: Command) => {
 }
 
 export { BootstrapFunction, bootstrapCore }
+
