@@ -94,7 +94,7 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
           for (const [index, phase] of designerProcess.phases.entries()) {
             if (!phase.hasOwnProperty('name')) phase.name = `Phase ${index + 1}`
             if (!phase.hasOwnProperty('jobAuthorizationScope')) phase.jobAuthorizationScope = BuildAuthorizationScope.ProjectCollection
-            if (!phase.hasOwnProperty('jobCancelTimeoutInMinutes')) phase.jobCancelTimeoutInMinutes = 1
+            if (!phase.hasOwnProperty('jobCancelTimeoutInMinutes')) phase.jobCancelTimeoutInMinutes = 0
 
             const defaultTarget: AgentPoolQueueTarget = {
               executionOptions: {

@@ -2,6 +2,7 @@
 * support
   * --timeout
   * --validate
+  * --kubeconfig
 * transformations:
   * task group by name
   * subscription by name
@@ -14,3 +15,4 @@
 * logs command
 * dynamic imports to bootstrap azure-devops?
 * in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
+* commit hooks via husky, semantic versioning, prettier, tralala

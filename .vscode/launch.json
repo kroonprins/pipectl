@@ -26,10 +26,6 @@
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "env": {
-        "HTTP_PROXY_HOST": "proxy.eib.electrabel.be",
-        "HTTP_PROXY_PORT": "8080",
-        "HTTP_PROXY": "http://proxy.eib.electrabel.be:8080",
-        "HTTPS_PROXY": "http://proxy.eib.electrabel.be:8080",
         "AZCONFIG": "./config/config.yaml"
       }
     },
@@ -52,10 +48,6 @@
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "env": {
-        "HTTP_PROXY_HOST": "proxy.eib.electrabel.be",
-        "HTTP_PROXY_PORT": "8080",
-        "HTTP_PROXY": "http://proxy.eib.electrabel.be:8080",
-        "HTTPS_PROXY": "http://proxy.eib.electrabel.be:8080",
         "AZCONFIG": "./config/config.yaml"
       }
     }

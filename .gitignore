@@ -9,4 +9,4 @@
 /config
 /helmfile/helmfile
 dist
-backup.txt
+/tmp
