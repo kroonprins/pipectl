@@ -1,6 +1,6 @@
-import { log } from 'pipectl-core/src/util/logging'
 import { Action, CommonArguments, GetArguments } from 'pipectl-core/src/actions/model'
 import { Definition, ProcessResult, TransformedDefinition } from 'pipectl-core/src/model'
+import { log } from 'pipectl-core/src/util/logging'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'

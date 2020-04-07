@@ -1,7 +1,7 @@
 import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { log } from 'pipectl-core/src/util/logging'
 import { Action, CommonArguments } from 'pipectl-core/src/actions/model'
 import { Definition, DefinitionTransformer } from 'pipectl-core/src/model'
+import { log } from 'pipectl-core/src/util/logging'
 import { Kind } from '../model'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { isAzureDevOps } from '../util'

@@ -1,6 +1,6 @@
 import { ICoreApi } from 'azure-devops-node-api/CoreApi'
-import { log } from 'pipectl-core/src/util/logging'
 import memoize from 'p-memoize'
+import { log } from 'pipectl-core/src/util/logging'
 import { azureConnection } from './connection'
 
 class CoreApi {

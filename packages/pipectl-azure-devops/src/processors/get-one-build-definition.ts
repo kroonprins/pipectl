@@ -1,6 +1,6 @@
-import { log } from 'pipectl-core/src/util/logging'
 import { Action, GetArguments } from 'pipectl-core/src/actions/model'
 import { ActionProcessor, TransformedDefinition } from 'pipectl-core/src/model'
+import { log } from 'pipectl-core/src/util/logging'
 import { buildApi } from '../adapters/build-api'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'

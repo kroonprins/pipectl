@@ -6,3 +6,4 @@ class GetBuildDefinitionProcessResult extends ProcessResult {
 }
 
 export { GetBuildDefinitionProcessResult }
+
