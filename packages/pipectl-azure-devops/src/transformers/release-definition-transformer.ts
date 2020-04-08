@@ -19,16 +19,7 @@ class ReleaseDefinitionTransformer implements DefinitionTransformer {
   }
 
   protected async setReleaseDefinitionDefaults(definition: Definition): Promise<ReleaseDefinition> {
-    // TODO clone?
-    const updatedSpec = definition.spec as ReleaseDefinition
-    if (!updatedSpec.hasOwnProperty('path'))
-      updatedSpec.path = '\\'
-
-    if (definition.metadata.labels) {
-      const tags = Object.entries(definition.metadata.labels).map(([k, v]) => `${k}=${v}`)
-      updatedSpec.tags = (updatedSpec.tags || []).concat(...tags)
-    }
-    return updatedSpec
+    return definition.spec as ReleaseDefinition
   }
 }
 

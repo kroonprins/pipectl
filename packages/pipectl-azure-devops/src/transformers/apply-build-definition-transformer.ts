@@ -16,10 +16,9 @@ class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
 
   protected async setBuildDefinitionDefaults(definition: Definition): Promise<BuildDefinition> {
     log.debug(`[ApplyBuildDefinitionTransformer.setBuildDefinitionDefaults] before[${JSON.stringify(definition)}]`)
-
     const updatedSpec = await applyDefaults(await super.setBuildDefinitionDefaults(definition), defaultsBuildDefinition, definition)
-
     log.debug(`[ApplyBuildDefinitionTransformer.setBuildDefinitionDefaults] after[${JSON.stringify(updatedSpec)}]`)
+
     return updatedSpec
   }
 }
