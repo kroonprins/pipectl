@@ -1,11 +1,11 @@
-import { AgentBasedDeployPhase, AgentDeploymentInput, ApprovalOptions, Artifact, ArtifactSourceReference, DeployPhase, DeployPhaseTypes, EnvironmentExecutionPolicy, EnvironmentOptions, EnvironmentRetentionPolicy, ReleaseDefinition, ReleaseDefinitionApprovals, ReleaseDefinitionApprovalStep, ReleaseDefinitionEnvironment, WorkflowTask } from "azure-devops-node-api/interfaces/ReleaseInterfaces"
-import { Definition } from "pipectl-core/dist/model"
-import { isNumber } from "util"
-import { agentPoolApi } from "../../adapters/agent-pool-api"
-import { buildApi } from "../../adapters/build-api"
-import { coreApi } from "../../adapters/core-api"
-import { variableGroupApi } from "../../adapters/variable-group-api"
-import { applyDefaults } from "./defaults"
+import { AgentBasedDeployPhase, AgentDeploymentInput, ApprovalOptions, Artifact, ArtifactSourceReference, DeployPhase, DeployPhaseTypes, EnvironmentExecutionPolicy, EnvironmentOptions, EnvironmentRetentionPolicy, ReleaseDefinition, ReleaseDefinitionApprovals, ReleaseDefinitionApprovalStep, ReleaseDefinitionEnvironment, WorkflowTask } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import { Definition } from 'pipectl-core/dist/model'
+import { isNumber } from 'util'
+import { agentPoolApi } from '../../adapters/agent-pool-api'
+import { buildApi } from '../../adapters/build-api'
+import { coreApi } from '../../adapters/core-api'
+import { variableGroupApi } from '../../adapters/variable-group-api'
+import { applyDefaults } from './defaults'
 
 const artifacts = async (spec: ReleaseDefinition, definition: Definition): Promise<Artifact[]> => {
   return Promise.all(
@@ -19,44 +19,44 @@ const artifacts = async (spec: ReleaseDefinition, definition: Definition): Promi
   )
 }
 
-const definitionReference = async (artifact: Artifact, project: string): Promise<{ [key: string]: ArtifactSourceReference }> => {
-  return applyDefaults(artifact.definitionReference || {}, defaultsDefinitionReference, project)
+const definitionReference = async (artifact: Artifact, projectId: string): Promise<{ [key: string]: ArtifactSourceReference }> => {
+  return applyDefaults(artifact.definitionReference || {}, defaultsDefinitionReference, projectId)
 }
 
-const defaultVersionType = async (definitionReference: { [key: string]: ArtifactSourceReference }): Promise<ArtifactSourceReference> => {
-  return applyDefaults(definitionReference.defaultVersionType, defaultsDefaultVersionType)
+const defaultVersionType = async (definitionRef: { [key: string]: ArtifactSourceReference }): Promise<ArtifactSourceReference> => {
+  return applyDefaults(definitionRef.defaultVersionType, defaultsDefaultVersionType)
 }
 
-const project = async (definitionReference: { [key: string]: ArtifactSourceReference }, project: string): Promise<ArtifactSourceReference> => {
-  if (!definitionReference.hasOwnProperty('project')) {
-    return { id: await coreApi.findProjectIdByName(project) }
-  } else if (!definitionReference.project.hasOwnProperty('id') || !definitionReference.project.id) {
-    return { id: await coreApi.findProjectIdByName(definitionReference.project.name || project) }
+const project = async (definitionRef: { [key: string]: ArtifactSourceReference }, projectId: string): Promise<ArtifactSourceReference> => {
+  if (!definitionRef.hasOwnProperty('project')) {
+    return { id: await coreApi.findProjectIdByName(projectId) }
+  } else if (!definitionRef.project.hasOwnProperty('id') || !definitionRef.project.id) {
+    return { id: await coreApi.findProjectIdByName(definitionRef.project.name || projectId) }
   }
-  return definitionReference.project
+  return definitionRef.project
 }
 
-const definition = async (definitionReference: { [key: string]: ArtifactSourceReference }, namespace: string): Promise<ArtifactSourceReference> => {
-  if (definitionReference.hasOwnProperty('definition')
-    && !definitionReference.definition.hasOwnProperty('id')
-    && definitionReference.definition.hasOwnProperty('name')
-    && definitionReference.definition.hasOwnProperty('path')) {
-    const buildName = definitionReference.definition.name!
-    const buildPath = (definitionReference.definition as any).path
-    const projectId = (await project(definitionReference, namespace)).id!
+const definitionReferenceDefinition = async (definitionRef: { [key: string]: ArtifactSourceReference }, namespace: string): Promise<ArtifactSourceReference> => {
+  if (definitionRef.hasOwnProperty('definition')
+    && !definitionRef.definition.hasOwnProperty('id')
+    && definitionRef.definition.hasOwnProperty('name')
+    && definitionRef.definition.hasOwnProperty('path')) {
+    const buildName = definitionRef.definition.name!
+    const buildPath = (definitionRef.definition as any).path
+    const projectId = (await project(definitionRef, namespace)).id!
     const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(buildName, buildPath, projectId)
     if (buildDefinition) {
       return { id: buildDefinition.id!.toString() }
     }
   }
-  return definitionReference.definition
+  return definitionRef.definition
 }
 
 const environments = async (spec: ReleaseDefinition, definition: Definition): Promise<ReleaseDefinitionEnvironment[]> => {
-  const project = definition.metadata.namespace
+  const projectId = definition.metadata.namespace
   return Promise.all(
     [...(spec.environments || []).entries()]
-      .map(([index, environment]) => applyDefaults(environment, defaultsEnvironment, index, project))
+      .map(([index, environment]) => applyDefaults(environment, defaultsEnvironment, index, projectId))
   )
 }
 
@@ -64,8 +64,8 @@ const rank = async (_: any, index: number): Promise<number> => {
   return index + 1
 }
 
-const environmentOptions = async (environment: ReleaseDefinitionEnvironment, _index: number, project: string): Promise<EnvironmentOptions> => {
-  return applyDefaults(environment.environmentOptions || {}, defaultsEnvironmentOptions, project)
+const environmentOptions = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<EnvironmentOptions> => {
+  return applyDefaults(environment.environmentOptions || {}, defaultsEnvironmentOptions, projectId)
 }
 
 const executionPolicy = async (environment: ReleaseDefinitionEnvironment): Promise<EnvironmentExecutionPolicy> => {
@@ -76,14 +76,14 @@ const retentionPolicy = async (environment: ReleaseDefinitionEnvironment): Promi
   return applyDefaults(environment.retentionPolicy || {}, defaultsRetentionPolicy)
 }
 
-const deployPhases = async (environment: ReleaseDefinitionEnvironment, _index: number, project: string): Promise<DeployPhase[]> => {
+const deployPhases = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<DeployPhase[]> => {
   return Promise.all(
     [...(environment.deployPhases || []).entries()]
       .map(async ([index, deployPhase]) => {
         const commonDefaultsApplied = await applyDefaults(deployPhase, defaultsDeployPhase, index)
         if (commonDefaultsApplied.phaseType === DeployPhaseTypes.AgentBasedDeployment) {
-          return applyDefaults(commonDefaultsApplied, defaultsAgentBasedDeployPhase, project)
-        } //TODO other phase types?
+          return applyDefaults(commonDefaultsApplied, defaultsAgentBasedDeployPhase, projectId)
+        } // TODO other phase types?
         return commonDefaultsApplied
       })
   )
@@ -96,13 +96,13 @@ const workflowTasks = async (deployPhase: DeployPhase): Promise<WorkflowTask[]> 
   )
 }
 
-const deploymentInput = async (deployPhase: AgentBasedDeployPhase, project: string): Promise<AgentDeploymentInput> => {
-  return applyDefaults(deployPhase.deploymentInput || {}, defaultsAgentDeploymentInput, project)
+const deploymentInput = async (deployPhase: AgentBasedDeployPhase, projectId: string): Promise<AgentDeploymentInput> => {
+  return applyDefaults(deployPhase.deploymentInput || {}, defaultsAgentDeploymentInput, projectId)
 }
 
-const queueId = async (agentDeploymentInput: AgentDeploymentInput, project: string): Promise<number | undefined> => {
+const queueId = async (agentDeploymentInput: AgentDeploymentInput, projectId: string): Promise<number | undefined> => {
   if (agentDeploymentInput.hasOwnProperty('queueId') && agentDeploymentInput.queueId && !isNumber(agentDeploymentInput.queueId)) {
-    return await agentPoolApi.findAgentPoolIdByName(agentDeploymentInput.queueId, project)
+    return await agentPoolApi.findAgentPoolIdByName(agentDeploymentInput.queueId, projectId)
   }
   return agentDeploymentInput.queueId
 }
@@ -131,28 +131,28 @@ const postDeployApprovals = async (environment: ReleaseDefinitionEnvironment): P
   }
 }
 
-const approvals = async (approvals: ReleaseDefinitionApprovals): Promise<ReleaseDefinitionApprovalStep[]> => {
+const approvals = async (releaseDefinitionApprovals: ReleaseDefinitionApprovals): Promise<ReleaseDefinitionApprovalStep[]> => {
   return Promise.all(
-    [...(approvals.approvals || []).entries()]
+    [...(releaseDefinitionApprovals.approvals || []).entries()]
       .map(([index, approvalStep]) => applyDefaults(approvalStep, defaultApprovalStep, index))
   )
 }
 
-const approvalOptions = async (approvals: ReleaseDefinitionApprovals): Promise<ApprovalOptions> => {
-  return applyDefaults(approvals.approvalOptions || {}, defaultsApprovalOptions)
+const approvalOptions = async (releaseDefinitionApprovals: ReleaseDefinitionApprovals): Promise<ApprovalOptions> => {
+  return applyDefaults(releaseDefinitionApprovals.approvalOptions || {}, defaultsApprovalOptions)
 }
 
-const variableGroups = async (environment: ReleaseDefinitionEnvironment, project: string): Promise<number[]> => {
-  const variableGroups = environment.variableGroups || []
+const variableGroups = async (environment: ReleaseDefinitionEnvironment, projectId: string): Promise<number[]> => {
+  const groups = environment.variableGroups || []
   if (environment.hasOwnProperty('variableGroups') && environment.variableGroups && environment.variableGroups.length) {
     for (let variableGroup of environment.variableGroups) {
       if (!isNumber(variableGroup)) {
-        variableGroup = await variableGroupApi.findVariableGroupIdByName(variableGroup, project)
+        variableGroup = await variableGroupApi.findVariableGroupIdByName(variableGroup, projectId)
       }
-      variableGroups.push(variableGroup)
+      groups.push(variableGroup)
     }
   }
-  return variableGroups
+  return groups
 }
 
 const defaultsReleaseDefinition: ReleaseDefinition | object = {
@@ -169,7 +169,7 @@ const defaultsBuildArtifact: Artifact | object = {
 const defaultsDefinitionReference: { [key: string]: ArtifactSourceReference } | object = {
   defaultVersionType,
   project,
-  definition,
+  definition: definitionReferenceDefinition,
 }
 
 const defaultsDefaultVersionType: ArtifactSourceReference = {

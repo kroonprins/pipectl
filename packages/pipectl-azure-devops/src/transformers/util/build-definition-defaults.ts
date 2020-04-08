@@ -1,11 +1,11 @@
-import { AgentPoolQueue, AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from "azure-devops-node-api/interfaces/BuildInterfaces";
-import { TeamProjectReference } from "azure-devops-node-api/interfaces/CoreInterfaces";
-import { Definition } from "pipectl-core/dist/model";
-import { isNumber } from "util";
-import { agentPoolApi } from "../../adapters/agent-pool-api";
-import { coreApi } from "../../adapters/core-api";
-import { variableGroupApi } from "../../adapters/variable-group-api";
-import { applyDefaults } from "./defaults";
+import { AgentPoolQueue, AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
+import { Definition } from 'pipectl-core/dist/model'
+import { isNumber } from 'util'
+import { agentPoolApi } from '../../adapters/agent-pool-api'
+import { coreApi } from '../../adapters/core-api'
+import { variableGroupApi } from '../../adapters/variable-group-api'
+import { applyDefaults } from './defaults'
 
 const process = async (spec: BuildDefinition, _definition: Definition): Promise<BuildProcess> => {
   const commonDefaultsApplied = await applyDefaults(spec.process || {}, defaultsProcess)
@@ -15,9 +15,9 @@ const process = async (spec: BuildDefinition, _definition: Definition): Promise<
   return commonDefaultsApplied
 }
 
-const phases = async (process: DesignerProcess): Promise<Phase[]> => {
+const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> => {
   return Promise.all(
-    [...(process.phases || []).entries()]
+    [...(designerProcess.phases || []).entries()]
       .map(([index, phase]) => applyDefaults(phase, defaultsDesignerProcessPhase, index))
   )
 }
@@ -106,16 +106,16 @@ const variableGroups = async (spec: BuildDefinition, definition: Definition): Pr
   )
 }
 
-const variableGroupId = async (variableGroup: VariableGroup, project: string): Promise<VariableGroup> => {
+const variableGroupId = async (variableGroup: VariableGroup, projectId: string): Promise<VariableGroup> => {
   let id = variableGroup.id
   if (!variableGroup.id) {
     if (variableGroup.name) {
-      id = await variableGroupApi.findVariableGroupIdByName(variableGroup.name, project)
+      id = await variableGroupApi.findVariableGroupIdByName(variableGroup.name, projectId)
     } else if (typeof variableGroup === 'string' || isNumber(variableGroup)) {
       if (isNumber(variableGroup)) {
         id = variableGroup
       } else {
-        id = await variableGroupApi.findVariableGroupIdByName(variableGroup, project)
+        id = await variableGroupApi.findVariableGroupIdByName(variableGroup, projectId)
       }
     }
   }
@@ -226,5 +226,5 @@ const defaultsVariableGroup: VariableGroup | object = {
   id: variableGroupId,
 }
 
-export { defaultsBuildDefinition };
+export { defaultsBuildDefinition }
 
