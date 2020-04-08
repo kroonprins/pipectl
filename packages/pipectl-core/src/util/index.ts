@@ -8,6 +8,7 @@ const completeDefinitions = (definitions: Definition[], args: CommonArguments): 
       if (!definition.apiVersion) throw new Error(`Missing apiVersion for definition ${definition}`)
       if (!definition.kind) throw new Error(`Missing kind for definition ${definition}`)
       if (!definition.spec) throw new Error(`Missing spec for definition ${definition}`)
+      if (!definition.metadata) definition.metadata = { namespace: '' }
       if (!definition.metadata.namespace) {
         definition.metadata.namespace = namespace(args)
       }

@@ -20,3 +20,6 @@
   * install the plugin globally and the ctl globally with npm in -g
   * with npx for a local package.json containing the plugin and the ctl in the dependencies
   * with one-off npx if the plugin is installed globally?
+
+* register stuff via annotations?
+* remove some duplication in azure devops reporters, transformers, etc
