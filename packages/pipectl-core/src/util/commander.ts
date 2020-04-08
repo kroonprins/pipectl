@@ -5,7 +5,7 @@ function multiple(value: string, previous: string[] = []) {
   return previous.concat([value])
 }
 
-function addCommands(...commands: Command[]) {
+function registerCommand(...commands: Command[]) {
   for (const command of commands) {
     command
       .option('--log-level <logLevel>', 'todo')
@@ -13,5 +13,5 @@ function addCommands(...commands: Command[]) {
   }
 }
 
-export { multiple, addCommands }
+export { multiple, registerCommand }
 

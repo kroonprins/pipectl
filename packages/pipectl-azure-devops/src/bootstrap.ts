@@ -1,5 +1,7 @@
 import { Command } from 'commander'
 import { registerActionProcessor, registerGrouper, registerReporter, registerTransformer } from 'pipectl-core/dist/registration'
+import { registerCommand } from 'pipectl-core/dist/util/commander'
+import test from './actions/test'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
 import { ApplyBuildDefinition } from './processors/apply-build-definition'
@@ -21,7 +23,13 @@ import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
 
-export default (_program: Command) => {
+export default (program: Command) => {
+  registerCommand(
+    program
+      .command('test-azure-devops')
+      .action(test)
+  )
+
   registerGrouper(
     new AzureDefinitionGrouper(),
     new ApplyAzureDefinitionGrouper(),
