@@ -1,4 +1,4 @@
-import { Action, CommonArguments, GetArguments } from 'pipectl-core/dist/actions/model'
+import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
 import { Definition, ProcessResult, TransformedDefinition } from 'pipectl-core/dist/model'
 import { log } from 'pipectl-core/dist/util/logging'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
@@ -6,7 +6,7 @@ import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 
-const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): object => {
+const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: GetArguments): object => {
   const azureBuildDefinition = transformedDefinition as AzureBuildDefinition
   const definitions: Definition[] = (processResult as GetBuildDefinitionProcessResult).buildDefinitions!
     .map(buildDefinition => {
@@ -20,7 +20,7 @@ const transformGetBuildDefinitionProcessResultForReporting = (processResult: Pro
       }
     })
     .map(definition => { // TODO
-      if ((args as GetArguments).export) {
+      if (args.export) {
         return removeFieldsFromBuildDefinitionForExport(definition)
       }
       return definition
@@ -35,6 +35,7 @@ const transformGetBuildDefinitionProcessResultForReporting = (processResult: Pro
   }
 }
 
+// TODO remove fields that are equal to default values
 /* tslint:disable:no-string-literal */
 const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Definition => {
   log.debug(`[removeFieldsFromBuildDefinitionForExport] before[${JSON.stringify(definition)}]`)
@@ -82,7 +83,7 @@ const removeFieldsFromBuildDefinitionForExport = (definition: Definition): Defin
   return definition
 }
 
-const transformGetReleaseDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): object => {
+const transformGetReleaseDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: GetArguments): object => {
   const azureReleaseDefinition = transformedDefinition as AzureReleaseDefinition
   const definitions: Definition[] = (processResult as GetReleaseDefinitionProcessResult).releaseDefinitions!
     .map(releaseDefinition => {
@@ -96,7 +97,7 @@ const transformGetReleaseDefinitionProcessResultForReporting = (processResult: P
       }
     })
     .map(definition => {
-      if ((args as GetArguments).export) {
+      if (args.export) {
         return removeFieldsFromReleaseDefinitionForExport(definition)
       }
       return definition

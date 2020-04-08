@@ -1,5 +1,5 @@
 import { safeDump } from 'js-yaml'
-import { Action, CommonArguments } from 'pipectl-core/dist/actions/model'
+import { Action, CommonArguments, GetArguments } from 'pipectl-core/dist/actions/model'
 import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
 import { log } from 'pipectl-core/dist/util/logging'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
@@ -13,7 +13,7 @@ class GetReleaseDefinitionYamlReporter implements Reporter {
 
   async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
     log.debug(`[GetReleaseDefinitionYamlReporter] processResult[${JSON.stringify(processResult)}], transformedDefinition[${JSON.stringify(transformedDefinition)}]`)
-    log.info(safeDump(transformGetReleaseDefinitionProcessResultForReporting(processResult, transformedDefinition, action, args)))
+    log.info(safeDump(transformGetReleaseDefinitionProcessResultForReporting(processResult, transformedDefinition, action, args as GetArguments)))
   }
 }
 
