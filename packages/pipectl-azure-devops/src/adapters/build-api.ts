@@ -53,7 +53,7 @@ class BuildApi {
   }
 
   async deleteBuildDefinition(buildDefinitionId: number, project: string) {
-    log.debug(`[BuildApi.updateBuildDefinition] id[${buildDefinitionId}], project[${project}]`)
+    log.debug(`[BuildApi.deleteBuildDefinition] id[${buildDefinitionId}], project[${project}]`)
     const api = await this.getApi()
     return api.deleteDefinition(project, buildDefinitionId)
   }

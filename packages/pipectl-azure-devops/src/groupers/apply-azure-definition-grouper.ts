@@ -12,7 +12,7 @@ class ApplyAzureDefinitionGrouper implements DefinitionGrouper {
     log.debug(`[ApplyAzureDefinitionGrouper] ${definition.kind}`)
     return [
       definition.kind,
-      [Kind.BUILD_DEFINITION, Kind.RELEASE_DEFINITION]
+      [Kind.VARIABLE_GROUP, Kind.BUILD_DEFINITION, Kind.RELEASE_DEFINITION]
     ]
   }
 }

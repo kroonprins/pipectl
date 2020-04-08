@@ -16,6 +16,7 @@ abstract class AzureDefinition<T> implements TransformedDefinition {
 enum Kind {
   BUILD_DEFINITION = 'BuildDefinition',
   RELEASE_DEFINITION = 'ReleaseDefinition',
+  VARIABLE_GROUP = 'VariableGroup',
 }
 
 export { AzureDefinition, Kind }

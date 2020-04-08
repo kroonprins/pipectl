@@ -6,22 +6,31 @@ import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-g
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
 import { ApplyBuildDefinition } from './processors/apply-build-definition'
 import { ApplyReleaseDefinition } from './processors/apply-release-definition'
+import { ApplyVariableGroup } from './processors/apply-variable-group'
 import { DeleteBuildDefinition } from './processors/delete-build-definition'
 import { DeleteReleaseDefinition } from './processors/delete-release-definition'
+import { DeleteVariableGroup } from './processors/delete-variable-group'
 import { GetAllBuildDefinitions } from './processors/get-all-build-definitions'
 import { GetAllReleaseDefinitions } from './processors/get-all-release-definitions'
+import { GetAllVariableGroups } from './processors/get-all-variable-groups'
 import { GetOneBuildDefinition } from './processors/get-one-build-definition'
 import { GetOneReleaseDefinition } from './processors/get-one-release-definition'
+import { GetOneVariableGroup } from './processors/get-one-variable-group'
 import { GetBuildDefinitionJsonReporter } from './reporters/get-build-definition-json-reporter'
 import { GetBuildDefinitionReporter } from './reporters/get-build-definition-reporter'
 import { GetBuildDefinitionYamlReporter } from './reporters/get-build-definition-yaml-reporter'
 import { GetReleaseDefinitionJsonReporter } from './reporters/get-release-definition-json-reporter'
 import { GetReleaseDefinitionReporter } from './reporters/get-release-definition-reporter'
 import { GetReleaseDefinitionYamlReporter } from './reporters/get-release-definition-yaml-reporter'
+import { GetVariableGroupJsonReporter } from './reporters/get-variable-group-json-reporter'
+import { GetVariableGroupReporter } from './reporters/get-variable-group-reporter'
+import { GetVariableGroupYamlReporter } from './reporters/get-variable-group-yaml-reporter'
 import { ApplyBuildDefinitionTransformer } from './transformers/apply-build-definition-transformer'
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
+import { ApplyVariableGroupTransformer } from './transformers/apply-variable-group-transformer'
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
+import { VariableGroupTransformer } from './transformers/variable-group-transformer'
 
 export default (program: Command) => {
   registerCommand(
@@ -36,6 +45,8 @@ export default (program: Command) => {
   )
 
   registerTransformer(
+    new VariableGroupTransformer(),
+    new ApplyVariableGroupTransformer(),
     new BuildDefinitionTransformer(),
     new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
@@ -43,6 +54,10 @@ export default (program: Command) => {
   )
 
   registerActionProcessor(
+    new GetAllVariableGroups(),
+    new GetOneVariableGroup(),
+    new ApplyVariableGroup(),
+    new DeleteVariableGroup(),
     new ApplyBuildDefinition(),
     new DeleteBuildDefinition(),
     new GetAllBuildDefinitions(),
@@ -54,6 +69,9 @@ export default (program: Command) => {
   )
 
   registerReporter(
+    new GetVariableGroupReporter(),
+    new GetVariableGroupYamlReporter(),
+    new GetVariableGroupJsonReporter(),
     new GetBuildDefinitionReporter(),
     new GetBuildDefinitionYamlReporter(),
     new GetBuildDefinitionJsonReporter(),
