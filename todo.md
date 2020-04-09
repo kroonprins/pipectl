@@ -2,7 +2,6 @@
 * support
   * --timeout
   * --validate
-  * --kubeconfig
 * transformations:
   * task group by name
   * subscription by name
@@ -23,3 +22,6 @@
 
 * register stuff via annotations?
 * remove some duplication in azure devops reporters, transformers, etc
+* review the use of commander:
+  * ugly workaround for --pipeconfig
+  * debug logging kicks in too late to see logging from initializeConfig

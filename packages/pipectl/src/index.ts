@@ -5,10 +5,19 @@ import { bootstrapCore, BootstrapFunction } from 'pipectl-core/dist/bootstrap'
 import { currentPlugins, initialize as initializeConfig } from 'pipectl-core/dist/config'
 import { initializeLogging, log } from 'pipectl-core/dist/util/logging'
 
+// TODO
+const configLocationWorkaround = (args: string[]): string | undefined => {
+  const index = args.findIndex(arg => arg === '--pipeconfig')
+  if (index > 0 && index < args.length - 1) {
+    return args[index + 1]
+  }
+  return
+}
+
 (async () => {
   try {
     initializeLogging()
-    initializeConfig()
+    initializeConfig(configLocationWorkaround(process.argv))
 
     const program = new Command()
 

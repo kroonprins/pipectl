@@ -10,6 +10,8 @@ function registerCommand(...commands: Command[]) {
     command
       .option('--log-level <logLevel>', 'todo')
       .addListener('option:log-level', updateLogLevel)
+    command
+      .option('--pipeconfig <configFile>', 'todo')
   }
 }
 

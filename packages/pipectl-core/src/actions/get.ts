@@ -7,8 +7,9 @@ import { Action, GetArguments } from './model'
 import { stringifyGetArguments } from './util'
 
 export default async (kind: string, name: string, args: GetArguments) => {
-  log.debug(`Action apply '${stringifyGetArguments(args)}'`)
+  args.kind = kind
   args.name = name
+  log.debug(`Action get '${stringifyGetArguments(args)}'`)
   const definitions: Definition[] = [{
     apiVersion: currentServer().type,
     kind,

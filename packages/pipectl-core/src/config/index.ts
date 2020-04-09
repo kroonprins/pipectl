@@ -5,9 +5,9 @@ import { Config, ContextConfig, ServerConfig, UserConfig } from './model'
 
 let config: Config
 
-const initialize = () => {
+const initialize = (configFileLocation?: string) => {
 
-  const location = configFileLocation()
+  const location = getConfigFileLocation(configFileLocation)
 
   config = load((readFileSync(location)).toString()) as Config // TODO sync?
 
@@ -24,8 +24,8 @@ const initialize = () => {
   log.debug()
 }
 
-const configFileLocation = () => {
-  return process.env.AZCONFIG || `${process.env.HOME}/.az/config`
+const getConfigFileLocation = (configFileLocation?: string) => {
+  return configFileLocation || process.env.PIPECONFIG || `${process.env.HOME}/.pipe/config`
 }
 
 const currentContext = () => {
