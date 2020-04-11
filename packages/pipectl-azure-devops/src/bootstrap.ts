@@ -1,6 +1,6 @@
-import { Command } from 'commander'
 import { registerActionProcessor, registerGrouper, registerReporter, registerTransformer } from 'pipectl-core/dist/registration'
-import { registerCommand } from 'pipectl-core/dist/util/commander'
+import { registerCommand } from 'pipectl-core/dist/util/yargs'
+import { Argv } from 'yargs'
 import test from './actions/test'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
@@ -32,11 +32,9 @@ import { BuildDefinitionTransformer } from './transformers/build-definition-tran
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
 import { VariableGroupTransformer } from './transformers/variable-group-transformer'
 
-export default (program: Command) => {
+export default (yargs: Argv) => {
   registerCommand(
-    program
-      .command('test-azure-devops')
-      .action(test)
+    yargs.command('test-azure-devops', 'todo', _yarg => undefined, test)
   )
 
   registerGrouper(
