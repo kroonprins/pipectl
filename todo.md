@@ -22,3 +22,4 @@
 
 * register stuff via annotations?
 * remove some duplication in azure devops reporters, transformers, etc
+* yargs sometimes outputting usage for no reason

@@ -1,4 +1,4 @@
-import { AgentPoolQueue, AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { AgentPoolQueue, AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildDefinitionVariable, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
 import { Definition } from 'pipectl-core/dist/model'
 import { isNumber } from 'util'
@@ -98,6 +98,18 @@ const schedules = async (scheduleTrigger: ScheduleTrigger): Promise<Schedule[]> 
   )
 }
 
+const variables = async (spec: BuildDefinition, _definition: Definition): Promise<{ [key: string]: BuildDefinitionVariable }> => {
+  return Object.entries(spec.variables || {})
+    .map(([variable, value]) => {
+      if (value && value.hasOwnProperty('value')) {
+        return { [variable]: value }
+      } else {
+        return { [variable]: { value: value as string } }
+      }
+    })
+    .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
+}
+
 const variableGroups = async (spec: BuildDefinition, definition: Definition): Promise<VariableGroup[]> => {
   const projectId = (await project(spec, definition)).id
   return Promise.all(
@@ -106,7 +118,7 @@ const variableGroups = async (spec: BuildDefinition, definition: Definition): Pr
   )
 }
 
-const variableGroupId = async (variableGroup: VariableGroup, projectId: string): Promise<VariableGroup> => {
+const variableGroupId = async (variableGroup: VariableGroup, projectId: string): Promise<number | undefined> => {
   let id = variableGroup.id
   if (!variableGroup.id) {
     if (variableGroup.name) {
@@ -119,7 +131,7 @@ const variableGroupId = async (variableGroup: VariableGroup, projectId: string):
       }
     }
   }
-  return { id }
+  return id
 }
 
 const defaultsBuildDefinition: BuildDefinition | object = {
@@ -137,6 +149,7 @@ const defaultsBuildDefinition: BuildDefinition | object = {
   tags,
   triggers,
   variableGroups,
+  variables,
 }
 
 const defaultsProcess: BuildProcess = {
