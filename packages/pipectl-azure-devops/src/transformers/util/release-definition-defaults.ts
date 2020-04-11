@@ -1,4 +1,4 @@
-import { AgentBasedDeployPhase, AgentDeploymentInput, ApprovalOptions, Artifact, ArtifactSourceReference, DeployPhase, DeployPhaseTypes, EnvironmentExecutionPolicy, EnvironmentOptions, EnvironmentRetentionPolicy, ReleaseDefinition, ReleaseDefinitionApprovals, ReleaseDefinitionApprovalStep, ReleaseDefinitionEnvironment, WorkflowTask } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import { AgentBasedDeployPhase, AgentDeploymentInput, ApprovalOptions, Artifact, ArtifactSourceReference, ConfigurationVariableValue, DeployPhase, DeployPhaseTypes, EnvironmentExecutionPolicy, EnvironmentOptions, EnvironmentRetentionPolicy, ReleaseDefinition, ReleaseDefinitionApprovals, ReleaseDefinitionApprovalStep, ReleaseDefinitionEnvironment, WorkflowTask } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import { Definition } from 'pipectl-core/dist/model'
 import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
@@ -142,22 +142,52 @@ const approvalOptions = async (releaseDefinitionApprovals: ReleaseDefinitionAppr
   return applyDefaults(releaseDefinitionApprovals.approvalOptions || {}, defaultsApprovalOptions)
 }
 
-const variableGroups = async (environment: ReleaseDefinitionEnvironment, projectId: string): Promise<number[]> => {
-  const groups = environment.variableGroups || []
-  if (environment.hasOwnProperty('variableGroups') && environment.variableGroups && environment.variableGroups.length) {
-    for (let variableGroup of environment.variableGroups) {
-      if (!isNumber(variableGroup)) {
-        variableGroup = await variableGroupApi.findVariableGroupIdByName(variableGroup, projectId)
+const variables = async (spec: ReleaseDefinition, _definition?: Definition): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+  return _variables(spec, { isDefault: true })
+}
+
+const variablesScoped = async (environment: ReleaseDefinitionEnvironment, index: number, _projectId: string): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+  return _variables(environment, { key: await rank(undefined, index) })
+}
+
+const _variables = async (source: ReleaseDefinition | ReleaseDefinitionEnvironment, scope: { [key: string]: any }): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+  return Object.entries(source.variables || {})
+    .map(([variable, value]) => {
+      if (value && value.hasOwnProperty('value')) {
+        (value as any).scope = scope
+        return { [variable]: value }
+      } else {
+        return { [variable]: { value: value as string, scope } }
       }
-      groups.push(variableGroup)
-    }
-  }
-  return groups
+    })
+    .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
+}
+
+const variableGroups = async (spec: ReleaseDefinition, definition: Definition): Promise<number[]> => {
+  return _variableGroups(spec, definition.metadata.namespace)
+}
+
+const variableGroupsScoped = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<number[]> => {
+  return _variableGroups(environment, projectId)
+}
+
+const _variableGroups = async (source: ReleaseDefinition | ReleaseDefinitionEnvironment, projectId: string): Promise<number[]> => {
+  return Promise.all(
+    (source.variableGroups || [])
+      .map(async variableGroup => {
+        if (!isNumber(variableGroup)) {
+          return await variableGroupApi.findVariableGroupIdByName(variableGroup, projectId)
+        }
+        return variableGroup
+      })
+  )
 }
 
 const defaultsReleaseDefinition: ReleaseDefinition | object = {
   artifacts,
   environments,
+  variableGroups,
+  variables,
 }
 
 const defaultsArtifact: Artifact = {}
@@ -185,7 +215,8 @@ const defaultsEnvironment: ReleaseDefinitionEnvironment | object = {
   deployPhases,
   preDeployApprovals,
   postDeployApprovals,
-  variableGroups,
+  variableGroups: variableGroupsScoped,
+  variables: variablesScoped,
 }
 
 const defaultsEnvironmentOptions: EnvironmentOptions = {

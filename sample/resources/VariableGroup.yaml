@@ -1,0 +1,7 @@
+apiVersion: azure-devops
+kind: VariableGroup
+spec:
+  name: My Variable Group
+  variables:
+    myVar: one
+    myOtherVar: two

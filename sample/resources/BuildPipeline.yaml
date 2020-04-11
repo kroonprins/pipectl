@@ -1,0 +1,35 @@
+---
+apiVersion: azure-devops
+kind: BuildDefinition
+metadata:
+  labels:
+    test: label
+spec:
+  name: My Build Pipeline
+  path: \
+  process:
+    phases:
+      - steps:
+          - displayName: Bash Script
+            task:
+              id: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+              versionSpec: 3.*
+              definitionType: task
+            inputs:
+              targetType: inline
+              script: |
+                echo 'Hello world'
+    target:
+      agentSpecification:
+        identifier: ubuntu-18.04
+  repository:
+    id: b7c02e89-d596-44ee-86b2-b502324c1938
+  queue:
+    name: Azure Pipelines
+  variables:
+    myBuildVar: build
+    myOverridableBuildVar:
+      value: overridable
+      allowOverride: true
+  variableGroups:
+    - My Variable Group

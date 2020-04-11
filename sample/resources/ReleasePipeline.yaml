@@ -1,0 +1,38 @@
+apiVersion: azure-devops
+kind: ReleaseDefinition
+metadata:
+  labels:
+    test: label
+spec:
+  name: My Release Pipeline
+  path: \
+  environments:
+    - name: Stage 1
+      variables:
+        myStageVar: stage
+      variableGroups:
+        - My Variable Group
+      deployPhases:
+        - deploymentInput:
+            agentSpecification:
+              identifier: vs2017-win2016
+            queueId: Azure Pipelines
+          name: Agent job
+          workflowTasks:
+            - taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+              version: 3.*
+              definitionType: task
+              inputs:
+                targetType: inline
+                name: Bash Script
+                script: |
+                  echo 'Hello world'
+  artifacts:
+    - type: Build
+      alias: build-artifact
+      definitionReference:
+        definition:
+          name: My Build Definition
+          path: \
+  variables:
+    myReleaseVar: release

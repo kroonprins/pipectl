@@ -5,7 +5,7 @@ import { applyDefaults } from './defaults'
 const variables = async (variableGroup: VariableGroup, _definition: Definition): Promise<{ [key: string]: VariableValue; }> => {
   return Object.entries(variableGroup.variables || {})
     .map(([variable, value]) => {
-      if (value.hasOwnProperty('value')) {
+      if (value && value.hasOwnProperty('value')) {
         return { [variable]: value }
       } else {
         return { [variable]: { value: value as string } }
