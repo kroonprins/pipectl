@@ -6,13 +6,11 @@ import { log } from '../util/logging'
 import { Action, GetArguments } from './model'
 import { stringifyGetArguments } from './util'
 
-export default async (kind: string, name: string, args: GetArguments) => {
-  args.kind = kind
-  args.name = name
+export default async (args: GetArguments) => {
   log.debug(`Action get '${stringifyGetArguments(args)}'`)
   const definitions: Definition[] = [{
     apiVersion: currentServer().type,
-    kind,
+    kind: args.kind,
     metadata: {
       namespace: namespace(args)
     },

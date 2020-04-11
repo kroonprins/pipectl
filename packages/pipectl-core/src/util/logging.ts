@@ -1,13 +1,8 @@
 import log, { LogLevelDesc } from 'loglevel'
 
-const initializeLogging = () => {
-  log.setDefaultLevel('info')
+const initializeLogging = (logLevel?: string) => {
+  log.setDefaultLevel(logLevel ? (logLevel as LogLevelDesc) : 'info') // TODO validate input
 }
 
-const updateLogLevel = (logLevel: LogLevelDesc) => {
-  // TODO validate input
-  log.setLevel(logLevel)
-}
-
-export { initializeLogging, updateLogLevel, log }
+export { initializeLogging, log }
 

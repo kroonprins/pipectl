@@ -1,4 +1,4 @@
-import { Command } from 'commander'
+import { Argv } from 'yargs'
 import apply from './actions/apply'
 import _delete from './actions/delete'
 import get from './actions/get'
@@ -6,37 +6,50 @@ import { DuplicateFilter } from './filters/DuplicateFilter'
 import { SelectorFilter } from './filters/SelectorFilter'
 import { registerFallbackReporter, registerFilter } from './registration'
 import { FallbackReporter } from './reporter'
-import { multiple, registerCommand } from './util/commander'
+import { registerCommand } from './util/yargs'
 
-type BootstrapFunction = (command: Command) => void
+type BootstrapFunction = (yargs: Argv) => void
 
-const bootstrapCore: BootstrapFunction = (program: Command) => {
+const bootstrapCore: BootstrapFunction = (yargs: Argv) => {
   registerCommand(
-    program
-      .command('apply')
-      .requiredOption('-f, --filename <fileOption>', 'File name to apply.', multiple)
-      .option('-R, --recursive', 'recursively if directory')
-      .option('--dry-run', 'todo')
-      .option('-l, --selector <selector>', 'todo')
-      .option('-n, --namespace <namespace>', 'todo')
-      .option('-o, --output <output>', 'todo')
-      .action(apply),
-    program
-      .command('delete')
-      .requiredOption('-f, --filename <fileOption>', 'File name to apply.', multiple)
-      .option('-R, --recursive', 'recursively if directory')
-      .option('--dry-run', 'todo')
-      .option('-l, --selector <selector>', 'todo')
-      .option('-n, --namespace <namespace>', 'todo')
-      .option('-o, --output <output>', 'todo')
-      .action(_delete),
-    program
-      .command('get <kind> [name]')
-      .option('-l, --selector <selector>', 'todo')
-      .option('-n, --namespace <namespace>', 'todo')
-      .option('-o, --output <output>', 'todo')
-      .option('--export', 'todo')
-      .action(get)
+    yargs
+      .command('apply', 'todo', yarg => {
+        yarg
+          .options({
+            filename: { type: 'string', array: true, alias: 'f', description: 'todo' },
+            dryRun: { type: 'boolean', description: 'todo' },
+            recursive: { type: 'boolean', alias: 'R', description: 'todo' },
+            selector: { type: 'string', alias: 'l', description: 'todo' }, // TODO array?
+            namespace: { type: 'string', alias: 'n', description: 'todo' },
+            output: { type: 'string', alias: 'o', description: 'todo', choices: ['yaml', 'json'] },
+          })
+          .demandOption('filename')
+      }, apply),
+    yargs
+      .command('delete', 'todo', yarg => {
+        yarg
+          .options({
+            filename: { type: 'string', array: true, alias: 'f', description: 'todo' },
+            dryRun: { type: 'boolean', description: 'todo' },
+            recursive: { type: 'boolean', alias: 'R', description: 'todo' },
+            selector: { type: 'string', alias: 'l', description: 'todo' }, // TODO array?
+            namespace: { type: 'string', alias: 'n', description: 'todo' },
+            output: { type: 'string', alias: 'o', description: 'todo', choices: ['yaml', 'json'] },
+          })
+          .demandOption('filename')
+      }, _delete),
+    yargs
+      .command('get <kind> [name]', 'todo', yarg => {
+        yarg
+          .positional('kind', { type: 'string', description: 'todo' })
+          .positional('name', { type: 'string', description: 'todo' })
+          .options({
+            selector: { type: 'string', alias: 'l', description: 'todo' }, // TODO array?
+            namespace: { type: 'string', alias: 'n', description: 'todo' },
+            output: { type: 'string', alias: 'o', description: 'todo', choices: ['yaml', 'json'] },
+            export: { type: 'boolean', description: 'todo' },
+          })
+      }, get),
   )
 
   registerFilter(
