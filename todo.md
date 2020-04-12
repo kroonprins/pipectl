@@ -25,3 +25,4 @@
 * yargs sometimes outputting usage for no reason
 
 * json input files, directory/recursive
+* handle empty object/array in applyExport instead of having this test in all export functions

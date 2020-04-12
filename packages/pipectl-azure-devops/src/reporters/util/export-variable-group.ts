@@ -1,5 +1,5 @@
-import { VariableGroup } from "azure-devops-node-api/interfaces/BuildInterfaces"
-import { filterProp } from "./export"
+import { VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { filterProp } from './export'
 
 const variables = (variableGroup: VariableGroup): { [key: string]: string | undefined } => {
   return Object.entries(variableGroup.variables || {})
@@ -7,7 +7,7 @@ const variables = (variableGroup: VariableGroup): { [key: string]: string | unde
     .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
 }
 
-const variableGroup: VariableGroup | object = {
+const exportVariableGroup: VariableGroup | object = {
   type: 'Vsts',
   isShared: false,
   id: filterProp,
@@ -19,5 +19,5 @@ const variableGroup: VariableGroup | object = {
   variables,
 }
 
-export { variableGroup as exportVariableGroup }
+export { exportVariableGroup }
 

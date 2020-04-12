@@ -6,7 +6,7 @@ import { ReportingTransformationResult } from './model'
 
 abstract class GetReporterYaml<U extends ProcessResult, V extends TransformedDefinition> implements Reporter {
 
-  constructor(private transformedDefinitionType: { new(): U }) { }
+  constructor(private transformedDefinitionType: new() => U) { }
 
   canReport(processResult: U, _transformedDefinition: V, _action: Action, args: GetArguments): boolean {
     const result = processResult instanceof this.transformedDefinitionType && args.output === 'yaml'

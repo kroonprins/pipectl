@@ -1,18 +1,17 @@
-import { Action, CommonArguments, GetArguments } from 'pipectl-core/dist/actions/model'
-import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
+import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
-import { transformGetBuildDefinitionProcessResultForReporting } from './util'
+import { GetReporterJson } from './get-reporter-json'
+import { ReportingTransformationResult } from './model'
+import { applyExport } from './util/export'
+import { exportBuildDefinition } from './util/export-build-definition'
+import { transformForGetReporting } from './util/get-reporting'
 
-class GetBuildDefinitionJsonReporter implements Reporter {
+class GetBuildDefinitionJsonReporter extends GetReporterJson<GetBuildDefinitionProcessResult, AzureBuildDefinition> {
+  constructor() { super(GetBuildDefinitionProcessResult) }
 
-  canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetBuildDefinitionProcessResult && args.output === 'json'
-  }
-
-  async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
-    log.debug(`[GetBuildDefinitionJsonReporter] processResult[${JSON.stringify(processResult)}], transformedDefinition[${JSON.stringify(transformedDefinition)}]`)
-    log.info(JSON.stringify(transformGetBuildDefinitionProcessResultForReporting(processResult, transformedDefinition, action, args as GetArguments), undefined, 4))
+  transform(processResult: GetBuildDefinitionProcessResult, transformedDefinition: AzureBuildDefinition, _action: Action, args: GetArguments): Promise<ReportingTransformationResult> {
+    return transformForGetReporting(processResult, transformedDefinition, args, (definition) => applyExport(definition, exportBuildDefinition))
   }
 }
 

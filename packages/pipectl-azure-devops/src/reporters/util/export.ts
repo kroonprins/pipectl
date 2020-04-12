@@ -2,16 +2,21 @@ const applyExport = async <T>(source: T, descriptor: T | object, ...extraFunctio
   const result: any = Object.assign({}, source)
 
   for (const [key, value] of Object.entries(descriptor)) {
-    let updatedValue: any = undefined
+    if (!result.hasOwnProperty(key)) {
+      continue
+    }
+    let updatedValue: any
     if (value instanceof Function) {
       updatedValue = await value(source, ...extraFunctionArgs)
-    } else if (!result.hasOwnProperty(key)) {
-      updatedValue = value
-    }
-    if (updatedValue && result[key] !== updatedValue) {
-      result[key] = updatedValue
+      if (updatedValue !== undefined && result[key] !== updatedValue) {
+        result[key] = updatedValue
+      } else {
+        delete result[key]
+      }
     } else {
-      delete result[key]
+      if (result[key] === value) {
+        delete result[key]
+      }
     }
   }
 

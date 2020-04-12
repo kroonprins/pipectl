@@ -1,9 +1,7 @@
 import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { ProcessResult } from 'pipectl-core/dist/model'
+import { GetProcessResult } from './get-process-result'
 
-class GetBuildDefinitionProcessResult extends ProcessResult {
-  constructor(public buildDefinitions?: BuildDefinition[]) { super() }
-}
+class GetBuildDefinitionProcessResult extends GetProcessResult<BuildDefinition> { }
 
 export { GetBuildDefinitionProcessResult }
 

@@ -1,9 +1,7 @@
 import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
-import { ProcessResult } from 'pipectl-core/dist/model'
+import { GetProcessResult } from './get-process-result'
 
-class GetReleaseDefinitionProcessResult extends ProcessResult {
-  constructor(public releaseDefinitions?: ReleaseDefinition[]) { super() }
-}
+class GetReleaseDefinitionProcessResult extends GetProcessResult<ReleaseDefinition> { }
 
 export { GetReleaseDefinitionProcessResult }
 

@@ -1,9 +1,9 @@
-import { GetArguments } from "pipectl-core/dist/actions/model"
-import { Definition } from "pipectl-core/dist/model"
-import { log } from "pipectl-core/dist/util/logging"
-import { AzureDefinition } from "../../model"
-import { GetProcessResult } from "../../model/get-process-result"
-import { ReportingTransformationResult } from "../model"
+import { GetArguments } from 'pipectl-core/dist/actions/model'
+import { Definition } from 'pipectl-core/dist/model'
+import { log } from 'pipectl-core/dist/util/logging'
+import { AzureDefinition } from '../../model'
+import { GetProcessResult } from '../../model/get-process-result'
+import { ReportingTransformationResult } from '../model'
 
 const transformForGetReporting = async <U extends GetProcessResult<any>, V extends AzureDefinition<any>>(processResult: U, transformedDefinition: V, args: GetArguments, applyExport: (definition: V) => Promise<V>): Promise<ReportingTransformationResult> => {
   const definitions: Definition[] = await Promise.all(

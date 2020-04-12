@@ -1,23 +1,24 @@
-import { Action, CommonArguments } from 'pipectl-core/dist/actions/model'
-import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
+import { GetReporter } from './get-reporter'
 
-class GetReleaseDefinitionReporter implements Reporter {
+class GetReleaseDefinitionReporter extends GetReporter<GetReleaseDefinitionProcessResult, AzureReleaseDefinition, ReleaseDefinition> {
+  constructor() { super(GetReleaseDefinitionProcessResult) }
 
-  canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetReleaseDefinitionProcessResult && !args.output
+  columns(): string[] {
+    return ['NAME', 'DESCRIPTION']
   }
 
-  async report(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, _args: CommonArguments): Promise<void> {
-    log.debug(`[GetReleaseDefinitionReporter] processResult[${JSON.stringify(processResult)}]`)
-    const getReleaseDefinitionProcessResult = processResult as GetReleaseDefinitionProcessResult
-    log.info('NAME\tDESCRIPTON')
-    getReleaseDefinitionProcessResult.releaseDefinitions!.forEach(releaseDefinition => {
-      log.info(`${releaseDefinition.id}\t${releaseDefinition.path}\\${releaseDefinition.name}`)
-    })
+  line(releaseDefinition: ReleaseDefinition): { [column: string]: string } {
+    return {
+      'NAME': releaseDefinition.id!.toString(),
+      'DESCRIPTION': `${releaseDefinition.path}\\${releaseDefinition.name}`,
+    }
   }
 }
 
 export { GetReleaseDefinitionReporter }
+
+
 
