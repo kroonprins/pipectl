@@ -5,7 +5,7 @@ import { GetProcessResult } from '../model/get-process-result'
 
 abstract class GetReporter<U extends GetProcessResult<W>, V extends TransformedDefinition, W> implements Reporter {
 
-  constructor(private transformedDefinitionType: { new(): U }) { }
+  constructor(private transformedDefinitionType: new() => U) { }
 
   canReport(processResult: U, _transformedDefinition: V, _action: Action, args: GetArguments): boolean {
     const result = processResult instanceof this.transformedDefinitionType && !args.output
@@ -20,7 +20,7 @@ abstract class GetReporter<U extends GetProcessResult<W>, V extends TransformedD
     log.info(columns.join('\t'))
     processResult.results!.forEach(result => {
       const line = this.line(result)
-      const formatted = columns.reduce((p: string, column: string) => p + line[column] + "\t", "")
+      const formatted = columns.reduce((p: string, column: string) => p + line[column] + '\t', '')
       log.info(formatted)
     })
   }

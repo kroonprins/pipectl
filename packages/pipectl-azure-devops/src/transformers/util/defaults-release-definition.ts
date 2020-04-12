@@ -7,9 +7,9 @@ import { coreApi } from '../../adapters/core-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
-const artifacts = async (spec: ReleaseDefinition, definition: Definition): Promise<Artifact[]> => {
+const artifacts = async (releaseDefinition: ReleaseDefinition, definition: Definition): Promise<Artifact[]> => {
   return Promise.all(
-    (spec.artifacts || [])
+    (releaseDefinition.artifacts || [])
       .map(artifact => {
         if (artifact.type === 'Build') {
           return applyDefaults(artifact, defaultsBuildArtifact, definition.metadata.namespace)
@@ -52,10 +52,10 @@ const definitionReferenceDefinition = async (definitionRef: { [key: string]: Art
   return definitionRef.definition
 }
 
-const environments = async (spec: ReleaseDefinition, definition: Definition): Promise<ReleaseDefinitionEnvironment[]> => {
+const environments = async (releaseDefinition: ReleaseDefinition, definition: Definition): Promise<ReleaseDefinitionEnvironment[]> => {
   const projectId = definition.metadata.namespace
   return Promise.all(
-    [...(spec.environments || []).entries()]
+    [...(releaseDefinition.environments || []).entries()]
       .map(([index, environment]) => applyDefaults(environment, defaultsEnvironment, index, projectId))
   )
 }
@@ -142,8 +142,8 @@ const approvalOptions = async (releaseDefinitionApprovals: ReleaseDefinitionAppr
   return applyDefaults(releaseDefinitionApprovals.approvalOptions || {}, defaultsApprovalOptions)
 }
 
-const variables = async (spec: ReleaseDefinition, _definition?: Definition): Promise<{ [key: string]: ConfigurationVariableValue }> => {
-  return _variables(spec, { isDefault: true })
+const variables = async (releaseDefinition: ReleaseDefinition, _definition?: Definition): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+  return _variables(releaseDefinition, { isDefault: true })
 }
 
 const variablesScoped = async (environment: ReleaseDefinitionEnvironment, index: number, _projectId: string): Promise<{ [key: string]: ConfigurationVariableValue }> => {
@@ -163,8 +163,8 @@ const _variables = async (source: ReleaseDefinition | ReleaseDefinitionEnvironme
     .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
 }
 
-const variableGroups = async (spec: ReleaseDefinition, definition: Definition): Promise<number[]> => {
-  return _variableGroups(spec, definition.metadata.namespace)
+const variableGroups = async (releaseDefinition: ReleaseDefinition, definition: Definition): Promise<number[]> => {
+  return _variableGroups(releaseDefinition, definition.metadata.namespace)
 }
 
 const variableGroupsScoped = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<number[]> => {
@@ -186,6 +186,7 @@ const _variableGroups = async (source: ReleaseDefinition | ReleaseDefinitionEnvi
 const defaultsReleaseDefinition: ReleaseDefinition | object = {
   artifacts,
   environments,
+  path: '\\',
   variableGroups,
   variables,
 }

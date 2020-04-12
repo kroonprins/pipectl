@@ -1,18 +1,17 @@
-import { Action, CommonArguments, GetArguments } from 'pipectl-core/dist/actions/model'
-import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
+import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
-import { transformGetReleaseDefinitionProcessResultForReporting } from './util'
+import { GetReporterJson } from './get-reporter-json'
+import { ReportingTransformationResult } from './model'
+import { applyExport } from './util/export'
+import { exportReleaseDefinition } from './util/export-release-definition'
+import { transformForGetReporting } from './util/get-reporting'
 
-class GetReleaseDefinitionJsonReporter implements Reporter {
+class GetReleaseDefinitionJsonReporter extends GetReporterJson<GetReleaseDefinitionProcessResult, AzureReleaseDefinition> {
+  constructor() { super(GetReleaseDefinitionProcessResult) }
 
-  canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetReleaseDefinitionProcessResult && args.output === 'json'
-  }
-
-  async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
-    log.debug(`[GetReleaseDefinitionJsonReporter] processResult[${JSON.stringify(processResult)}], transformedDefinition[${JSON.stringify(transformedDefinition)}]`)
-    log.info(JSON.stringify(transformGetReleaseDefinitionProcessResultForReporting(processResult, transformedDefinition, action, args as GetArguments), undefined, 4))
+  transform(processResult: GetReleaseDefinitionProcessResult, transformedDefinition: AzureReleaseDefinition, _action: Action, args: GetArguments): Promise<ReportingTransformationResult> {
+    return transformForGetReporting(processResult, transformedDefinition, args, (definition) => applyExport(definition, exportReleaseDefinition, transformedDefinition.project))
   }
 }
 

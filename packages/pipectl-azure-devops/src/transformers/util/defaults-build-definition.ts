@@ -1,4 +1,4 @@
-import { AgentPoolQueue, AgentPoolQueueTarget, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildDefinitionVariable, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+import { AgentPoolQueue, AgentPoolQueueTarget, AgentTargetExecutionOptions, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildDefinitionVariable, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
 import { Definition } from 'pipectl-core/dist/model'
 import { isNumber } from 'util'
@@ -7,8 +7,8 @@ import { coreApi } from '../../adapters/core-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
-const process = async (spec: BuildDefinition, _definition: Definition): Promise<BuildProcess> => {
-  const commonDefaultsApplied = await applyDefaults(spec.process || {}, defaultsProcess)
+const process = async (buildDefinition: BuildDefinition, _definition: Definition): Promise<BuildProcess> => {
+  const commonDefaultsApplied = await applyDefaults(buildDefinition.process || {}, defaultsProcess)
   if (commonDefaultsApplied.type === 1) {
     return applyDefaults(commonDefaultsApplied, defaultsDesignerProcess)
   } // TODO other process types?
@@ -34,6 +34,10 @@ const phaseTarget = async (phase: Phase, _index: number): Promise<PhaseTarget> =
   return commonDefaultsApplied
 }
 
+const designerProcessPhaseAgentPoolQueueTargetExecutionOptions = async (agentPoolQueueTarget: AgentPoolQueueTarget): Promise<AgentTargetExecutionOptions> => {
+  return applyDefaults(agentPoolQueueTarget.executionOptions || {}, defaultsDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions)
+}
+
 const phaseSteps = async (phase: Phase, _index: number): Promise<BuildDefinitionStep[]> => {
   return Promise.all(
     (phase.steps || [])
@@ -41,45 +45,45 @@ const phaseSteps = async (phase: Phase, _index: number): Promise<BuildDefinition
   )
 }
 
-const project = async (spec: BuildDefinition, definition: Definition): Promise<TeamProjectReference> => {
-  if (!spec.hasOwnProperty('project')) {
+const project = async (buildDefinition: BuildDefinition, definition: Definition): Promise<TeamProjectReference> => {
+  if (!buildDefinition.hasOwnProperty('project')) {
     return { id: await coreApi.findProjectIdByName(definition.metadata.namespace) }
-  } else if (!spec.project!.id) {
-    return { id: await coreApi.findProjectIdByName(spec.project!.name || definition.metadata.namespace) }
+  } else if (!buildDefinition.project!.id) {
+    return { id: await coreApi.findProjectIdByName(buildDefinition.project!.name || definition.metadata.namespace) }
   }
-  return spec.project!
+  return buildDefinition.project!
 }
 
-const queue = async (spec: BuildDefinition, definition: Definition): Promise<AgentPoolQueue> => {
-  let id = spec.queue?.id
-  if (spec.hasOwnProperty('queue') && spec.queue && !spec.queue.hasOwnProperty('id') && spec.queue.hasOwnProperty('name')) {
-    id = await agentPoolApi.findAgentPoolIdByName(spec.queue.name!, (await project(spec, definition)).id!)
+const queue = async (buildDefinition: BuildDefinition, definition: Definition): Promise<AgentPoolQueue> => {
+  let id = buildDefinition.queue?.id
+  if (buildDefinition.hasOwnProperty('queue') && buildDefinition.queue && !buildDefinition.queue.hasOwnProperty('id') && buildDefinition.queue.hasOwnProperty('name')) {
+    id = await agentPoolApi.findAgentPoolIdByName(buildDefinition.queue.name!, (await project(buildDefinition, definition)).id!)
   }
   return { id }
 }
 
-const repository = async (spec: BuildDefinition, _definition: Definition): Promise<BuildRepository> => {
-  return applyDefaults(spec.repository || {}, defaultsBuildRepository)
+const repository = async (buildDefinition: BuildDefinition, _definition: Definition): Promise<BuildRepository> => {
+  return applyDefaults(buildDefinition.repository || {}, defaultsBuildRepository)
 }
 
-const buildRepositoryProperties = async (properties?: { [key: string]: string; }): Promise<{ [key: string]: string; }> => {
-  return applyDefaults(properties || {}, defaultsBuildRepositoryProperties)
+const buildRepositoryProperties = async (buildRepository: BuildRepository): Promise<{ [key: string]: string; }> => {
+  return applyDefaults(buildRepository.properties || {}, defaultsBuildRepositoryProperties)
 }
 
-const retentionRules = async (spec: BuildDefinition, _definition: Definition): Promise<RetentionPolicy[]> => {
-  if (!spec.hasOwnProperty('retentionRules') || !spec.retentionRules || !spec.retentionRules.length) {
+const retentionRules = async (buildDefinition: BuildDefinition, _definition: Definition): Promise<RetentionPolicy[]> => {
+  if (!buildDefinition.hasOwnProperty('retentionRules') || !buildDefinition.retentionRules || !buildDefinition.retentionRules.length) {
     return [defaultsRetentionRule]
   }
-  return spec.retentionRules
+  return buildDefinition.retentionRules
 }
 
-const tags = (spec: BuildDefinition, definition: Definition): string[] => {
-  return (spec.tags || []).concat(Object.entries(definition.metadata.labels || {}).map(([k, v]) => `${k}=${v}`))
+const tags = (buildDefinition: BuildDefinition, definition: Definition): string[] => {
+  return (buildDefinition.tags || []).concat(Object.entries(definition.metadata.labels || {}).map(([k, v]) => `${k}=${v}`))
 }
 
-const triggers = async (spec: BuildDefinition, _definition: Definition): Promise<BuildTrigger[]> => {
+const triggers = async (buildDefinition: BuildDefinition, _definition: Definition): Promise<BuildTrigger[]> => {
   return Promise.all(
-    (spec.triggers || [])
+    (buildDefinition.triggers || [])
       .map(trigger => {
         if (trigger.triggerType === DefinitionTriggerType.ContinuousIntegration) {
           return applyDefaults(trigger, defaultsContinuousIntegrationTrigger)
@@ -98,8 +102,8 @@ const schedules = async (scheduleTrigger: ScheduleTrigger): Promise<Schedule[]> 
   )
 }
 
-const variables = async (spec: BuildDefinition, _definition: Definition): Promise<{ [key: string]: BuildDefinitionVariable }> => {
-  return Object.entries(spec.variables || {})
+const variables = async (buildDefinition: BuildDefinition, _definition: Definition): Promise<{ [key: string]: BuildDefinitionVariable }> => {
+  return Object.entries(buildDefinition.variables || {})
     .map(([variable, value]) => {
       if (value && value.hasOwnProperty('value')) {
         return { [variable]: value }
@@ -110,10 +114,10 @@ const variables = async (spec: BuildDefinition, _definition: Definition): Promis
     .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
 }
 
-const variableGroups = async (spec: BuildDefinition, definition: Definition): Promise<VariableGroup[]> => {
-  const projectId = (await project(spec, definition)).id
+const variableGroups = async (buildDefinition: BuildDefinition, definition: Definition): Promise<VariableGroup[]> => {
+  const projectId = (await project(buildDefinition, definition)).id
   return Promise.all(
-    (spec.variableGroups || [])
+    (buildDefinition.variableGroups || [])
       .map(variableGroup => applyDefaults(variableGroup, defaultsVariableGroup, projectId))
   )
 }
@@ -140,9 +144,9 @@ const defaultsBuildDefinition: BuildDefinition | object = {
   jobTimeoutInMinutes: 60,
   jobCancelTimeoutInMinutes: 5,
   path: '\\',
+  quality: DefinitionQuality.Definition,
   process,
   project,
-  quality: DefinitionQuality.Definition,
   queue,
   repository,
   retentionRules, // TODO is this still actually supported in latest azure devops? (seems to have been moved to the project level according to UI)
@@ -172,11 +176,13 @@ const defaultsDesignerProcessPhaseTarget: PhaseTarget = {
   type: 1,  // AgentPoolQueueTarget
 }
 
-const defaultsDesignerProcessPhaseAgentPoolQueueTarget: AgentPoolQueueTarget = {
-  executionOptions: {
-    type: 0 // no parallelism
-  },
+const defaultsDesignerProcessPhaseAgentPoolQueueTarget: AgentPoolQueueTarget | object = {
+  executionOptions: designerProcessPhaseAgentPoolQueueTargetExecutionOptions,
   allowScriptsAuthAccessOption: true,
+}
+
+const defaultsDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions: AgentTargetExecutionOptions = {
+  type: 0 // no parallelism
 }
 
 const defaultsDesignerProcessStep: BuildDefinitionStep | object = {

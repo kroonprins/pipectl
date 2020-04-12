@@ -1,4 +1,4 @@
-import { Definition } from "pipectl-core/dist/model"
+import { Definition } from 'pipectl-core/dist/model'
 
 interface MultipleReportingTransformationResult {
   apiVersion: string,

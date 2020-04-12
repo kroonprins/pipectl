@@ -1,21 +1,18 @@
-import { safeDump } from 'js-yaml'
-import { Action, CommonArguments, GetArguments } from 'pipectl-core/dist/actions/model'
-import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
+import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
-import { transformGetBuildDefinitionProcessResultForReporting } from './util'
+import { GetReporterYaml } from './get-reporter-yaml'
+import { ReportingTransformationResult } from './model'
+import { applyExport } from './util/export'
+import { exportBuildDefinition } from './util/export-build-definition'
+import { transformForGetReporting } from './util/get-reporting'
 
-class GetBuildDefinitionYamlReporter implements Reporter {
+class GetBuildDefinitionYamlReporter extends GetReporterYaml<GetBuildDefinitionProcessResult, AzureBuildDefinition> {
+  constructor() { super(GetBuildDefinitionProcessResult) }
 
-  canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetBuildDefinitionProcessResult && args.output === 'yaml'
-  }
-
-  async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
-    log.debug(`[GetBuildDefinitionYamlReporter] processResult[${JSON.stringify(processResult)}], transformedDefinition[${JSON.stringify(transformedDefinition)}]`)
-    log.info(safeDump(transformGetBuildDefinitionProcessResultForReporting(processResult, transformedDefinition, action, args as GetArguments)))
+  transform(processResult: GetBuildDefinitionProcessResult, transformedDefinition: AzureBuildDefinition, _action: Action, args: GetArguments): Promise<ReportingTransformationResult> {
+    return transformForGetReporting(processResult, transformedDefinition, args, (definition) => applyExport(definition, exportBuildDefinition))
   }
 }
 
 export { GetBuildDefinitionYamlReporter }
-
