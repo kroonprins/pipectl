@@ -6,7 +6,7 @@ import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 import { ReleaseDefinitionTransformer } from './release-definition-transformer'
 import { applyDefaults } from './util/defaults'
-import { defaultsReleaseDefinition } from './util/release-definition-defaults'
+import { defaultsReleaseDefinition } from './util/defaults-release-definition'
 
 class ApplyReleaseDefinitionTransformer extends ReleaseDefinitionTransformer { // TODO instead of this, maybe possible to have multiple transformers applied (first ReleaseDefinitionTransformer for all then this one if action === Action.APPLY)?
 

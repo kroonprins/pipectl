@@ -3,10 +3,8 @@ import { Definition, ProcessResult, TransformedDefinition } from 'pipectl-core/d
 import { log } from 'pipectl-core/dist/util/logging'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
-import { AzureVariableGroup } from '../model/azure-variable-group'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
-import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
 
 const transformGetBuildDefinitionProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: GetArguments): object => {
   const azureBuildDefinition = transformedDefinition as AzureBuildDefinition
@@ -183,51 +181,5 @@ const removeFieldsFromReleaseDefinitionForExport = (definition: Definition): Def
   return definition
 }
 
-const transformGetVariableGroupProcessResultForReporting = (processResult: ProcessResult, transformedDefinition: TransformedDefinition, _action: Action, args: GetArguments): object => {
-  const azureVariableGroup = transformedDefinition as AzureVariableGroup
-  const definitions: Definition[] = (processResult as GetVariableGroupProcessResult).variableGroups!
-    .map(buildDefinition => {
-      return {
-        apiVersion: azureVariableGroup.apiVersion,
-        kind: azureVariableGroup.kind,
-        metadata: {
-          namespace: azureVariableGroup.project
-        },
-        spec: buildDefinition,
-      }
-    })
-    .map(definition => { // TODO
-      if (args.export) {
-        return removeFieldsFromVariableGroupForExport(definition)
-      }
-      return definition
-    })
-  if (definitions.length > 1) {
-    return {
-      apiVersion: azureVariableGroup.apiVersion,
-      items: definitions
-    }
-  } else {
-    return definitions[0]
-  }
-}
-
-// TODO remove fields that are equal to default values
-/* tslint:disable:no-string-literal */
-const removeFieldsFromVariableGroupForExport = (definition: Definition): Definition => {
-  log.debug(`[removeFieldsFromVariableGroupForExport] before[${JSON.stringify(definition)}]`)
-  // TODO more elegant way :)
-  const spec = definition.spec as any
-  delete spec['id']
-  delete spec['createdBy']
-  delete spec['createdOn']
-  delete spec['modifiedBy']
-  delete spec['modifiedOn']
-  delete spec['variableGroupProjectReferences']
-
-  log.debug(`[removeFieldsFromVariableGroupForExport] after[${JSON.stringify(definition)}]`)
-  return definition
-}
-
-export { transformGetBuildDefinitionProcessResultForReporting, transformGetReleaseDefinitionProcessResultForReporting, transformGetVariableGroupProcessResultForReporting }
+export { transformGetBuildDefinitionProcessResultForReporting, transformGetReleaseDefinitionProcessResultForReporting }
 

@@ -5,7 +5,7 @@ import { log } from 'pipectl-core/dist/util/logging'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 import { applyDefaults } from './util/defaults'
-import { defaultsVariableGroup } from './util/variable-group-defaults'
+import { defaultsVariableGroup } from './util/defaults-variable-group'
 import { VariableGroupTransformer } from './variable-group-transformer'
 
 class ApplyVariableGroupTransformer extends VariableGroupTransformer {
