@@ -1,18 +1,17 @@
-import { Action, CommonArguments, GetArguments } from 'pipectl-core/dist/actions/model'
-import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
+import { AzureVariableGroup } from '../model/azure-variable-group'
 import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
-import { transformGetVariableGroupProcessResultForReporting } from './util'
+import { GetReporterJson } from './get-reporter-json'
+import { ReportingTransformationResult } from './model'
+import { applyExport } from './util/export'
+import { exportVariableGroup } from './util/export-variable-group'
+import { transformForGetReporting } from './util/get-reporting'
 
-class GetVariableGroupJsonReporter implements Reporter {
+class GetVariableGroupJsonReporter extends GetReporterJson<GetVariableGroupProcessResult, AzureVariableGroup> {
+  constructor() { super(GetVariableGroupProcessResult) }
 
-  canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetVariableGroupProcessResult && args.output === 'json'
-  }
-
-  async report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void> {
-    log.debug(`[GetVariableGroupJsonReporter] processResult[${JSON.stringify(processResult)}], transformedDefinition[${JSON.stringify(transformedDefinition)}]`)
-    log.info(JSON.stringify(transformGetVariableGroupProcessResultForReporting(processResult, transformedDefinition, action, args as GetArguments), undefined, 4))
+  transform(processResult: GetVariableGroupProcessResult, transformedDefinition: AzureVariableGroup, _action: Action, args: GetArguments): Promise<ReportingTransformationResult> {
+    return transformForGetReporting(processResult, transformedDefinition, args, (definition) => applyExport(definition, exportVariableGroup))
   }
 }
 

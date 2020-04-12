@@ -1,21 +1,20 @@
-import { Action, CommonArguments } from 'pipectl-core/dist/actions/model'
-import { ProcessResult, Reporter, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
+import { AzureVariableGroup } from '../model/azure-variable-group'
 import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
+import { GetReporter } from './get-reporter'
 
-class GetVariableGroupReporter implements Reporter {
+class GetVariableGroupReporter extends GetReporter<GetVariableGroupProcessResult, AzureVariableGroup, VariableGroup> {
+  constructor() { super(GetVariableGroupProcessResult) }
 
-  canReport(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, args: CommonArguments): boolean {
-    return processResult instanceof GetVariableGroupProcessResult && !args.output
+  columns(): string[] {
+    return ['NAME', 'DESCRIPTION']
   }
 
-  async report(processResult: ProcessResult, _transformedDefinition: TransformedDefinition, _action: Action, _args: CommonArguments): Promise<void> {
-    log.debug(`[GetVariableGroupReporter] processResult[${JSON.stringify(processResult)}]`)
-    const getVariableGroupProcessResult = processResult as GetVariableGroupProcessResult
-    log.info('NAME\tDESCRIPTON')
-    getVariableGroupProcessResult.variableGroups!.forEach(variableGroup => {
-      log.info(`${variableGroup.id}\t${variableGroup.name}`)
-    })
+  line(variableGroup: VariableGroup): { [column: string]: string } {
+    return {
+      'NAME': variableGroup.id!.toString(),
+      'DESCRIPTION': variableGroup.name!,
+    }
   }
 }
 

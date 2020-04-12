@@ -5,7 +5,7 @@ import { log } from 'pipectl-core/dist/util/logging'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 import { BuildDefinitionTransformer } from './build-definition-transformer'
-import { defaultsBuildDefinition } from './util/build-definition-defaults'
+import { defaultsBuildDefinition } from './util/defaults-build-definition'
 import { applyDefaults } from './util/defaults'
 
 class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
