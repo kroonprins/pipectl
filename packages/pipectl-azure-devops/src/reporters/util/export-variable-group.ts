@@ -3,8 +3,8 @@ import { filterProp } from './export'
 
 const variables = (
   variableGroup: VariableGroup
-): { [key: string]: string | undefined } => {
-  return Object.entries(variableGroup.variables || {})
+): { [key: string]: string | undefined } =>
+  Object.entries(variableGroup.variables || {})
     .map(([variable, value]) => {
       return { [variable]: value.value }
     })
@@ -13,7 +13,6 @@ const variables = (
         Object.assign({}, previousValue, currentValue),
       {}
     )
-}
 
 const exportVariableGroup: VariableGroup | object = {
   type: 'Vsts',

@@ -3,38 +3,36 @@ import {
   AgentDeploymentInput,
   ApprovalOptions,
   Artifact,
-  ArtifactDownloadInputBase,
   ArtifactsDownloadInput,
   ArtifactSourceReference,
-  Condition,
   ConfigurationVariableValue,
-  Demand,
   DeployPhase,
   DeployPhaseTypes,
   EnvironmentExecutionPolicy,
   EnvironmentOptions,
   EnvironmentRetentionPolicy,
-  EnvironmentTrigger,
   ExecutionInput,
   ReleaseDefinition,
   ReleaseDefinitionApprovals,
   ReleaseDefinitionApprovalStep,
   ReleaseDefinitionEnvironment,
-  ReleaseDefinitionGate,
   ReleaseDefinitionGatesStep,
-  ReleaseSchedule,
-  ReleaseTriggerBase,
   WorkflowTask,
 } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
-import { applyExport, filterProp } from './export'
+import {
+  applyExport,
+  applyExportOnArray,
+  filterIfEmpty,
+  filterProp,
+} from './export'
 
 const artifacts = async (
   releaseDefinition: ReleaseDefinition
-): Promise<Artifact[] | undefined> => {
-  return Promise.all(
+): Promise<Artifact[]> =>
+  Promise.all(
     (releaseDefinition.artifacts || []).map((artifact) => {
       if (artifact.type === 'Build') {
         return applyExport(artifact, exportBuildArtifact)
@@ -42,30 +40,24 @@ const artifacts = async (
       return applyExport(artifact, exportArtifact)
     })
   )
-}
 
 const definitionReference = async (
   artifact: Artifact
-): Promise<ArtifactSourceReference | undefined> => {
-  return applyExport(
-    artifact.definitionReference || {},
+): Promise<ArtifactSourceReference> =>
+  applyExport(
+    artifact.definitionReference,
     exportArtifactSourceReference,
     artifact.definitionReference?.project.id
   )
-}
 
 const defaultVersionType = async (definitionRef: {
   [key: string]: ArtifactSourceReference
-}): Promise<ArtifactSourceReference | undefined> => {
-  const exported = applyExport(
-    definitionRef.defaultVersionType || {},
-    exportDefaultVersionType
-  )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
+}): Promise<ArtifactSourceReference> =>
+  applyExport(definitionRef.defaultVersionType, exportDefaultVersionType)
 
 const definitionReferenceDefinition = async (
   definitionRef: { [key: string]: ArtifactSourceReference },
+  _key: string,
   projectId: string
 ): Promise<{ [key: string]: string }> => {
   const buildDefinition = await buildApi.findBuildDefinitionById(
@@ -75,54 +67,22 @@ const definitionReferenceDefinition = async (
   return { name: buildDefinition.name!, path: buildDefinition.path! }
 }
 
-const description = async (
-  releaseDefinition: ReleaseDefinition
-): Promise<string | undefined> => {
-  return releaseDefinition.description
-    ? releaseDefinition.description
-    : undefined
-}
-
 const environments = async (
   releaseDefinition: ReleaseDefinition,
+  _key: string,
   projectId: string
-): Promise<ReleaseDefinitionEnvironment[] | undefined> => {
-  return Promise.all(
+): Promise<ReleaseDefinitionEnvironment[]> =>
+  Promise.all(
     (releaseDefinition.environments || []).map((environment) =>
       applyExport(environment, exportEnvironment, projectId)
     )
   )
-}
-
-const properties = async (
-  releaseDefinition: ReleaseDefinition | ReleaseDefinitionEnvironment
-): Promise<any> => {
-  return Object.keys(releaseDefinition.properties).length !== 0
-    ? releaseDefinition.properties
-    : undefined
-}
-
-const conditions = async (
-  environment: ReleaseDefinitionEnvironment
-): Promise<Condition[] | undefined> => {
-  return (environment.conditions || []).length !== 0
-    ? environment.conditions
-    : undefined
-}
-
-const demands = async (
-  environment: ReleaseDefinitionEnvironment | AgentDeploymentInput
-): Promise<Demand[] | undefined> => {
-  return (environment.demands || []).length !== 0
-    ? environment.demands
-    : undefined
-}
-
 const deployPhases = async (
   environment: ReleaseDefinitionEnvironment,
+  _key: string,
   projectId: string
-): Promise<DeployPhase[] | undefined> => {
-  const exported = await Promise.all(
+): Promise<DeployPhase[]> =>
+  Promise.all(
     (environment.deployPhases || []).map(async (deployPhase) => {
       const exportedDeployPhase = await applyExport(
         deployPhase,
@@ -138,66 +98,40 @@ const deployPhases = async (
       return exportedDeployPhase
     })
   )
-  return exported.length !== 0 ? exported : undefined
-}
 
 const environmentOptions = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<EnvironmentOptions | undefined> => {
-  const exported = await applyExport(
-    environment.environmentOptions || {},
-    exportEnvironmentOptions
-  )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
-
-const environmentTriggers = async (
-  environment: ReleaseDefinitionEnvironment
-): Promise<EnvironmentTrigger[] | undefined> => {
-  return (environment.environmentTriggers || []).length !== 0
-    ? environment.environmentTriggers
-    : undefined
-}
+): Promise<EnvironmentOptions> =>
+  applyExport(environment.environmentOptions, exportEnvironmentOptions)
 
 const executionPolicy = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<EnvironmentExecutionPolicy | undefined> => {
-  const exported = await applyExport(
-    environment.executionPolicy || {},
-    exportExecutionPolicy
-  )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
+): Promise<EnvironmentExecutionPolicy | undefined> =>
+  applyExport(environment.executionPolicy, exportExecutionPolicy)
 
 const workflowTasks = async (
   deployPhase: DeployPhase
-): Promise<WorkflowTask[] | undefined> => {
-  const exported = (
-    await Promise.all(
-      (deployPhase.workflowTasks || []).map((workflowTask) => {
-        return applyExport(workflowTask || {}, exportWorkflowTask)
-      })
-    )
-  ).filter(
-    (workflowTask) => workflowTask && Object.keys(workflowTask).length !== 0
+): Promise<WorkflowTask[]> =>
+  Promise.all(
+    (deployPhase.workflowTasks || []).map((workflowTask) => {
+      return applyExport(workflowTask, exportWorkflowTask)
+    })
   )
-  return exported.length !== 0 ? exported : undefined
-}
 
 const deploymentInput = async (
   deployPhase: AgentBasedDeployPhase,
+  _key: string,
   projectId: string
-): Promise<AgentDeploymentInput | undefined> => {
-  const exported = await applyExport(
-    deployPhase.deploymentInput || {},
+): Promise<AgentDeploymentInput> =>
+  applyExport(
+    deployPhase.deploymentInput,
     exportAgentDeploymentInput,
     projectId
   )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
 
 const queueId = async (
   agentDeploymentInput: AgentDeploymentInput,
+  _key: string,
   projectId: string
 ): Promise<string | number | undefined> => {
   const queueName = await agentPoolApi.findAgentPoolNameById(
@@ -209,130 +143,56 @@ const queueId = async (
 
 const agentDeploymentInputParallelExecution = async (
   agentDeploymentInput: AgentDeploymentInput
-): Promise<ExecutionInput | undefined> => {
-  const exported = await applyExport(
-    agentDeploymentInput.parallelExecution || {},
+): Promise<ExecutionInput> =>
+  applyExport(
+    agentDeploymentInput.parallelExecution,
     exportAgentDeploymentInputParallelExecution
   )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
 
 const agentDeploymentInputArtifactsDownloadInput = async (
   agentDeploymentInput: AgentDeploymentInput
-): Promise<ArtifactsDownloadInput | undefined> => {
-  const exported = await applyExport(
-    agentDeploymentInput.artifactsDownloadInput || {},
+): Promise<ArtifactsDownloadInput> =>
+  applyExport(
+    agentDeploymentInput.artifactsDownloadInput,
     exportAgentDeploymentInputArtifactsDownloadInput
   )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
-
-const agentDeploymentInputArtifactsDownloadInputs = async (
-  artifactsDownloadInput: ArtifactsDownloadInput
-): Promise<ArtifactDownloadInputBase[] | undefined> => {
-  return (artifactsDownloadInput.downloadInputs || []).length !== 0
-    ? artifactsDownloadInput.downloadInputs
-    : undefined
-}
 
 const preDeployApprovals = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<ReleaseDefinitionApprovals | undefined> => {
-  const deployApprovals = await applyExport(
-    environment.preDeployApprovals || {},
-    exportReleaseDefinitionApprovals
-  )
-  return Object.keys(deployApprovals).length !== 0 ? deployApprovals : undefined
-}
+): Promise<ReleaseDefinitionApprovals> =>
+  applyExport(environment.preDeployApprovals, exportReleaseDefinitionApprovals)
 
 const preDeploymentGates = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<ReleaseDefinitionGatesStep | undefined> => {
-  const deploymentGates = await applyExport(
-    environment.preDeploymentGates || {},
-    exportDeploymentGates
-  )
-  return Object.keys(deploymentGates).length !== 0 ? deploymentGates : undefined
-}
-
-const gates = async (
-  releaseDefinitionGatesStep: ReleaseDefinitionGatesStep
-): Promise<ReleaseDefinitionGate[] | undefined> => {
-  return (releaseDefinitionGatesStep.gates || []).length !== 0
-    ? releaseDefinitionGatesStep.gates
-    : undefined
-}
+): Promise<ReleaseDefinitionGatesStep> =>
+  applyExport(environment.preDeploymentGates, exportDeploymentGates)
 
 const postDeployApprovals = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<ReleaseDefinitionApprovals | undefined> => {
-  const deployApprovals = await applyExport(
-    environment.postDeployApprovals || {},
-    exportReleaseDefinitionApprovals
-  )
-  return Object.keys(deployApprovals).length !== 0 ? deployApprovals : undefined
-}
+): Promise<ReleaseDefinitionApprovals> =>
+  applyExport(environment.postDeployApprovals, exportReleaseDefinitionApprovals)
 
 const postDeploymentGates = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<ReleaseDefinitionGatesStep | undefined> => {
-  const deploymentGates = await applyExport(
-    environment.postDeploymentGates || {},
-    exportDeploymentGates
-  )
-  return Object.keys(deploymentGates).length !== 0 ? deploymentGates : undefined
-}
+): Promise<ReleaseDefinitionGatesStep> =>
+  applyExport(environment.postDeploymentGates, exportDeploymentGates)
 
 const approvals = async (
   releaseDefinitionApprovals: ReleaseDefinitionApprovals
-): Promise<ReleaseDefinitionApprovalStep[] | undefined> => {
-  const exported = (
-    await Promise.all(
-      (releaseDefinitionApprovals.approvals || []).map(
-        async (releaseDefinitionApproval) => {
-          return applyExport(releaseDefinitionApproval, exportApproval)
-        }
-      )
-    )
-  ).filter(
-    (releaseDefinitionApproval) =>
-      releaseDefinitionApproval &&
-      Object.keys(releaseDefinitionApproval).length !== 0
-  )
-  return exported.length !== 0 ? exported : undefined
-}
+): Promise<ReleaseDefinitionApprovalStep[]> =>
+  applyExportOnArray(releaseDefinitionApprovals.approvals, exportApproval)
 
 const approvalOptions = async (
   releaseDefinitionApprovals: ReleaseDefinitionApprovals
-): Promise<ApprovalOptions | undefined> => {
-  const exported = await applyExport(
-    releaseDefinitionApprovals.approvalOptions || {},
-    exportApprovalOptions
-  )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
-
-const tags = async (
-  releaseDefinition: ReleaseDefinition
-): Promise<string[] | undefined> => {
-  return (releaseDefinition.tags || []).length !== 0
-    ? releaseDefinition.tags
-    : undefined
-}
-
-const triggers = async (
-  releaseDefinition: ReleaseDefinition
-): Promise<ReleaseTriggerBase[] | undefined> => {
-  return (releaseDefinition.triggers || []).length !== 0
-    ? releaseDefinition.triggers
-    : undefined
-}
+): Promise<ApprovalOptions> =>
+  applyExport(releaseDefinitionApprovals.approvalOptions, exportApprovalOptions)
 
 const variableGroups = async (
   releaseDefinition: ReleaseDefinition | ReleaseDefinitionEnvironment,
+  _key: string,
   projectId: string
-): Promise<string[] | undefined> => {
-  const vars = await Promise.all(
+): Promise<string[]> =>
+  Promise.all(
     (releaseDefinition.variableGroups || []).map(async (variable) => {
       const variableGroup = await variableGroupApi.findVariableGroupById(
         variable,
@@ -341,35 +201,19 @@ const variableGroups = async (
       return variableGroup.name!
     })
   )
-  return vars.length !== 0 ? vars : undefined
-}
 
 const retentionPolicy = async (
   environment: ReleaseDefinitionEnvironment
-): Promise<EnvironmentRetentionPolicy | undefined> => {
-  const exported = await applyExport(
-    environment.retentionPolicy || {},
-    exportRetentionPolicy
-  )
-  return Object.keys(exported).length !== 0 ? exported : undefined
-}
-
-const schedules = async (
-  environment: ReleaseDefinitionEnvironment
-): Promise<ReleaseSchedule[] | undefined> => {
-  return (environment.schedules || []).length !== 0
-    ? environment.schedules
-    : undefined
-}
+): Promise<EnvironmentRetentionPolicy> =>
+  applyExport(environment.retentionPolicy, exportRetentionPolicy)
 
 const variables = async (
   releaseDefinition: ReleaseDefinition | ReleaseDefinitionEnvironment
 ): Promise<
   | { [key: string]: ConfigurationVariableValue }
   | { [key: string]: string | undefined }
-  | undefined
-> => {
-  const vars = (
+> =>
+  (
     await Promise.all(
       Object.entries(releaseDefinition.variables || {}).map(
         async ([name, value]) => {
@@ -389,15 +233,13 @@ const variables = async (
       Object.assign({}, previousValue, currentValue),
     {}
   )
-  return vars.length !== 0 ? vars : undefined
-}
 
 const exportReleaseDefinition: ReleaseDefinition | object = {
   _links: filterProp,
   artifacts,
   createdBy: filterProp,
   createdOn: filterProp,
-  description,
+  description: filterIfEmpty,
   environments,
   id: filterProp,
   isDeleted: filterProp,
@@ -405,12 +247,12 @@ const exportReleaseDefinition: ReleaseDefinition | object = {
   modifiedOn: filterProp,
   path: '\\',
   projectReference: filterProp,
-  properties,
+  properties: filterIfEmpty,
   releaseNameFormat: '',
   revision: filterProp,
   source: filterProp,
-  tags,
-  triggers,
+  tags: filterIfEmpty,
+  triggers: filterIfEmpty,
   url: filterProp,
   variables,
   variableGroups,
@@ -439,24 +281,24 @@ const exportDefaultVersionType: ArtifactSourceReference = {
 
 const exportEnvironment: ReleaseDefinitionEnvironment | object = {
   badgeUrl: filterProp,
-  conditions,
+  conditions: filterIfEmpty,
   currentRelease: filterProp,
-  demands,
+  demands: filterIfEmpty,
   deployPhases,
   deployStep: filterProp,
   environmentOptions,
-  environmentTriggers,
+  environmentTriggers: executionPolicy,
   executionPolicy,
   id: filterProp,
   owner: filterProp,
   preDeployApprovals,
   preDeploymentGates,
-  properties,
+  properties: filterIfEmpty,
   postDeployApprovals,
   postDeploymentGates,
   rank: filterProp,
   retentionPolicy,
-  schedules,
+  schedules: filterIfEmpty,
   variables,
   variableGroups,
 }
@@ -485,7 +327,7 @@ const exportApprovalOptions: ApprovalOptions | object = {
 const exportDeploymentGates: ReleaseDefinitionGatesStep | object = {
   id: filterProp,
   gatesOptions: null,
-  gates,
+  gates: filterIfEmpty,
 }
 
 const exportRetentionPolicy: EnvironmentRetentionPolicy = {
@@ -513,7 +355,7 @@ const exportAgentDeploymentInput: AgentDeploymentInput | object = {
   condition: 'succeeded()',
   overrideInputs: filterProp, // TODO
   queueId,
-  demands,
+  demands: filterIfEmpty,
   parallelExecution: agentDeploymentInputParallelExecution,
   artifactsDownloadInput: agentDeploymentInputArtifactsDownloadInput,
 }
@@ -525,7 +367,7 @@ const exportAgentDeploymentInputParallelExecution: ExecutionInput | object = {
 const exportAgentDeploymentInputArtifactsDownloadInput:
   | ArtifactsDownloadInput
   | object = {
-  downloadInputs: agentDeploymentInputArtifactsDownloadInputs,
+  downloadInputs: filterIfEmpty,
 }
 
 const exportEnvironmentOptions: EnvironmentOptions = {
