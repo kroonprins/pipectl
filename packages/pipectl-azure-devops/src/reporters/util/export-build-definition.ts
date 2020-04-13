@@ -18,10 +18,7 @@ const process = async (buildDefinition: BuildDefinition): Promise<BuildProcess> 
 const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> => {
   return Promise.all(
     (designerProcess.phases || [])
-      // .map(phase => applyExport(phase, exportDesignerProcessPhase))
-      .map(phase => {
-        return applyExport(phase, exportDesignerProcessPhase)
-      })
+      .map(phase => applyExport(phase, exportDesignerProcessPhase))
   )
 }
 

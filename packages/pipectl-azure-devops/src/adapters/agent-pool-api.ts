@@ -27,6 +27,18 @@ class AgentPoolApi {
     }
     throw new Error(`Agent pool with name ${name} not found in project ${project}. It either doesn't exist or you do not have the required access for it.`)
   }
+
+  findAgentPoolNameById = memoize(this._findAgentPoolNameById, { cacheKey: JSON.stringify })
+
+  private async _findAgentPoolNameById(id: number, project: string): Promise<string> {
+    log.debug(`[AgentPoolApi._findAgentPoolNameById] id[${id}], project[${project}]`)
+    const api = await this.getApi()
+    const agentQueue = await api.getAgentQueue(id, project)
+    if (agentQueue) {
+      return agentQueue.name!
+    }
+    throw new Error(`Agent pool with id ${id} not found in project ${project}. It either doesn't exist or you do not have the required access for it.`)
+  }
 }
 
 const agentPoolApi = new AgentPoolApi()

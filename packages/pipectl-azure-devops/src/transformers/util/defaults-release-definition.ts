@@ -243,7 +243,10 @@ const defaultsDeployPhase: DeployPhase | object = {
 }
 
 const defaultsWorkflowTask: WorkflowTask | object = {
-  enabled: true
+  enabled: true,
+  alwaysRun: false,
+  continueOnError: false,
+  timeoutInMinutes: 0,
 }
 
 const defaultsAgentBasedDeployPhase: AgentBasedDeployPhase | object = {
@@ -278,6 +281,10 @@ const defaultApprovalStep: ReleaseDefinitionApprovalStep | object = {
 
 const defaultsApprovalOptions: ApprovalOptions = {
   releaseCreatorCanBeApprover: false,
+  autoTriggeredAndPreviousEnvironmentApprovedCanBeSkipped: false,
+  enforceIdentityRevalidation: false,
+  timeoutInMinutes: 0,
+  executionOrder: 1,
 }
 
 export { defaultsReleaseDefinition }
