@@ -7,6 +7,7 @@ import yargs from 'yargs'
 
 (async () => {
   try {
+    yargs.showHelpOnFail(false)
     const argv = yargs.options({
       pipeconfig: { type: 'string' },
       logLevel: { type: 'string', alias: 'log-level' },
