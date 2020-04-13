@@ -1,6 +1,6 @@
+import { Definition } from '@kroonprins/pipectl-core/dist/model'
 import { AgentPoolQueue, AgentPoolQueueTarget, AgentTargetExecutionOptions, BuildAuthorizationScope, BuildDefinition, BuildDefinitionStep, BuildDefinitionVariable, BuildProcess, BuildRepository, BuildTrigger, ContinuousIntegrationTrigger, DefinitionQuality, DefinitionTriggerType, DefinitionType, DesignerProcess, Phase, PhaseTarget, RetentionPolicy, Schedule, ScheduleDays, ScheduleTrigger, VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
-import { Definition } from 'pipectl-core/dist/model'
 import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { coreApi } from '../../adapters/core-api'

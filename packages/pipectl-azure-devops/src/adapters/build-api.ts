@@ -1,6 +1,6 @@
+import { log } from '@kroonprins/pipectl-core/dist/util/logging'
 import { IBuildApi } from 'azure-devops-node-api/BuildApi'
 import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { log } from 'pipectl-core/dist/util/logging'
 import { azureConnection } from './connection'
 
 class BuildApi {

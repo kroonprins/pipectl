@@ -1,5 +1,5 @@
 {
-  "name": "pipectl-azure-devops",
+  "name": "@kroonprins/pipectl-azure-devops",
   "version": "0.0.1",
   "description": "pipectl plugin for Azure DevOps",
   "scripts": {
@@ -11,7 +11,7 @@
   ],
   "devDependencies": {},
   "dependencies": {
-    "pipectl-core": "0.0.1",
+    "@kroonprins/pipectl-core": "0.0.1",
     "azure-devops-node-api": "^10.1.0",
     "p-memoize": "^4.0.0",
     "@types/js-yaml": "^3.12.2",

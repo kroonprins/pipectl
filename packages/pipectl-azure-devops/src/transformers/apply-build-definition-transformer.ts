@@ -1,12 +1,12 @@
+import { Action, CommonArguments } from '@kroonprins/pipectl-core/dist/actions/model'
+import { Definition } from '@kroonprins/pipectl-core/dist/model'
+import { log } from '@kroonprins/pipectl-core/dist/util/logging'
 import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { Action, CommonArguments } from 'pipectl-core/dist/actions/model'
-import { Definition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 import { BuildDefinitionTransformer } from './build-definition-transformer'
-import { defaultsBuildDefinition } from './util/defaults-build-definition'
 import { applyDefaults } from './util/defaults'
+import { defaultsBuildDefinition } from './util/defaults-build-definition'
 
 class ApplyBuildDefinitionTransformer extends BuildDefinitionTransformer {
 

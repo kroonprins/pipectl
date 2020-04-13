@@ -1,4 +1,4 @@
-import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
+import { Action, GetArguments } from '@kroonprins/pipectl-core/dist/actions/model'
 import { AzureVariableGroup } from '../model/azure-variable-group'
 import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
 import { GetReporterYaml } from './get-reporter-yaml'
