@@ -5,7 +5,9 @@ const stringifyApplyArguments = (args: ApplyArguments) => {
 }
 
 const stringifyGetArguments = (args: GetArguments) => {
-  return `kind[${args.kind}], name[${args.name}], export[${args.export}], ${stringifyCommonArguments(args)}`
+  return `kind[${args.kind}], name[${args.name}], export[${
+    args.export
+  }], ${stringifyCommonArguments(args)}`
 }
 
 const stringifyCommonArguments = (args: CommonArguments) => {
@@ -13,4 +15,3 @@ const stringifyCommonArguments = (args: CommonArguments) => {
 }
 
 export { stringifyApplyArguments, stringifyGetArguments }
-

@@ -17,11 +17,7 @@
         "--log-level",
         "debug"
       ],
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "ts-node/register"
-      ],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
@@ -33,17 +29,8 @@
       "name": "Test",
       "type": "node",
       "request": "launch",
-      "args": [
-        "${workspaceRoot}/src/index.ts",
-        "test",
-        "--log-level",
-        "debug"
-      ],
-      "runtimeArgs": [
-        "--nolazy",
-        "-r",
-        "ts-node/register"
-      ],
+      "args": ["${workspaceRoot}/src/index.ts", "test", "--log-level", "debug"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",

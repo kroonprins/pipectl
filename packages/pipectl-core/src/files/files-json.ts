@@ -11,7 +11,9 @@ abstract class JsonFileHandler implements DefinitionFileHandler {
   async handle(file: DefinitionFile): Promise<Definition[]> {
     // TODO kubectl allows multiple resources in one file for json like this https://github.com/kubernetes/kubernetes/blob/master/hack/testdata/multi-resource-json.json
     const parsed = parseJson(stripJsonComments(file.content))
-    return parsed.hasOwnProperty('items') ? parsed.items as Definition[] : [parsed as Definition]
+    return parsed.hasOwnProperty('items')
+      ? (parsed.items as Definition[])
+      : [parsed as Definition]
   }
 }
 
@@ -24,7 +26,7 @@ class JsonExtensionFileHandler extends JsonFileHandler {
 class JsonContentFileHandler extends JsonFileHandler {
   canHandle(file: DefinitionFile): boolean {
     try {
-      parseJson(stripJsonComments((file.content)))
+      parseJson(stripJsonComments(file.content))
       return true
     } catch (e) {
       return false
@@ -33,4 +35,3 @@ class JsonContentFileHandler extends JsonFileHandler {
 }
 
 export { JsonExtensionFileHandler, JsonContentFileHandler }
-

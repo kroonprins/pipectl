@@ -1,4 +1,8 @@
-const applyExport = async <T>(source: T, descriptor: T | object, ...extraFunctionArgs: any[]): Promise<T> => {
+const applyExport = async <T>(
+  source: T,
+  descriptor: T | object,
+  ...extraFunctionArgs: any[]
+): Promise<T> => {
   const result: any = Object.assign({}, source)
 
   for (const [key, value] of Object.entries(descriptor)) {
@@ -28,4 +32,3 @@ const filterProp = () => {
 }
 
 export { applyExport, filterProp }
-

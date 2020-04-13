@@ -1,11 +1,12 @@
 import { Definition } from '@kroonprins/pipectl-core/dist/model'
 
 interface MultipleReportingTransformationResult {
-  apiVersion: string,
+  apiVersion: string
   items: Definition[]
 }
 
-type ReportingTransformationResult = MultipleReportingTransformationResult | Definition
+type ReportingTransformationResult =
+  | MultipleReportingTransformationResult
+  | Definition
 
 export { ReportingTransformationResult }
-

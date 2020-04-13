@@ -5,4 +5,3 @@ const isAzureDevOps = (apiVersion: string): boolean => {
 }
 
 export { isAzureDevOps, API_VERSION }
-

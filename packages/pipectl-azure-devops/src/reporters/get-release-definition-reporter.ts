@@ -3,8 +3,14 @@ import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 import { GetReporter } from './get-reporter'
 
-class GetReleaseDefinitionReporter extends GetReporter<GetReleaseDefinitionProcessResult, AzureReleaseDefinition, ReleaseDefinition> {
-  constructor() { super(GetReleaseDefinitionProcessResult) }
+class GetReleaseDefinitionReporter extends GetReporter<
+  GetReleaseDefinitionProcessResult,
+  AzureReleaseDefinition,
+  ReleaseDefinition
+> {
+  constructor() {
+    super(GetReleaseDefinitionProcessResult)
+  }
 
   columns(): string[] {
     return ['NAME', 'DESCRIPTION']
@@ -12,13 +18,10 @@ class GetReleaseDefinitionReporter extends GetReporter<GetReleaseDefinitionProce
 
   line(releaseDefinition: ReleaseDefinition): { [column: string]: string } {
     return {
-      'NAME': releaseDefinition.id!.toString(),
-      'DESCRIPTION': `${releaseDefinition.path}\\${releaseDefinition.name}`,
+      NAME: releaseDefinition.id!.toString(),
+      DESCRIPTION: `${releaseDefinition.path}\\${releaseDefinition.name}`,
     }
   }
 }
 
 export { GetReleaseDefinitionReporter }
-
-
-

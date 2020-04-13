@@ -9,4 +9,3 @@ export default async (args: ApplyArguments) => {
   const definitions = await inputDefinitionsFromFile(args)
   return process(definitions, Action.DELETE, args)
 }
-

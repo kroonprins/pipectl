@@ -1,4 +1,10 @@
-import { ActionProcessor, DefinitionFilter, DefinitionGrouper, DefinitionTransformer, Reporter } from './model'
+import {
+  ActionProcessor,
+  DefinitionFilter,
+  DefinitionGrouper,
+  DefinitionTransformer,
+  Reporter,
+} from './model'
 
 class Registrations<T> {
   private _registrations: T[] = []
@@ -74,5 +80,20 @@ const reporters = (): readonly Reporter[] => {
   return _reporters.get()
 }
 
-export { registerGrouper, registerFallbackGrouper, groupers, registerTransformer, registerFallbackTransformer, transformers, registerFilter, registerFallbackFilter, filters, registerActionProcessor, registerFallbackActionProcessor, processors, registerReporter, registerFallbackReporter, reporters }
-
+export {
+  registerGrouper,
+  registerFallbackGrouper,
+  groupers,
+  registerTransformer,
+  registerFallbackTransformer,
+  transformers,
+  registerFilter,
+  registerFallbackFilter,
+  filters,
+  registerActionProcessor,
+  registerFallbackActionProcessor,
+  processors,
+  registerReporter,
+  registerFallbackReporter,
+  reporters,
+}

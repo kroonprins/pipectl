@@ -14,7 +14,10 @@ abstract class YamlFileHandler implements DefinitionFileHandler {
 
 class YamlExtensionFileHandler extends YamlFileHandler {
   canHandle(file: DefinitionFile): boolean {
-    return file.name !== undefined && (file.name.extension === 'yaml' || file.name.extension === 'yml')
+    return (
+      file.name !== undefined &&
+      (file.name.extension === 'yaml' || file.name.extension === 'yml')
+    )
   }
 }
 
@@ -30,4 +33,3 @@ class YamlContentFileHandler extends YamlFileHandler {
 }
 
 export { YamlExtensionFileHandler, YamlContentFileHandler }
-

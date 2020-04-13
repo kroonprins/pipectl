@@ -1,5 +1,8 @@
-
-const applyDefaults = async <T>(source: T, defaults: T | object, ...extraFunctionArgs: any[]): Promise<T> => {
+const applyDefaults = async <T>(
+  source: T,
+  defaults: T | object,
+  ...extraFunctionArgs: any[]
+): Promise<T> => {
   const result: any = Object.assign({}, source)
 
   for (const [key, value] of Object.entries(defaults)) {
@@ -14,4 +17,3 @@ const applyDefaults = async <T>(source: T, defaults: T | object, ...extraFunctio
 }
 
 export { applyDefaults }
-

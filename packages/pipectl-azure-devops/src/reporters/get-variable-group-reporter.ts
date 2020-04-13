@@ -3,8 +3,14 @@ import { AzureVariableGroup } from '../model/azure-variable-group'
 import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
 import { GetReporter } from './get-reporter'
 
-class GetVariableGroupReporter extends GetReporter<GetVariableGroupProcessResult, AzureVariableGroup, VariableGroup> {
-  constructor() { super(GetVariableGroupProcessResult) }
+class GetVariableGroupReporter extends GetReporter<
+  GetVariableGroupProcessResult,
+  AzureVariableGroup,
+  VariableGroup
+> {
+  constructor() {
+    super(GetVariableGroupProcessResult)
+  }
 
   columns(): string[] {
     return ['NAME', 'DESCRIPTION']
@@ -12,11 +18,10 @@ class GetVariableGroupReporter extends GetReporter<GetVariableGroupProcessResult
 
   line(variableGroup: VariableGroup): { [column: string]: string } {
     return {
-      'NAME': variableGroup.id!.toString(),
-      'DESCRIPTION': variableGroup.name!,
+      NAME: variableGroup.id!.toString(),
+      DESCRIPTION: variableGroup.name!,
     }
   }
 }
 
 export { GetVariableGroupReporter }
-

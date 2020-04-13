@@ -1,11 +1,20 @@
 #!/usr/bin/env node
 
-import { bootstrapCore, BootstrapFunction } from '@kroonprins/pipectl-core/dist/bootstrap'
-import { currentPlugins, initialize as initializeConfig } from '@kroonprins/pipectl-core/dist/config'
-import { initializeLogging, log } from '@kroonprins/pipectl-core/dist/util/logging'
+import {
+  bootstrapCore,
+  BootstrapFunction,
+} from '@kroonprins/pipectl-core/dist/bootstrap'
+import {
+  currentPlugins,
+  initialize as initializeConfig,
+} from '@kroonprins/pipectl-core/dist/config'
+import {
+  initializeLogging,
+  log,
+} from '@kroonprins/pipectl-core/dist/util/logging'
 import yargs from 'yargs'
 
-(async () => {
+const main = async () => {
   try {
     yargs.showHelpOnFail(false)
     const argv = yargs.options({
@@ -20,7 +29,9 @@ import yargs from 'yargs'
 
     await Promise.all(
       currentPlugins().map(async (plugin) => {
-        const bootstrapFunctionPlugin = ((await import(`${plugin}/dist/bootstrap`)).default as unknown) as BootstrapFunction
+        const bootstrapFunctionPlugin = ((
+          await import(`${plugin}/dist/bootstrap`)
+        ).default as unknown) as BootstrapFunction
         return bootstrapFunctionPlugin(yargs)
       })
     )
@@ -28,8 +39,8 @@ import yargs from 'yargs'
     yargs.argv /* tslint:disable-line:no-unused-expression */
   } catch (e) {
     log.error('ERROR 👎')
-    log.error(e/*.message*/)
+    log.error(e /*.message*/)
   }
+}
 
-})()
-
+main()

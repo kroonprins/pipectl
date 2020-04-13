@@ -9,11 +9,14 @@ class FileName {
 }
 
 interface DefinitionFile {
-  name?: FileName,
-  content: string,
+  name?: FileName
+  content: string
 }
 
-type FileOptionHandler = (fileOption: string, args: Arguments) => Promise<DefinitionFile[]>
+type FileOptionHandler = (
+  fileOption: string,
+  args: Arguments
+) => Promise<DefinitionFile[]>
 
 interface DefinitionFileHandler {
   canHandle(file: DefinitionFile): boolean
@@ -21,4 +24,3 @@ interface DefinitionFileHandler {
 }
 
 export { FileName, DefinitionFile, FileOptionHandler, DefinitionFileHandler }
-
