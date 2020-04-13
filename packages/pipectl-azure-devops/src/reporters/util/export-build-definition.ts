@@ -11,7 +11,6 @@ import {
   BuildTrigger,
   ContinuousIntegrationTrigger,
   DefinitionQuality,
-  DefinitionReference,
   DefinitionTriggerType,
   DefinitionType,
   DesignerProcess,
@@ -21,21 +20,18 @@ import {
   ScheduleDays,
   ScheduleTrigger,
 } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { applyExport, filterProp } from './export'
-
-const drafts = async (
-  buildDefinition: BuildDefinition
-): Promise<DefinitionReference[] | undefined> => {
-  return (buildDefinition.drafts || []).length !== 0
-    ? buildDefinition.drafts
-    : undefined
-}
+import {
+  applyExport,
+  applyExportOnArray,
+  filterIfEmpty,
+  filterProp,
+} from './export'
 
 const process = async (
   buildDefinition: BuildDefinition
 ): Promise<BuildProcess> => {
   const commonExportApplied = await applyExport(
-    buildDefinition.process || {},
+    buildDefinition.process,
     exportProcess
   )
   if (buildDefinition.process) {
@@ -46,101 +42,52 @@ const process = async (
   return commonExportApplied
 }
 
-const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> => {
-  return Promise.all(
-    (designerProcess.phases || []).map((phase) =>
-      applyExport(phase, exportDesignerProcessPhase)
-    )
-  )
-}
+const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> =>
+  applyExportOnArray(designerProcess.phases, exportDesignerProcessPhase)
 
-const phaseTarget = async (phase: Phase): Promise<PhaseTarget | undefined> => {
-  let target = await applyExport(
-    phase.target || {},
+const phaseTarget = async (phase: Phase): Promise<PhaseTarget> => {
+  const target = await applyExport(
+    phase.target,
     exportDesignerProcessPhaseTarget
   )
   if (phase.target) {
     if (phase.target.type === 1) {
       // AgentPoolQueueTarget
-      target = await applyExport(
-        target,
-        exportDesignerProcessPhaseAgentPoolQueueTarget
-      )
+      return applyExport(target, exportDesignerProcessPhaseAgentPoolQueueTarget)
     } // TODO other target types?
   }
-  return Object.keys(target).length !== 0 ? target : undefined
+  return target
 }
 
 const designerProcessPhaseAgentPoolQueueTargetExecutionOptions = async (
   agentPoolQueueTarget: AgentPoolQueueTarget
-): Promise<AgentTargetExecutionOptions | undefined> => {
-  const executionOptions = applyExport(
-    agentPoolQueueTarget.executionOptions || {},
+): Promise<AgentTargetExecutionOptions> =>
+  applyExport(
+    agentPoolQueueTarget.executionOptions,
     exportDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions
   )
-  return Object.keys(executionOptions).length !== 0
-    ? executionOptions
-    : undefined
-}
 
-const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> => {
-  return Promise.all(
-    (phase.steps || []).map((step) =>
-      applyExport(step, exportDesignerProcessStep)
-    )
-  )
-}
-
-const designerProcessStepEnvironment = async (
-  buildDefinitionStep: BuildDefinitionStep
-): Promise<{ [key: string]: string } | undefined> => {
-  return Object.keys(buildDefinitionStep.environment || {}).length !== 0
-    ? buildDefinitionStep.environment
-    : undefined
-}
-
-const properties = async (buildDefinition: BuildDefinition): Promise<any> => {
-  return Object.keys(buildDefinition.properties).length !== 0
-    ? buildDefinition.properties
-    : undefined
-}
+const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> =>
+  applyExportOnArray(phase.steps, exportDesignerProcessStep)
 
 const queue = async (
   buildDefinition: BuildDefinition
-): Promise<AgentPoolQueue | undefined> => {
-  return buildDefinition.queue
-    ? applyExport(buildDefinition.queue, exportQueue)
-    : undefined
-}
+): Promise<AgentPoolQueue> => applyExport(buildDefinition.queue, exportQueue)
 
 const repository = async (
   buildDefinition: BuildDefinition
-): Promise<BuildRepository> => {
-  return applyExport(buildDefinition.repository || {}, exportBuildRepository)
-}
+): Promise<BuildRepository> =>
+  applyExport(buildDefinition.repository, exportBuildRepository)
 
 const buildRepositoryProperties = async (
   buildRepository: BuildRepository
-): Promise<{ [key: string]: string } | undefined> => {
-  const exportedProperties = applyExport(
-    buildRepository.properties || {},
-    exportBuildRepositoryProperties
-  )
-  return Object.keys(exportedProperties).length !== 0
-    ? exportedProperties
-    : undefined
-}
-
-const tags = async (buildDefinition: BuildDefinition): Promise<any> => {
-  return (buildDefinition.tags || []).length !== 0
-    ? buildDefinition.tags
-    : undefined
-}
+): Promise<{ [key: string]: string } | undefined> =>
+  applyExport(buildRepository.properties, exportBuildRepositoryProperties)
 
 const triggers = async (
   buildDefinition: BuildDefinition
-): Promise<BuildTrigger[]> => {
-  return Promise.all(
+): Promise<BuildTrigger[]> =>
+  Promise.all(
     (buildDefinition.triggers || []).map((trigger) => {
       if (trigger.triggerType === DefinitionTriggerType.ContinuousIntegration) {
         return applyExport(trigger, exportContinuousIntegrationTrigger)
@@ -150,26 +97,16 @@ const triggers = async (
       return Object.assign({}, trigger)
     })
   )
-}
 
 const schedules = async (
   scheduleTrigger: ScheduleTrigger
-): Promise<Schedule[]> => {
-  return Promise.all(
-    (scheduleTrigger.schedules || []).map((schedule) =>
-      applyExport(schedule, exportSchedule)
-    )
-  )
-}
+): Promise<Schedule[]> =>
+  applyExportOnArray(scheduleTrigger.schedules, exportSchedule)
 
 const variableGroups = async (
   buildDefinition: BuildDefinition
-): Promise<string[] | undefined> => {
-  const vars = (buildDefinition.variableGroups || []).map(
-    (v) => v.name || v.id!.toString()
-  )
-  return vars.length !== 0 ? vars : undefined
-}
+): Promise<string[] | undefined> =>
+  (buildDefinition.variableGroups || []).map((v) => v.name || v.id!.toString())
 
 const variables = async (
   buildDefinition: BuildDefinition
@@ -177,8 +114,8 @@ const variables = async (
   | { [key: string]: BuildDefinitionVariable }
   | { [key: string]: string | undefined }
   | undefined
-> => {
-  const vars = (
+> =>
+  (
     await Promise.all(
       Object.entries(buildDefinition.variables || {}).map(
         async ([name, value]) => {
@@ -198,8 +135,6 @@ const variables = async (
       Object.assign({}, previousValue, currentValue),
     {}
   )
-  return vars.length !== 0 ? vars : undefined
-}
 
 const exportBuildDefinition: BuildDefinition | object = {
   type: DefinitionType.Build,
@@ -211,16 +146,16 @@ const exportBuildDefinition: BuildDefinition | object = {
   _links: filterProp,
   authoredBy: filterProp,
   createdDate: filterProp,
-  drafts,
+  drafts: filterIfEmpty,
   id: filterProp,
   process,
   project: filterProp,
-  properties,
+  properties: filterIfEmpty,
   queue,
   queueStatus: filterProp,
   repository,
   revision: filterProp,
-  tags,
+  tags: filterIfEmpty,
   triggers,
   uri: filterProp,
   url: filterProp,
@@ -286,7 +221,7 @@ const exportDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions: AgentTarge
 }
 
 const exportDesignerProcessStep: BuildDefinitionStep | object = {
-  environment: designerProcessStepEnvironment,
+  environment: filterIfEmpty,
   enabled: true,
   continueOnError: false,
   alwaysRun: false,

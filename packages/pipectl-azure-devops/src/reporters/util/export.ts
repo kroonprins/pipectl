@@ -1,5 +1,5 @@
 const applyExport = async <T>(
-  source: T,
+  source: T | undefined,
   descriptor: T | object,
   ...extraFunctionArgs: any[]
 ): Promise<T> => {
@@ -11,8 +11,8 @@ const applyExport = async <T>(
     }
     let updatedValue: any
     if (value instanceof Function) {
-      updatedValue = await value(source, ...extraFunctionArgs)
-      if (updatedValue !== undefined) {
+      updatedValue = await value(source, key, ...extraFunctionArgs)
+      if (!empty(updatedValue)) {
         result[key] = updatedValue
       } else {
         delete result[key]
@@ -27,8 +27,35 @@ const applyExport = async <T>(
   return result
 }
 
+const applyExportOnArray = async <T>(
+  source: T[] | undefined,
+  descriptor: T | object,
+  ...extraFunctionArgs: any[]
+): Promise<T[]> => {
+  return (
+    await Promise.all(
+      (source || []).map((item) =>
+        applyExport(item, descriptor, ...extraFunctionArgs)
+      )
+    )
+  ).filter((item) => !empty(item))
+}
+
+const empty = (value: any): boolean => {
+  return (
+    value === undefined ||
+    value === null ||
+    (typeof value === 'object' && Object.keys(value).length === 0) ||
+    (typeof value === 'string' && value.trim() === '')
+  )
+}
+
 const filterProp = () => {
   return undefined
 }
 
-export { applyExport, filterProp }
+const filterIfEmpty = (source: any, key: string) => {
+  return source[key]
+}
+
+export { applyExport, applyExportOnArray, filterProp, filterIfEmpty }
