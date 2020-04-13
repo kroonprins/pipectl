@@ -8,7 +8,7 @@ const applyExport = async <T>(source: T, descriptor: T | object, ...extraFunctio
     let updatedValue: any
     if (value instanceof Function) {
       updatedValue = await value(source, ...extraFunctionArgs)
-      if (updatedValue !== undefined && result[key] !== updatedValue) {
+      if (updatedValue !== undefined) {
         result[key] = updatedValue
       } else {
         delete result[key]
