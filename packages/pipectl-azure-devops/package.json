@@ -3,18 +3,22 @@
   "version": "0.0.1",
   "description": "pipectl plugin for Azure DevOps",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "updates": "updates -e @kroonprins/pipectl-core",
+    "updates-apply": "updates -e @kroonprins/pipectl-core -u"
   },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
-  "devDependencies": {},
+  "devDependencies": {
+    "updates": "^10.2.7"
+  },
   "dependencies": {
     "@kroonprins/pipectl-core": "0.0.1",
-    "azure-devops-node-api": "^10.1.0",
+    "azure-devops-node-api": "^10.1.1",
     "p-memoize": "^4.0.0",
-    "@types/js-yaml": "^3.12.2",
+    "@types/js-yaml": "^3.12.3",
     "js-yaml": "^3.13.1"
   }
 }

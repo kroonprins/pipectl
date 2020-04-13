@@ -12,7 +12,7 @@ contexts:
       namespace: ${project}
       user: user-azure-devops
       plugins:
-        - pipectl-azure-devops
+        - '@kroonprins/pipectl-azure-devops'
     name: context-azure-devops
 current-context: context-azure-devops
 users:

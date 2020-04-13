@@ -12,9 +12,13 @@
   ],
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "updates": "updates -e @kroonprins/pipectl-core,@kroonprins/pipectl-azure-devops",
+    "updates-apply": "updates -e @kroonprins/pipectl-core,@kroonprins/pipectl-azure-devops -u"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "updates": "^10.2.7"
+  },
   "dependencies": {
     "@kroonprins/pipectl-core": "0.0.1",
     "@kroonprins/pipectl-azure-devops": "0.0.1"
