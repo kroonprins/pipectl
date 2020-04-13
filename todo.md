@@ -17,7 +17,6 @@
 - edit command
 - logs command
 - in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
-- commit semantic versioning, updates, tralala
 
 - check if pipectl-azure-devops can be removed from package.json of pipectl, different options would be:
 
@@ -29,3 +28,5 @@
 - remove some duplication in azure devops reporters, transformers, etc
 
 - handle empty object/array in applyExport instead of having this test in all export functions
+
+- check if yarn workspaces can be alternative for lerna

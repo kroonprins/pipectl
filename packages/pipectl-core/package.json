@@ -3,15 +3,19 @@
   "version": "0.0.1",
   "description": "Core implementation for pipectl",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "updates": "updates",
+    "updates-apply": "updates -u"
   },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
-  "devDependencies": {},
+  "devDependencies": {
+    "updates": "^10.2.7"
+  },
   "dependencies": {
-    "@types/js-yaml": "^3.12.2",
+    "@types/js-yaml": "^3.12.3",
     "@types/parse-json": "^4.0.0",
     "get-stdin": "^7.0.0",
     "glob": "^7.1.6",
