@@ -1,5 +1,5 @@
+import { Definition } from '@kroonprins/pipectl-core/dist/model'
 import { AgentBasedDeployPhase, AgentDeploymentInput, ApprovalOptions, Artifact, ArtifactSourceReference, ConfigurationVariableValue, DeployPhase, DeployPhaseTypes, EnvironmentExecutionPolicy, EnvironmentOptions, EnvironmentRetentionPolicy, ReleaseDefinition, ReleaseDefinitionApprovals, ReleaseDefinitionApprovalStep, ReleaseDefinitionEnvironment, WorkflowTask } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
-import { Definition } from 'pipectl-core/dist/model'
 import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'

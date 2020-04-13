@@ -1,6 +1,6 @@
-import { Action, ApplyArguments } from 'pipectl-core/dist/actions/model'
-import { ActionProcessor, ProcessResult, TransformedDefinition } from 'pipectl-core/dist/model'
-import { log } from 'pipectl-core/dist/util/logging'
+import { Action, ApplyArguments } from '@kroonprins/pipectl-core/dist/actions/model'
+import { ActionProcessor, ProcessResult, TransformedDefinition } from '@kroonprins/pipectl-core/dist/model'
+import { log } from '@kroonprins/pipectl-core/dist/util/logging'
 import { variableGroupApi } from '../adapters/variable-group-api'
 import { AzureVariableGroup } from '../model/azure-variable-group'
 

@@ -1,5 +1,5 @@
+import { Definition } from '@kroonprins/pipectl-core/dist/model'
 import { ProjectReference, VariableGroup, VariableGroupProjectReference, VariableValue } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
-import { Definition } from 'pipectl-core/dist/model'
 import { applyDefaults } from './defaults'
 
 const variables = async (variableGroup: VariableGroup, _definition: Definition): Promise<{ [key: string]: VariableValue; }> => {

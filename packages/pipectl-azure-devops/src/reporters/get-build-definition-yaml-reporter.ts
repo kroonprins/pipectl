@@ -1,4 +1,4 @@
-import { Action, GetArguments } from 'pipectl-core/dist/actions/model'
+import { Action, GetArguments } from '@kroonprins/pipectl-core/dist/actions/model'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
 import { GetReporterYaml } from './get-reporter-yaml'
@@ -16,3 +16,4 @@ class GetBuildDefinitionYamlReporter extends GetReporterYaml<GetBuildDefinitionP
 }
 
 export { GetBuildDefinitionYamlReporter }
+
