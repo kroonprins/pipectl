@@ -5,24 +5,40 @@ import { AzureDefinition } from '../../model'
 import { GetProcessResult } from '../../model/get-process-result'
 import { ReportingTransformationResult } from '../model'
 
-const transformForGetReporting = async <U extends GetProcessResult<any>, V extends AzureDefinition<any>>(processResult: U, transformedDefinition: V, args: GetArguments, applyExport: (definition: V) => Promise<V>): Promise<ReportingTransformationResult> => {
+const transformForGetReporting = async <
+  U extends GetProcessResult<any>,
+  V extends AzureDefinition<any>
+>(
+  processResult: U,
+  transformedDefinition: V,
+  args: GetArguments,
+  applyExport: (definition: V) => Promise<V>
+): Promise<ReportingTransformationResult> => {
   const definitions: Definition[] = await Promise.all(
-    processResult.results!
-      .map(definition => {
+    processResult
+      .results!.map((definition) => {
         return {
           apiVersion: transformedDefinition.apiVersion,
           kind: transformedDefinition.kind,
           metadata: {
-            namespace: transformedDefinition.project
+            namespace: transformedDefinition.project,
           },
           spec: definition,
         }
       })
-      .map(async definition => {
+      .map(async (definition) => {
         if (args.export) {
-          log.debug(`[transformForGetReporting apply export] before[${JSON.stringify(definition)}]`)
+          log.debug(
+            `[transformForGetReporting apply export] before[${JSON.stringify(
+              definition
+            )}]`
+          )
           definition.spec = await applyExport(definition.spec)
-          log.debug(`[transformForGetReporting apply export] after[${JSON.stringify(definition)}]`)
+          log.debug(
+            `[transformForGetReporting apply export] after[${JSON.stringify(
+              definition
+            )}]`
+          )
         }
         return definition
       })
@@ -30,7 +46,7 @@ const transformForGetReporting = async <U extends GetProcessResult<any>, V exten
   if (definitions.length > 1) {
     return {
       apiVersion: transformedDefinition.apiVersion,
-      items: definitions
+      items: definitions,
     }
   } else {
     return definitions[0]
@@ -38,4 +54,3 @@ const transformForGetReporting = async <U extends GetProcessResult<any>, V exten
 }
 
 export { transformForGetReporting }
-

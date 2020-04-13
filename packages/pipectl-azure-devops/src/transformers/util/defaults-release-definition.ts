@@ -1,5 +1,22 @@
 import { Definition } from '@kroonprins/pipectl-core/dist/model'
-import { AgentBasedDeployPhase, AgentDeploymentInput, ApprovalOptions, Artifact, ArtifactSourceReference, ConfigurationVariableValue, DeployPhase, DeployPhaseTypes, EnvironmentExecutionPolicy, EnvironmentOptions, EnvironmentRetentionPolicy, ReleaseDefinition, ReleaseDefinitionApprovals, ReleaseDefinitionApprovalStep, ReleaseDefinitionEnvironment, WorkflowTask } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
+import {
+  AgentBasedDeployPhase,
+  AgentDeploymentInput,
+  ApprovalOptions,
+  Artifact,
+  ArtifactSourceReference,
+  ConfigurationVariableValue,
+  DeployPhase,
+  DeployPhaseTypes,
+  EnvironmentExecutionPolicy,
+  EnvironmentOptions,
+  EnvironmentRetentionPolicy,
+  ReleaseDefinition,
+  ReleaseDefinitionApprovals,
+  ReleaseDefinitionApprovalStep,
+  ReleaseDefinitionEnvironment,
+  WorkflowTask,
+} from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
@@ -7,44 +24,81 @@ import { coreApi } from '../../adapters/core-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
-const artifacts = async (releaseDefinition: ReleaseDefinition, definition: Definition): Promise<Artifact[]> => {
+const artifacts = async (
+  releaseDefinition: ReleaseDefinition,
+  definition: Definition
+): Promise<Artifact[]> => {
   return Promise.all(
-    (releaseDefinition.artifacts || [])
-      .map(artifact => {
-        if (artifact.type === 'Build') {
-          return applyDefaults(artifact, defaultsBuildArtifact, definition.metadata.namespace)
-        } // TODO other artifact types?
-        return applyDefaults(artifact, defaultsArtifact)
-      })
+    (releaseDefinition.artifacts || []).map((artifact) => {
+      if (artifact.type === 'Build') {
+        return applyDefaults(
+          artifact,
+          defaultsBuildArtifact,
+          definition.metadata.namespace
+        )
+      } // TODO other artifact types?
+      return applyDefaults(artifact, defaultsArtifact)
+    })
   )
 }
 
-const definitionReference = async (artifact: Artifact, projectId: string): Promise<{ [key: string]: ArtifactSourceReference }> => {
-  return applyDefaults(artifact.definitionReference || {}, defaultsDefinitionReference, projectId)
+const definitionReference = async (
+  artifact: Artifact,
+  projectId: string
+): Promise<{ [key: string]: ArtifactSourceReference }> => {
+  return applyDefaults(
+    artifact.definitionReference || {},
+    defaultsDefinitionReference,
+    projectId
+  )
 }
 
-const defaultVersionType = async (definitionRef: { [key: string]: ArtifactSourceReference }): Promise<ArtifactSourceReference> => {
-  return applyDefaults(definitionRef.defaultVersionType, defaultsDefaultVersionType)
+const defaultVersionType = async (definitionRef: {
+  [key: string]: ArtifactSourceReference
+}): Promise<ArtifactSourceReference> => {
+  return applyDefaults(
+    definitionRef.defaultVersionType,
+    defaultsDefaultVersionType
+  )
 }
 
-const project = async (definitionRef: { [key: string]: ArtifactSourceReference }, projectId: string): Promise<ArtifactSourceReference> => {
+const project = async (
+  definitionRef: { [key: string]: ArtifactSourceReference },
+  projectId: string
+): Promise<ArtifactSourceReference> => {
   if (!definitionRef.hasOwnProperty('project')) {
     return { id: await coreApi.findProjectIdByName(projectId) }
-  } else if (!definitionRef.project.hasOwnProperty('id') || !definitionRef.project.id) {
-    return { id: await coreApi.findProjectIdByName(definitionRef.project.name || projectId) }
+  } else if (
+    !definitionRef.project.hasOwnProperty('id') ||
+    !definitionRef.project.id
+  ) {
+    return {
+      id: await coreApi.findProjectIdByName(
+        definitionRef.project.name || projectId
+      ),
+    }
   }
   return definitionRef.project
 }
 
-const definitionReferenceDefinition = async (definitionRef: { [key: string]: ArtifactSourceReference }, namespace: string): Promise<ArtifactSourceReference> => {
-  if (definitionRef.hasOwnProperty('definition')
-    && !definitionRef.definition.hasOwnProperty('id')
-    && definitionRef.definition.hasOwnProperty('name')
-    && definitionRef.definition.hasOwnProperty('path')) {
+const definitionReferenceDefinition = async (
+  definitionRef: { [key: string]: ArtifactSourceReference },
+  namespace: string
+): Promise<ArtifactSourceReference> => {
+  if (
+    definitionRef.hasOwnProperty('definition') &&
+    !definitionRef.definition.hasOwnProperty('id') &&
+    definitionRef.definition.hasOwnProperty('name') &&
+    definitionRef.definition.hasOwnProperty('path')
+  ) {
     const buildName = definitionRef.definition.name!
     const buildPath = (definitionRef.definition as any).path
     const projectId = (await project(definitionRef, namespace)).id!
-    const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(buildName, buildPath, projectId)
+    const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(
+      buildName,
+      buildPath,
+      projectId
+    )
     if (buildDefinition) {
       return { id: buildDefinition.id!.toString() }
     }
@@ -52,11 +106,17 @@ const definitionReferenceDefinition = async (definitionRef: { [key: string]: Art
   return definitionRef.definition
 }
 
-const environments = async (releaseDefinition: ReleaseDefinition, definition: Definition): Promise<ReleaseDefinitionEnvironment[]> => {
+const environments = async (
+  releaseDefinition: ReleaseDefinition,
+  definition: Definition
+): Promise<ReleaseDefinitionEnvironment[]> => {
   const projectId = definition.metadata.namespace
   return Promise.all(
-    [...(releaseDefinition.environments || []).entries()]
-      .map(([index, environment]) => applyDefaults(environment, defaultsEnvironment, index, projectId))
+    [
+      ...(releaseDefinition.environments || []).entries(),
+    ].map(([index, environment]) =>
+      applyDefaults(environment, defaultsEnvironment, index, projectId)
+    )
   )
 }
 
@@ -64,122 +124,219 @@ const rank = async (_: any, index: number): Promise<number> => {
   return index + 1
 }
 
-const environmentOptions = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<EnvironmentOptions> => {
-  return applyDefaults(environment.environmentOptions || {}, defaultsEnvironmentOptions, projectId)
+const environmentOptions = async (
+  environment: ReleaseDefinitionEnvironment,
+  _index: number,
+  projectId: string
+): Promise<EnvironmentOptions> => {
+  return applyDefaults(
+    environment.environmentOptions || {},
+    defaultsEnvironmentOptions,
+    projectId
+  )
 }
 
-const executionPolicy = async (environment: ReleaseDefinitionEnvironment): Promise<EnvironmentExecutionPolicy> => {
-  return applyDefaults(environment.executionPolicy || {}, defaultsExecutionPolicy)
+const executionPolicy = async (
+  environment: ReleaseDefinitionEnvironment
+): Promise<EnvironmentExecutionPolicy> => {
+  return applyDefaults(
+    environment.executionPolicy || {},
+    defaultsExecutionPolicy
+  )
 }
 
-const retentionPolicy = async (environment: ReleaseDefinitionEnvironment): Promise<EnvironmentRetentionPolicy> => {
-  return applyDefaults(environment.retentionPolicy || {}, defaultsRetentionPolicy)
+const retentionPolicy = async (
+  environment: ReleaseDefinitionEnvironment
+): Promise<EnvironmentRetentionPolicy> => {
+  return applyDefaults(
+    environment.retentionPolicy || {},
+    defaultsRetentionPolicy
+  )
 }
 
-const deployPhases = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<DeployPhase[]> => {
+const deployPhases = async (
+  environment: ReleaseDefinitionEnvironment,
+  _index: number,
+  projectId: string
+): Promise<DeployPhase[]> => {
   return Promise.all(
-    [...(environment.deployPhases || []).entries()]
-      .map(async ([index, deployPhase]) => {
-        const commonDefaultsApplied = await applyDefaults(deployPhase, defaultsDeployPhase, index)
-        if (commonDefaultsApplied.phaseType === DeployPhaseTypes.AgentBasedDeployment) {
-          return applyDefaults(commonDefaultsApplied, defaultsAgentBasedDeployPhase, projectId)
+    [...(environment.deployPhases || []).entries()].map(
+      async ([index, deployPhase]) => {
+        const commonDefaultsApplied = await applyDefaults(
+          deployPhase,
+          defaultsDeployPhase,
+          index
+        )
+        if (
+          commonDefaultsApplied.phaseType ===
+          DeployPhaseTypes.AgentBasedDeployment
+        ) {
+          return applyDefaults(
+            commonDefaultsApplied,
+            defaultsAgentBasedDeployPhase,
+            projectId
+          )
         } // TODO other phase types?
         return commonDefaultsApplied
-      })
+      }
+    )
   )
 }
 
-const workflowTasks = async (deployPhase: DeployPhase): Promise<WorkflowTask[]> => {
+const workflowTasks = async (
+  deployPhase: DeployPhase
+): Promise<WorkflowTask[]> => {
   return Promise.all(
-    (deployPhase.workflowTasks || [])
-      .map(workflowTask => applyDefaults(workflowTask, defaultsWorkflowTask))
+    (deployPhase.workflowTasks || []).map((workflowTask) =>
+      applyDefaults(workflowTask, defaultsWorkflowTask)
+    )
   )
 }
 
-const deploymentInput = async (deployPhase: AgentBasedDeployPhase, projectId: string): Promise<AgentDeploymentInput> => {
-  return applyDefaults(deployPhase.deploymentInput || {}, defaultsAgentDeploymentInput, projectId)
+const deploymentInput = async (
+  deployPhase: AgentBasedDeployPhase,
+  projectId: string
+): Promise<AgentDeploymentInput> => {
+  return applyDefaults(
+    deployPhase.deploymentInput || {},
+    defaultsAgentDeploymentInput,
+    projectId
+  )
 }
 
-const queueId = async (agentDeploymentInput: AgentDeploymentInput, projectId: string): Promise<number | undefined> => {
-  if (agentDeploymentInput.hasOwnProperty('queueId') && agentDeploymentInput.queueId && !isNumber(agentDeploymentInput.queueId)) {
-    return await agentPoolApi.findAgentPoolIdByName(agentDeploymentInput.queueId, projectId)
+const queueId = async (
+  agentDeploymentInput: AgentDeploymentInput,
+  projectId: string
+): Promise<number | undefined> => {
+  if (
+    agentDeploymentInput.hasOwnProperty('queueId') &&
+    agentDeploymentInput.queueId &&
+    !isNumber(agentDeploymentInput.queueId)
+  ) {
+    return await agentPoolApi.findAgentPoolIdByName(
+      agentDeploymentInput.queueId,
+      projectId
+    )
   }
   return agentDeploymentInput.queueId
 }
 
-const preDeployApprovals = async (environment: ReleaseDefinitionEnvironment): Promise<ReleaseDefinitionApprovals> => {
-  if (!environment.hasOwnProperty('preDeployApprovals')
-    || !environment.preDeployApprovals
-    || !environment.preDeployApprovals.hasOwnProperty('approvals')
-    || !environment.preDeployApprovals.approvals
-    || !environment.preDeployApprovals.approvals.length) {
+const preDeployApprovals = async (
+  environment: ReleaseDefinitionEnvironment
+): Promise<ReleaseDefinitionApprovals> => {
+  if (
+    !environment.hasOwnProperty('preDeployApprovals') ||
+    !environment.preDeployApprovals ||
+    !environment.preDeployApprovals.hasOwnProperty('approvals') ||
+    !environment.preDeployApprovals.approvals ||
+    !environment.preDeployApprovals.approvals.length
+  ) {
     return defaultNoApproval
   } else {
     return applyDefaults(environment.preDeployApprovals, defaultsApproval)
   }
 }
 
-const postDeployApprovals = async (environment: ReleaseDefinitionEnvironment): Promise<ReleaseDefinitionApprovals> => {
-  if (!environment.hasOwnProperty('postDeployApprovals')
-    || !environment.postDeployApprovals
-    || !environment.postDeployApprovals.hasOwnProperty('approvals')
-    || !environment.postDeployApprovals.approvals
-    || !environment.postDeployApprovals.approvals.length) {
+const postDeployApprovals = async (
+  environment: ReleaseDefinitionEnvironment
+): Promise<ReleaseDefinitionApprovals> => {
+  if (
+    !environment.hasOwnProperty('postDeployApprovals') ||
+    !environment.postDeployApprovals ||
+    !environment.postDeployApprovals.hasOwnProperty('approvals') ||
+    !environment.postDeployApprovals.approvals ||
+    !environment.postDeployApprovals.approvals.length
+  ) {
     return defaultNoApproval
   } else {
     return applyDefaults(environment.postDeployApprovals, defaultsApproval)
   }
 }
 
-const approvals = async (releaseDefinitionApprovals: ReleaseDefinitionApprovals): Promise<ReleaseDefinitionApprovalStep[]> => {
+const approvals = async (
+  releaseDefinitionApprovals: ReleaseDefinitionApprovals
+): Promise<ReleaseDefinitionApprovalStep[]> => {
   return Promise.all(
-    [...(releaseDefinitionApprovals.approvals || []).entries()]
-      .map(([index, approvalStep]) => applyDefaults(approvalStep, defaultApprovalStep, index))
+    [
+      ...(releaseDefinitionApprovals.approvals || []).entries(),
+    ].map(([index, approvalStep]) =>
+      applyDefaults(approvalStep, defaultApprovalStep, index)
+    )
   )
 }
 
-const approvalOptions = async (releaseDefinitionApprovals: ReleaseDefinitionApprovals): Promise<ApprovalOptions> => {
-  return applyDefaults(releaseDefinitionApprovals.approvalOptions || {}, defaultsApprovalOptions)
+const approvalOptions = async (
+  releaseDefinitionApprovals: ReleaseDefinitionApprovals
+): Promise<ApprovalOptions> => {
+  return applyDefaults(
+    releaseDefinitionApprovals.approvalOptions || {},
+    defaultsApprovalOptions
+  )
 }
 
-const variables = async (releaseDefinition: ReleaseDefinition, _definition?: Definition): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+const variables = async (
+  releaseDefinition: ReleaseDefinition,
+  _definition?: Definition
+): Promise<{ [key: string]: ConfigurationVariableValue }> => {
   return _variables(releaseDefinition, { isDefault: true })
 }
 
-const variablesScoped = async (environment: ReleaseDefinitionEnvironment, index: number, _projectId: string): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+const variablesScoped = async (
+  environment: ReleaseDefinitionEnvironment,
+  index: number,
+  _projectId: string
+): Promise<{ [key: string]: ConfigurationVariableValue }> => {
   return _variables(environment, { key: await rank(undefined, index) })
 }
 
-const _variables = async (source: ReleaseDefinition | ReleaseDefinitionEnvironment, scope: { [key: string]: any }): Promise<{ [key: string]: ConfigurationVariableValue }> => {
+const _variables = async (
+  source: ReleaseDefinition | ReleaseDefinitionEnvironment,
+  scope: { [key: string]: any }
+): Promise<{ [key: string]: ConfigurationVariableValue }> => {
   return Object.entries(source.variables || {})
     .map(([variable, value]) => {
       if (value && value.hasOwnProperty('value')) {
-        (value as any).scope = scope
-        return { [variable]: value }
+        return { [variable]: Object.assign({}, value, { scope }) }
       } else {
         return { [variable]: { value: value as string, scope } }
       }
     })
-    .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
+    .reduce(
+      (previousValue, currentValue) =>
+        Object.assign({}, previousValue, currentValue),
+      {}
+    )
 }
 
-const variableGroups = async (releaseDefinition: ReleaseDefinition, definition: Definition): Promise<number[]> => {
+const variableGroups = async (
+  releaseDefinition: ReleaseDefinition,
+  definition: Definition
+): Promise<number[]> => {
   return _variableGroups(releaseDefinition, definition.metadata.namespace)
 }
 
-const variableGroupsScoped = async (environment: ReleaseDefinitionEnvironment, _index: number, projectId: string): Promise<number[]> => {
+const variableGroupsScoped = async (
+  environment: ReleaseDefinitionEnvironment,
+  _index: number,
+  projectId: string
+): Promise<number[]> => {
   return _variableGroups(environment, projectId)
 }
 
-const _variableGroups = async (source: ReleaseDefinition | ReleaseDefinitionEnvironment, projectId: string): Promise<number[]> => {
+const _variableGroups = async (
+  source: ReleaseDefinition | ReleaseDefinitionEnvironment,
+  projectId: string
+): Promise<number[]> => {
   return Promise.all(
-    (source.variableGroups || [])
-      .map(async variableGroup => {
-        if (!isNumber(variableGroup)) {
-          return await variableGroupApi.findVariableGroupIdByName(variableGroup, projectId)
-        }
-        return variableGroup
-      })
+    (source.variableGroups || []).map(async (variableGroup) => {
+      if (!isNumber(variableGroup)) {
+        return await variableGroupApi.findVariableGroupIdByName(
+          variableGroup,
+          projectId
+        )
+      }
+      return variableGroup
+    })
   )
 }
 
@@ -197,7 +354,9 @@ const defaultsBuildArtifact: Artifact | object = {
   definitionReference,
 }
 
-const defaultsDefinitionReference: { [key: string]: ArtifactSourceReference } | object = {
+const defaultsDefinitionReference:
+  | { [key: string]: ArtifactSourceReference }
+  | object = {
   defaultVersionType,
   project,
   definition: definitionReferenceDefinition,
@@ -258,14 +417,16 @@ const defaultsAgentDeploymentInput: AgentDeploymentInput | object = {
 }
 
 const defaultNoApproval: ReleaseDefinitionApprovals = {
-  approvals: [{
-    rank: 1,
-    isAutomated: true,
-    isNotificationOn: false
-  }],
+  approvals: [
+    {
+      rank: 1,
+      isAutomated: true,
+      isNotificationOn: false,
+    },
+  ],
   approvalOptions: {
-    releaseCreatorCanBeApprover: false
-  }
+    releaseCreatorCanBeApprover: false,
+  },
 }
 
 const defaultsApproval: ReleaseDefinitionApprovals | object = {
@@ -288,4 +449,3 @@ const defaultsApprovalOptions: ApprovalOptions = {
 }
 
 export { defaultsReleaseDefinition }
-

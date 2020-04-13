@@ -5,4 +5,3 @@ const initializeLogging = (logLevel?: string) => {
 }
 
 export { initializeLogging, log }
-

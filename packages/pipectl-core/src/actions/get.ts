@@ -8,13 +8,15 @@ import { stringifyGetArguments } from './util'
 
 export default async (args: GetArguments) => {
   log.debug(`Action get '${stringifyGetArguments(args)}'`)
-  const definitions: Definition[] = [{
-    apiVersion: currentServer().type,
-    kind: args.kind,
-    metadata: {
-      namespace: namespace(args)
+  const definitions: Definition[] = [
+    {
+      apiVersion: currentServer().type,
+      kind: args.kind,
+      metadata: {
+        namespace: namespace(args),
+      },
+      spec: {},
     },
-    spec: {}
-  }]
+  ]
   return process(definitions, Action.GET, args)
 }

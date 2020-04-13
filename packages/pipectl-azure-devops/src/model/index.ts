@@ -1,4 +1,7 @@
-import { Definition, TransformedDefinition } from '@kroonprins/pipectl-core/dist/model'
+import {
+  Definition,
+  TransformedDefinition,
+} from '@kroonprins/pipectl-core/dist/model'
 
 abstract class AzureDefinition<T> implements TransformedDefinition {
   constructor(
@@ -7,7 +10,7 @@ abstract class AzureDefinition<T> implements TransformedDefinition {
     public kind: Kind,
     public project: string,
     public spec: T
-  ) { }
+  ) {}
 
   abstract uniqueId(): string
   abstract shortName(): string
@@ -20,4 +23,3 @@ enum Kind {
 }
 
 export { AzureDefinition, Kind }
-

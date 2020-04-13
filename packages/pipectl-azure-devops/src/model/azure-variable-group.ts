@@ -1,4 +1,3 @@
-
 import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { AzureDefinition } from '.'
 
@@ -12,4 +11,3 @@ class AzureVariableGroup extends AzureDefinition<VariableGroup> {
 }
 
 export { AzureVariableGroup }
-

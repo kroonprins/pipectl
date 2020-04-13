@@ -1,10 +1,18 @@
 import { VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { filterProp } from './export'
 
-const variables = (variableGroup: VariableGroup): { [key: string]: string | undefined } => {
+const variables = (
+  variableGroup: VariableGroup
+): { [key: string]: string | undefined } => {
   return Object.entries(variableGroup.variables || {})
-    .map(([variable, value]) => { return { [variable]: value.value } })
-    .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
+    .map(([variable, value]) => {
+      return { [variable]: value.value }
+    })
+    .reduce(
+      (previousValue, currentValue) =>
+        Object.assign({}, previousValue, currentValue),
+      {}
+    )
 }
 
 const exportVariableGroup: VariableGroup | object = {
@@ -20,4 +28,3 @@ const exportVariableGroup: VariableGroup | object = {
 }
 
 export { exportVariableGroup }
-

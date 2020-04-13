@@ -21,17 +21,25 @@ interface MetaData {
 }
 
 interface DefinitionGroupItem {
-  name: string,
-  definitions: Definition[],
+  name: string
+  definitions: Definition[]
 }
 
 interface DefinitionGroup {
-  items: DefinitionGroupItem[],
+  items: DefinitionGroupItem[]
 }
 
 interface DefinitionGrouper {
-  canGroup(definition: Definition, action: Action, args: CommonArguments): boolean
-  group(definition: Definition, action: Action, args: CommonArguments): [string, string[]]
+  canGroup(
+    definition: Definition,
+    action: Action,
+    args: CommonArguments
+  ): boolean
+  group(
+    definition: Definition,
+    action: Action,
+    args: CommonArguments
+  ): [string, string[]]
 }
 
 interface UniqueId {
@@ -45,18 +53,44 @@ interface TransformedDefinition extends UniqueId {
 }
 
 interface DefinitionTransformer {
-  canTransform(definition: Definition, action: Action, args: CommonArguments): boolean
-  transform(definition: Definition, action: Action, args: CommonArguments): Promise<TransformedDefinition>
+  canTransform(
+    definition: Definition,
+    action: Action,
+    args: CommonArguments
+  ): boolean
+  transform(
+    definition: Definition,
+    action: Action,
+    args: CommonArguments
+  ): Promise<TransformedDefinition>
 }
 
 interface DefinitionFilter {
-  canFilter(transformedDefinition: TransformedDefinition, transformedDefinitions: TransformedDefinition[], action: Action, args: CommonArguments): boolean
-  filter(transformedDefinition: TransformedDefinition, transformedDefinitions: TransformedDefinition[], action: Action, args: CommonArguments): boolean
+  canFilter(
+    transformedDefinition: TransformedDefinition,
+    transformedDefinitions: TransformedDefinition[],
+    action: Action,
+    args: CommonArguments
+  ): boolean
+  filter(
+    transformedDefinition: TransformedDefinition,
+    transformedDefinitions: TransformedDefinition[],
+    action: Action,
+    args: CommonArguments
+  ): boolean
 }
 
 interface ActionProcessor {
-  canProcess(transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): boolean
-  process(transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<ProcessResult>
+  canProcess(
+    transformedDefinition: TransformedDefinition,
+    action: Action,
+    args: CommonArguments
+  ): boolean
+  process(
+    transformedDefinition: TransformedDefinition,
+    action: Action,
+    args: CommonArguments
+  ): Promise<ProcessResult>
 }
 
 class ProcessResult {
@@ -65,9 +99,30 @@ class ProcessResult {
 }
 
 interface Reporter {
-  canReport(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): boolean
-  report(processResult: ProcessResult, transformedDefinition: TransformedDefinition, action: Action, args: CommonArguments): Promise<void>
+  canReport(
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
+    action: Action,
+    args: CommonArguments
+  ): boolean
+  report(
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
+    action: Action,
+    args: CommonArguments
+  ): Promise<void>
 }
 
-export { Resource, Definition, DefinitionFilter, DefinitionGrouper, DefinitionGroup, DefinitionGroupItem, TransformedDefinition, DefinitionTransformer, ActionProcessor, ProcessResult, Reporter }
-
+export {
+  Resource,
+  Definition,
+  DefinitionFilter,
+  DefinitionGrouper,
+  DefinitionGroup,
+  DefinitionGroupItem,
+  TransformedDefinition,
+  DefinitionTransformer,
+  ActionProcessor,
+  ProcessResult,
+  Reporter,
+}

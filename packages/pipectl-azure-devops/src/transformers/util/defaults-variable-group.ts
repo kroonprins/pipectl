@@ -1,8 +1,16 @@
 import { Definition } from '@kroonprins/pipectl-core/dist/model'
-import { ProjectReference, VariableGroup, VariableGroupProjectReference, VariableValue } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
+import {
+  ProjectReference,
+  VariableGroup,
+  VariableGroupProjectReference,
+  VariableValue,
+} from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { applyDefaults } from './defaults'
 
-const variables = async (variableGroup: VariableGroup, _definition: Definition): Promise<{ [key: string]: VariableValue; }> => {
+const variables = async (
+  variableGroup: VariableGroup,
+  _definition: Definition
+): Promise<{ [key: string]: VariableValue }> => {
   return Object.entries(variableGroup.variables || {})
     .map(([variable, value]) => {
       if (value && value.hasOwnProperty('value')) {
@@ -11,26 +19,58 @@ const variables = async (variableGroup: VariableGroup, _definition: Definition):
         return { [variable]: { value: value as string } }
       }
     })
-    .reduce((previousValue, currentValue) => Object.assign({}, previousValue, currentValue), {})
+    .reduce(
+      (previousValue, currentValue) =>
+        Object.assign({}, previousValue, currentValue),
+      {}
+    )
 }
 
-const variableGroupProjectReferences = async (variableGroup: VariableGroup, definition: Definition): Promise<VariableGroupProjectReference[]> => {
+const variableGroupProjectReferences = async (
+  variableGroup: VariableGroup,
+  definition: Definition
+): Promise<VariableGroupProjectReference[]> => {
   const project = definition.metadata.namespace
-  if (variableGroup.hasOwnProperty('variableGroupProjectReferences') && variableGroup.variableGroupProjectReferences && variableGroup.variableGroupProjectReferences.length) {
+  if (
+    variableGroup.hasOwnProperty('variableGroupProjectReferences') &&
+    variableGroup.variableGroupProjectReferences &&
+    variableGroup.variableGroupProjectReferences.length
+  ) {
     return Promise.all(
-      variableGroup.variableGroupProjectReferences
-        .map(variableGroupProjectReference => applyDefaults(variableGroupProjectReference, defaultsVariableGroupProjectReference, project, variableGroup))
+      variableGroup.variableGroupProjectReferences.map(
+        (variableGroupProjectReference) =>
+          applyDefaults(
+            variableGroupProjectReference,
+            defaultsVariableGroupProjectReference,
+            project,
+            variableGroup
+          )
+      )
     )
   } else {
-    return [await applyDefaults({}, defaultsVariableGroupProjectReference, project, variableGroup)]
+    return [
+      await applyDefaults(
+        {},
+        defaultsVariableGroupProjectReference,
+        project,
+        variableGroup
+      ),
+    ]
   }
 }
 
-const name = async (_variableGroupProjectReference: VariableGroupProjectReference, _project: string, variableGroup: VariableGroup): Promise<string> => {
+const name = async (
+  _variableGroupProjectReference: VariableGroupProjectReference,
+  _project: string,
+  variableGroup: VariableGroup
+): Promise<string> => {
   return variableGroup.name!
 }
 
-const projectReference = async (_variableGroupProjectReference: VariableGroupProjectReference | undefined, project: string): Promise<ProjectReference> => {
+const projectReference = async (
+  _variableGroupProjectReference: VariableGroupProjectReference | undefined,
+  project: string
+): Promise<ProjectReference> => {
   return { name: project }
 }
 
@@ -41,10 +81,11 @@ const defaultsVariableGroup: VariableGroup | object = {
   variableGroupProjectReferences,
 }
 
-const defaultsVariableGroupProjectReference: VariableGroupProjectReference | object = {
+const defaultsVariableGroupProjectReference:
+  | VariableGroupProjectReference
+  | object = {
   name,
   projectReference,
 }
 
 export { defaultsVariableGroup }
-

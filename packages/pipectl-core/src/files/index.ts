@@ -5,13 +5,18 @@ import util from 'util'
 import { CommonArguments as Arguments } from '../actions/model'
 import { Definition } from '../model'
 import { YamlContentFileHandler, YamlExtensionFileHandler } from './files-yaml'
-import { DefinitionFile, DefinitionFileHandler, FileName, FileOptionHandler } from './model'
+import {
+  DefinitionFile,
+  DefinitionFileHandler,
+  FileName,
+  FileOptionHandler,
+} from './model'
 
 const glob = util.promisify(g)
 
 const definitionFileHandlers: DefinitionFileHandler[] = [
   new YamlExtensionFileHandler(),
-  new YamlContentFileHandler()
+  new YamlContentFileHandler(),
 ]
 
 const inputDefinitions = async (args: Arguments) => {
@@ -22,7 +27,9 @@ const inputDefinitions = async (args: Arguments) => {
 
   const definitions: Definition[] = []
   for (const fileOption of args.filename) {
-    const fileOptionHandler: FileOptionHandler = await getFileOptionHandler(fileOption)
+    const fileOptionHandler: FileOptionHandler = await getFileOptionHandler(
+      fileOption
+    )
 
     const definitionFiles = await fileOptionHandler(fileOption, args)
 
@@ -61,19 +68,31 @@ const file: FileOptionHandler = async (fileOption: string) => {
   return [{ name: new FileName(fileOption), content: buffer.toString() }]
 }
 
-const directory: FileOptionHandler = async (fileOption: string, args: Arguments) => {
-  const pattern = args.recursive ? `${fileOption}/**/*@(.yaml|.yml|.json)` : `${fileOption}/*@(.yaml|.yml|.json)`
+const directory: FileOptionHandler = async (
+  fileOption: string,
+  args: Arguments
+) => {
+  const pattern = args.recursive
+    ? `${fileOption}/**/*@(.yaml|.yml|.json)`
+    : `${fileOption}/*@(.yaml|.yml|.json)`
   const files = await glob(pattern, { nodir: true })
-  return (await Promise.all(files.map(async foundFile => file(foundFile, args)))).flat()
+  return (
+    await Promise.all(files.map(async (foundFile) => file(foundFile, args)))
+  ).flat()
 }
 
-const getDefinitionFileHandler = (definitionFile: DefinitionFile): DefinitionFileHandler => {
-  const handler = definitionFileHandlers.find(definitionFileHandler => definitionFileHandler.canHandle(definitionFile))
+const getDefinitionFileHandler = (
+  definitionFile: DefinitionFile
+): DefinitionFileHandler => {
+  const handler = definitionFileHandlers.find((definitionFileHandler) =>
+    definitionFileHandler.canHandle(definitionFile)
+  )
   if (!handler) {
-    throw new Error(`No handler found for file name[${definitionFile.name?.name}], content[${definitionFile.content}]`)
+    throw new Error(
+      `No handler found for file name[${definitionFile.name?.name}], content[${definitionFile.content}]`
+    )
   }
   return handler
 }
 
 export { inputDefinitions }
-

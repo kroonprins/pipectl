@@ -49,5 +49,14 @@ interface Config extends Resource {
   users: UserConfig[]
 }
 
-export { Config, UserConfig, User, AuthProviderConfig, AuthProvider, ContextConfig, Context, ServerConfig, Server }
-
+export {
+  Config,
+  UserConfig,
+  User,
+  AuthProviderConfig,
+  AuthProvider,
+  ContextConfig,
+  Context,
+  ServerConfig,
+  Server,
+}

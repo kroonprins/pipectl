@@ -6,10 +6,9 @@ import { Config, ContextConfig, ServerConfig, UserConfig } from './model'
 let config: Config
 
 const initialize = (configFileLocation?: string) => {
-
   const location = getConfigFileLocation(configFileLocation)
 
-  config = load((readFileSync(location)).toString()) as Config // TODO sync?
+  config = load(readFileSync(location).toString()) as Config // TODO sync?
 
   log.debug(`Loaded configuration from ${location}`)
   log.debug(` Current context ${config['current-context']}`)
@@ -25,24 +24,31 @@ const initialize = (configFileLocation?: string) => {
 }
 
 const getConfigFileLocation = (configFileLocation?: string) => {
-  return configFileLocation || process.env.PIPECONFIG || `${process.env.HOME}/.pipe/config`
+  return (
+    configFileLocation ||
+    process.env.PIPECONFIG ||
+    `${process.env.HOME}/.pipe/config`
+  )
 }
 
 const currentContext = () => {
-  return config.contexts
-    .find(context => context.name === config['current-context']) as ContextConfig // TODO error handling not found
+  return config.contexts.find(
+    (context) => context.name === config['current-context']
+  ) as ContextConfig // TODO error handling not found
 }
 
 const currentUser = () => {
   const currentUserRef = currentContext().context.user
-  return (config.users
-    .find(user => user.name === currentUserRef) as UserConfig).user// TODO error handling not found
+  return (config.users.find(
+    (user) => user.name === currentUserRef
+  ) as UserConfig).user // TODO error handling not found
 }
 
 const currentServer = () => {
   const currentServerRef = currentContext().context.server
-  return (config.servers
-    .find(server => server.name === currentServerRef) as ServerConfig).server// TODO error handling not found
+  return (config.servers.find(
+    (server) => server.name === currentServerRef
+  ) as ServerConfig).server // TODO error handling not found
 }
 
 const currentPlugins = () => {
@@ -51,5 +57,10 @@ const currentPlugins = () => {
 
 const defaultNamespace = () => currentContext().context.namespace
 
-export { initialize, currentUser, currentServer, currentPlugins, defaultNamespace }
-
+export {
+  initialize,
+  currentUser,
+  currentServer,
+  currentPlugins,
+  defaultNamespace,
+}

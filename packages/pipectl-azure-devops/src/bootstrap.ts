@@ -1,4 +1,9 @@
-import { registerActionProcessor, registerGrouper, registerReporter, registerTransformer } from '@kroonprins/pipectl-core/dist/registration'
+import {
+  registerActionProcessor,
+  registerGrouper,
+  registerReporter,
+  registerTransformer,
+} from '@kroonprins/pipectl-core/dist/registration'
 import { registerCommand } from '@kroonprins/pipectl-core/dist/util/yargs'
 import { Argv } from 'yargs'
 import test from './actions/test'
@@ -34,12 +39,12 @@ import { VariableGroupTransformer } from './transformers/variable-group-transfor
 
 export default (yargs: Argv) => {
   registerCommand(
-    yargs.command('test-azure-devops', 'todo', _yarg => undefined, test)
+    yargs.command('test-azure-devops', 'todo', (_yarg) => undefined, test)
   )
 
   registerGrouper(
     new AzureDefinitionGrouper(),
-    new ApplyAzureDefinitionGrouper(),
+    new ApplyAzureDefinitionGrouper()
   )
 
   registerTransformer(
@@ -48,7 +53,7 @@ export default (yargs: Argv) => {
     new BuildDefinitionTransformer(),
     new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
-    new ApplyReleaseDefinitionTransformer(),
+    new ApplyReleaseDefinitionTransformer()
   )
 
   registerActionProcessor(
@@ -63,7 +68,7 @@ export default (yargs: Argv) => {
     new ApplyReleaseDefinition(),
     new DeleteReleaseDefinition(),
     new GetAllReleaseDefinitions(),
-    new GetOneReleaseDefinition(),
+    new GetOneReleaseDefinition()
   )
 
   registerReporter(
@@ -75,6 +80,6 @@ export default (yargs: Argv) => {
     new GetBuildDefinitionJsonReporter(),
     new GetReleaseDefinitionReporter(),
     new GetReleaseDefinitionYamlReporter(),
-    new GetReleaseDefinitionJsonReporter(),
+    new GetReleaseDefinitionJsonReporter()
   )
 }
