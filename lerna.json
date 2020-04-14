@@ -5,8 +5,5 @@
     "version": {
       "exact": "true"
     }
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
