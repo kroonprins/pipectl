@@ -17,7 +17,7 @@
     "updates-apply": "updates -e @kroonprins/pipectl-core,@kroonprins/pipectl-azure-devops -u"
   },
   "devDependencies": {
-    "updates": "^10.2.7"
+    "updates": "10.2.7"
   },
   "dependencies": {
     "@kroonprins/pipectl-core": "0.0.1",
