@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@kroonprins/pipectl-core": "0.0.1",
-    "@kroonprins/pipectl-azure-devops": "0.0.1"
+    "@kroonprins/pipectl-azure-devops": "0.0.1",
+    "yargs": "15.3.1"
   },
   "publishConfig": {
     "access": "public"
