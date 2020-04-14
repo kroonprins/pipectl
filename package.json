@@ -13,7 +13,8 @@
     "prettier": "prettier --list-different '**/*.{ts,js,mjs,json,yaml,md}'",
     "prettier-fix": "prettier --write '**/*.{ts,js,mjs,json,yaml,md}'",
     "updates": "updates && lerna run updates",
-    "updates-apply": "updates -u && lerna run updates-apply"
+    "updates-apply": "updates -u && lerna run updates-apply",
+    "release": "lerna publish"
   },
   "devDependencies": {
     "@types/node": "13.11.1",
