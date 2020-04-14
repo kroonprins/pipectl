@@ -4,6 +4,7 @@ import g from 'glob'
 import util from 'util'
 import { CommonArguments as Arguments } from '../actions/model'
 import { Definition } from '../model'
+import { JsonContentFileHandler, JsonExtensionFileHandler } from './files-json'
 import { YamlContentFileHandler, YamlExtensionFileHandler } from './files-yaml'
 import {
   DefinitionFile,
@@ -16,7 +17,9 @@ const glob = util.promisify(g)
 
 const definitionFileHandlers: DefinitionFileHandler[] = [
   new YamlExtensionFileHandler(),
+  new JsonExtensionFileHandler(),
   new YamlContentFileHandler(),
+  new JsonContentFileHandler(),
 ]
 
 const inputDefinitions = async (args: Arguments) => {
