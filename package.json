@@ -10,7 +10,7 @@
     "lint-fix": "tslint --fix 'src/**/*.ts'"
   },
   "devDependencies": {
-    "@types/node": "^13.7.7",
+    "@types/node": "^13.11.1",
     "ts-node": "^8.6.2",
     "tslint": "^6.0.0",
     "typescript": "^3.8.3"
