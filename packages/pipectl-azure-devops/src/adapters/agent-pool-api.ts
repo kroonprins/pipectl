@@ -1,4 +1,4 @@
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { ITaskAgentApi } from 'azure-devops-node-api/TaskAgentApi'
 import memoize from 'p-memoize'
 import { azureConnection } from './connection'

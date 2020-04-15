@@ -1,12 +1,9 @@
-import {
-  Action,
-  GetArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
+import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
   TransformedDefinition,
-} from '@kroonprins/pipectl-core/dist/model'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+} from '@kroonprins/pipectl/dist/model'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { buildApi } from '../adapters/build-api'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'

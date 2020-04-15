@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "ts-node packages/pipectl/src/index.ts",
+    "start": "packages/pipectl/dist/index.js",
     "build": "lerna run --parallel build",
     "postinstall": "lerna bootstrap",
     "lint": "run-s tslint prettier",

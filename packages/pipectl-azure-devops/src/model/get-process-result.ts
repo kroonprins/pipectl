@@ -1,4 +1,4 @@
-import { ProcessResult } from '@kroonprins/pipectl-core/dist/model'
+import { ProcessResult } from '@kroonprins/pipectl/dist/model'
 
 class GetProcessResult<T> extends ProcessResult {
   constructor(public results?: T[]) {

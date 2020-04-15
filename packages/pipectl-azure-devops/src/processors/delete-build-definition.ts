@@ -1,13 +1,10 @@
-import {
-  Action,
-  ApplyArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
+import { Action, ApplyArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
   ProcessResult,
   TransformedDefinition,
-} from '@kroonprins/pipectl-core/dist/model'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+} from '@kroonprins/pipectl/dist/model'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { buildApi } from '../adapters/build-api'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 

@@ -1,4 +1,4 @@
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import { IReleaseApi } from 'azure-devops-node-api/ReleaseApi'
 import { azureConnection } from './connection'

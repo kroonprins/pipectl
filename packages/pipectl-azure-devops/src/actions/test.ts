@@ -1,4 +1,4 @@
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { azureConnection } from '../adapters/connection'
 
 export default async () => {

@@ -1,13 +1,10 @@
-import {
-  Action,
-  GetArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
+import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ProcessResult,
   Reporter,
   TransformedDefinition,
-} from '@kroonprins/pipectl-core/dist/model'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+} from '@kroonprins/pipectl/dist/model'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { safeDump } from 'js-yaml'
 import { ReportingTransformationResult } from './model'
 
