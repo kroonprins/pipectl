@@ -9,34 +9,18 @@
       "type": "node",
       "request": "launch",
       "args": [
-        "${workspaceRoot}/src/index.ts",
-        "apply",
-        "-f",
-        "helmfile/result.yaml",
-        "--dry-run",
+        "${workspaceRoot}/packages/pipectl/dist/index.js",
+        "get",
+        "VariableGroup",
         "--log-level",
-        "debug"
+        "debug",
+        "--pipeconfig",
+        "./config/config.yaml"
       ],
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "runtimeArgs": ["--nolazy"],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
-      "env": {
-        "AZCONFIG": "./config/config.yaml"
-      }
-    },
-    {
-      "name": "Test",
-      "type": "node",
-      "request": "launch",
-      "args": ["${workspaceRoot}/src/index.ts", "test", "--log-level", "debug"],
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-      "sourceMaps": true,
-      "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
-      "env": {
-        "AZCONFIG": "./config/config.yaml"
-      }
+      "protocol": "inspector"
     }
   ]
 }

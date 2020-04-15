@@ -22,4 +22,3 @@
 - remove some duplication in azure devops reporters, transformers, etc
 
 - check if yarn workspaces can be alternative for lerna
-- use renovate/dependabot instead of updates
