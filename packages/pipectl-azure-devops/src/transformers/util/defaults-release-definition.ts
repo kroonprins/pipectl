@@ -1,4 +1,4 @@
-import { Definition } from '@kroonprins/pipectl-core/dist/model'
+import { Definition } from '@kroonprins/pipectl/dist/model'
 import {
   AgentBasedDeployPhase,
   AgentDeploymentInput,

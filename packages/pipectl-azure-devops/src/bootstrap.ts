@@ -3,8 +3,8 @@ import {
   registerGrouper,
   registerReporter,
   registerTransformer,
-} from '@kroonprins/pipectl-core/dist/registration'
-import { registerCommand } from '@kroonprins/pipectl-core/dist/util/yargs'
+} from '@kroonprins/pipectl/dist/registration'
+import { registerCommand } from '@kroonprins/pipectl/dist/util/yargs'
 import { Argv } from 'yargs'
 import test from './actions/test'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'

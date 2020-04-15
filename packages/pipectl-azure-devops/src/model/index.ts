@@ -1,7 +1,7 @@
 import {
   Definition,
   TransformedDefinition,
-} from '@kroonprins/pipectl-core/dist/model'
+} from '@kroonprins/pipectl/dist/model'
 
 abstract class AzureDefinition<T> implements TransformedDefinition {
   constructor(

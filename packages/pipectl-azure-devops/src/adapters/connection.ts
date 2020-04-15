@@ -1,8 +1,5 @@
-import {
-  currentServer,
-  currentUser,
-} from '@kroonprins/pipectl-core/dist/config'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+import { currentServer, currentUser } from '@kroonprins/pipectl/dist/config'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import {
   getBasicHandler,
   getBearerHandler,

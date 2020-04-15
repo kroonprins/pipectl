@@ -1,7 +1,4 @@
-import {
-  Action,
-  GetArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
+import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
 import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
 import { GetReporterJson } from './get-reporter-json'

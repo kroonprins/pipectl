@@ -1,18 +1,9 @@
 #!/usr/bin/env node
 
-import {
-  bootstrapCore,
-  BootstrapFunction,
-} from '@kroonprins/pipectl-core/dist/bootstrap'
-import {
-  currentPlugins,
-  initialize as initializeConfig,
-} from '@kroonprins/pipectl-core/dist/config'
-import {
-  initializeLogging,
-  log,
-} from '@kroonprins/pipectl-core/dist/util/logging'
 import yargs from 'yargs'
+import { bootstrapCore, BootstrapFunction } from './bootstrap'
+import { currentPlugins, initialize as initializeConfig } from './config'
+import { initializeLogging, log } from './util/logging'
 
 const main = async () => {
   try {

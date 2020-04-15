@@ -4,23 +4,26 @@
   "description": "pipectl plugin for Azure DevOps",
   "scripts": {
     "build": "tsc",
-    "updates": "updates -e @kroonprins/pipectl-core",
-    "updates-apply": "updates -e @kroonprins/pipectl-core -u"
+    "updates": "updates -e @kroonprins/pipectl",
+    "updates-apply": "updates -e @kroonprins/pipectl -u"
   },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "updates": "10.2.7"
+    "updates": "10.2.7",
+    "@kroonprins/pipectl": "0.0.1"
   },
   "dependencies": {
-    "@kroonprins/pipectl-core": "0.0.1",
     "azure-devops-node-api": "10.1.1",
     "p-memoize": "4.0.0",
     "@types/js-yaml": "3.12.3",
     "js-yaml": "3.13.1",
     "yargs": "15.3.1"
+  },
+  "peerDependencies": {
+    "@kroonprins/pipectl": "*"
   },
   "publishConfig": {
     "access": "public"

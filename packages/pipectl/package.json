@@ -11,17 +11,24 @@
     "dist/**/*.d.ts"
   ],
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "dist/index.js",
     "build": "tsc",
-    "updates": "updates -e @kroonprins/pipectl-core,@kroonprins/pipectl-azure-devops",
-    "updates-apply": "updates -e @kroonprins/pipectl-core,@kroonprins/pipectl-azure-devops -u"
+    "updates": "updates -e @kroonprins/pipectl-azure-devops",
+    "updates-apply": "updates -e @kroonprins/pipectl-azure-devops -u"
   },
   "devDependencies": {
-    "updates": "10.2.7"
+    "updates": "10.2.7",
+    "@kroonprins/pipectl-azure-devops": "0.0.1"
   },
   "dependencies": {
-    "@kroonprins/pipectl-core": "0.0.1",
-    "@kroonprins/pipectl-azure-devops": "0.0.1",
+    "@types/js-yaml": "3.12.3",
+    "@types/parse-json": "4.0.0",
+    "get-stdin": "7.0.0",
+    "glob": "7.1.6",
+    "js-yaml": "3.13.1",
+    "loglevel": "1.6.8",
+    "parse-json": "5.0.0",
+    "strip-json-comments": "3.1.0",
     "yargs": "15.3.1"
   },
   "publishConfig": {

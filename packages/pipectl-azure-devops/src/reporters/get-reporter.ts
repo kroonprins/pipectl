@@ -1,12 +1,6 @@
-import {
-  Action,
-  GetArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
-import {
-  Reporter,
-  TransformedDefinition,
-} from '@kroonprins/pipectl-core/dist/model'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
+import { Reporter, TransformedDefinition } from '@kroonprins/pipectl/dist/model'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { GetProcessResult } from '../model/get-process-result'
 
 abstract class GetReporter<

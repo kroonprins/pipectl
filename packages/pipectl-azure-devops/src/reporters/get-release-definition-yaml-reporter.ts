@@ -1,7 +1,4 @@
-import {
-  Action,
-  GetArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
+import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
 import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 import { GetReporterYaml } from './get-reporter-yaml'

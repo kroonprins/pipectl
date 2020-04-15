@@ -18,14 +18,6 @@
 - logs command
 - in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
 
-- check if pipectl-azure-devops can be removed from package.json of pipectl, different options would be:
-
-  - install the plugin globally and the ctl globally with npm in -g
-  - with npx for a local package.json containing the plugin and the ctl in the dependencies
-  - with one-off npx if the plugin is installed globally?
-
-  but it seems problematic... pipectl and pipectl-azure-devops need to use the pipectl-core; peerDependencies seem to be made for this, but this has multiple issues: lerna does not update peer dependencies + it means that pipectl-core must be installed explicitly. The last problem could be worked around by merging pipectl and pipectl-core, and have it as a peerDependency for pipectl-azure-devops, but this brings a circular dependency
-
 - register stuff via annotations?
 - remove some duplication in azure devops reporters, transformers, etc
 

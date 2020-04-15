@@ -1,12 +1,9 @@
-import {
-  Action,
-  CommonArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
+import { Action, CommonArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   Definition,
   DefinitionTransformer,
-} from '@kroonprins/pipectl-core/dist/model'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+} from '@kroonprins/pipectl/dist/model'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { Kind } from '../model'
 import { AzureBuildDefinition } from '../model/azure-build-definition'

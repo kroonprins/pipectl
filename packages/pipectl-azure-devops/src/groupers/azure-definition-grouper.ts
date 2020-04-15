@@ -1,12 +1,6 @@
-import {
-  Action,
-  CommonArguments,
-} from '@kroonprins/pipectl-core/dist/actions/model'
-import {
-  Definition,
-  DefinitionGrouper,
-} from '@kroonprins/pipectl-core/dist/model'
-import { log } from '@kroonprins/pipectl-core/dist/util/logging'
+import { Action, CommonArguments } from '@kroonprins/pipectl/dist/actions/model'
+import { Definition, DefinitionGrouper } from '@kroonprins/pipectl/dist/model'
+import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { API_VERSION, isAzureDevOps } from '../util'
 
 class AzureDefinitionGrouper implements DefinitionGrouper {
