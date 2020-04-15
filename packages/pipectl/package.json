@@ -1,6 +1,6 @@
 {
   "name": "@kroonprins/pipectl",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.0",
   "description": "",
   "main": "./dist/index.js",
   "bin": {
@@ -17,8 +17,8 @@
     "updates-apply": "updates -e @kroonprins/pipectl-azure-devops -u"
   },
   "devDependencies": {
-    "updates": "10.2.7",
-    "@kroonprins/pipectl-azure-devops": "0.0.1"
+    "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.0",
+    "updates": "10.2.7"
   },
   "dependencies": {
     "@types/js-yaml": "3.12.3",
