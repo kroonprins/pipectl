@@ -12,7 +12,7 @@ const applyExport = async <T>(
     let updatedValue: any
     if (value instanceof Function) {
       updatedValue = await value(source, key, ...extraFunctionArgs)
-      if (!empty(updatedValue)) {
+      if (!isEmpty(updatedValue)) {
         result[key] = updatedValue
       } else {
         delete result[key]
@@ -38,10 +38,10 @@ const applyExportOnArray = async <T>(
         applyExport(item, descriptor, ...extraFunctionArgs)
       )
     )
-  ).filter((item) => !empty(item))
+  ).filter((item) => !isEmpty(item))
 }
 
-const empty = (value: any): boolean => {
+const isEmpty = (value: any): boolean => {
   return (
     value === undefined ||
     value === null ||
@@ -54,8 +54,49 @@ const filterProp = () => {
   return undefined
 }
 
-const filterIfEmpty = (source: any, key: string) => {
+const filterIfEmpty = <T, K extends keyof T>(source: T, key: K) => {
   return source[key]
 }
 
-export { applyExport, applyExportOnArray, filterProp, filterIfEmpty }
+const object = <T extends { [key: string]: U }, U, V extends keyof T>(
+  descriptor: U | object
+): ((
+  source: T | undefined,
+  key: V,
+  ...extraFunctionArgs: any[]
+) => Promise<U>) => (
+  source: T | undefined,
+  key: V,
+  ...extraFunctionArgs: any[]
+) =>
+  applyExport(
+    source ? source[key] : undefined,
+    descriptor,
+    ...extraFunctionArgs
+  )
+
+const array = <T extends { [key: string]: U[] }, U, V extends keyof T>(
+  descriptor: U | object
+): ((
+  source: T | undefined,
+  key: V,
+  ...extraFunctionArgs: any[]
+) => Promise<U[]>) => (
+  source: T | undefined,
+  key: V,
+  ...extraFunctionArgs: any[]
+) =>
+  applyExportOnArray(
+    source ? source[key] : undefined,
+    descriptor,
+    ...extraFunctionArgs
+  )
+
+export {
+  applyExport,
+  applyExportOnArray,
+  filterProp,
+  filterIfEmpty,
+  object,
+  array,
+}
