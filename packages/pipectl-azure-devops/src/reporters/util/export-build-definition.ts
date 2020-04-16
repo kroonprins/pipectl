@@ -1,13 +1,9 @@
 import {
-  AgentPoolQueue,
   AgentPoolQueueTarget,
-  AgentTargetExecutionOptions,
   BuildAuthorizationScope,
   BuildDefinition,
-  BuildDefinitionStep,
   BuildDefinitionVariable,
   BuildProcess,
-  BuildRepository,
   BuildTrigger,
   ContinuousIntegrationTrigger,
   DefinitionQuality,
@@ -16,16 +12,10 @@ import {
   DesignerProcess,
   Phase,
   PhaseTarget,
-  Schedule,
   ScheduleDays,
   ScheduleTrigger,
 } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import {
-  applyExport,
-  applyExportOnArray,
-  filterIfEmpty,
-  filterProp,
-} from './export'
+import { applyExport, array, filterIfEmpty, filterProp, object } from './export'
 
 const process = async (
   buildDefinition: BuildDefinition
@@ -42,9 +32,6 @@ const process = async (
   return commonExportApplied
 }
 
-const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> =>
-  applyExportOnArray(designerProcess.phases, exportDesignerProcessPhase)
-
 const phaseTarget = async (phase: Phase): Promise<PhaseTarget> => {
   const target = await applyExport(
     phase.target,
@@ -59,31 +46,6 @@ const phaseTarget = async (phase: Phase): Promise<PhaseTarget> => {
   return target
 }
 
-const designerProcessPhaseAgentPoolQueueTargetExecutionOptions = async (
-  agentPoolQueueTarget: AgentPoolQueueTarget
-): Promise<AgentTargetExecutionOptions> =>
-  applyExport(
-    agentPoolQueueTarget.executionOptions,
-    exportDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions
-  )
-
-const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> =>
-  applyExportOnArray(phase.steps, exportDesignerProcessStep)
-
-const queue = async (
-  buildDefinition: BuildDefinition
-): Promise<AgentPoolQueue> => applyExport(buildDefinition.queue, exportQueue)
-
-const repository = async (
-  buildDefinition: BuildDefinition
-): Promise<BuildRepository> =>
-  applyExport(buildDefinition.repository, exportBuildRepository)
-
-const buildRepositoryProperties = async (
-  buildRepository: BuildRepository
-): Promise<{ [key: string]: string } | undefined> =>
-  applyExport(buildRepository.properties, exportBuildRepositoryProperties)
-
 const triggers = async (
   buildDefinition: BuildDefinition
 ): Promise<BuildTrigger[]> =>
@@ -97,11 +59,6 @@ const triggers = async (
       return Object.assign({}, trigger)
     })
   )
-
-const schedules = async (
-  scheduleTrigger: ScheduleTrigger
-): Promise<Schedule[]> =>
-  applyExportOnArray(scheduleTrigger.schedules, exportSchedule)
 
 const variableGroups = async (
   buildDefinition: BuildDefinition
@@ -151,9 +108,32 @@ const exportBuildDefinition: BuildDefinition | object = {
   process,
   project: filterProp,
   properties: filterIfEmpty,
-  queue,
+  queue: object({
+    _links: filterProp,
+    id: filterProp,
+    url: filterProp,
+    pool: filterProp,
+  }),
   queueStatus: filterProp,
-  repository,
+  repository: object({
+    type: 'TfsGit',
+    defaultBranch: 'refs/heads/master',
+    clean: 'true',
+    checkoutSubmodules: false,
+    properties: object({
+      id: filterProp,
+      cleanOptions: '3',
+      labelSources: '0',
+      labelSourcesFormat: '$(build.buildNumber)',
+      reportBuildStatus: 'true',
+      gitLfsSupport: 'false',
+      skipSyncSource: 'false',
+      checkoutNestedSubmodules: 'false',
+      fetchDepth: '0',
+    }),
+    url: filterProp,
+    name: filterProp, // TODO not if repo can be given by name, then replace this by id
+  }),
   revision: filterProp,
   tags: filterIfEmpty,
   triggers,
@@ -171,21 +151,19 @@ const exportContinuousIntegrationTrigger: ContinuousIntegrationTrigger = {
 }
 
 const exportScheduleTrigger: ScheduleTrigger | object = {
-  schedules,
-}
-
-const exportSchedule: Schedule = {
-  scheduleOnlyWithChanges: true,
-  branchFilters: ['+refs/heads/master'], // TODO array
-  daysToBuild:
-    ScheduleDays.Monday +
-    ScheduleDays.Tuesday +
-    ScheduleDays.Wednesday +
-    ScheduleDays.Thursday +
-    ScheduleDays.Friday,
-  startHours: 0,
-  startMinutes: 0,
-  timeZoneId: 'UTC',
+  schedules: array({
+    scheduleOnlyWithChanges: true,
+    branchFilters: ['+refs/heads/master'], // TODO array
+    daysToBuild:
+      ScheduleDays.Monday +
+      ScheduleDays.Tuesday +
+      ScheduleDays.Wednesday +
+      ScheduleDays.Thursday +
+      ScheduleDays.Friday,
+    startHours: 0,
+    startMinutes: 0,
+    timeZoneId: 'UTC',
+  }),
 }
 
 const exportProcess: BuildProcess = {
@@ -193,15 +171,19 @@ const exportProcess: BuildProcess = {
 }
 
 const exportDesignerProcess: DesignerProcess | object = {
-  phases,
-}
-
-const exportDesignerProcessPhase: Phase | object = {
-  refName: filterProp,
-  jobAuthorizationScope: 'projectCollection', // BuildAuthorizationScope.ProjectCollection, (appears to be bug in API that this comes back as a string)
-  jobCancelTimeoutInMinutes: 0,
-  target: phaseTarget,
-  steps: phaseSteps,
+  phases: array({
+    refName: filterProp,
+    jobAuthorizationScope: 'projectCollection', // BuildAuthorizationScope.ProjectCollection, (appears to be bug in API that this comes back as a string)
+    jobCancelTimeoutInMinutes: 0,
+    target: phaseTarget,
+    steps: array({
+      environment: filterIfEmpty,
+      enabled: true,
+      continueOnError: false,
+      alwaysRun: false,
+      timeoutInMinutes: 0,
+    }),
+  }),
 }
 
 const exportDesignerProcessPhaseTarget: PhaseTarget = {
@@ -211,50 +193,11 @@ const exportDesignerProcessPhaseTarget: PhaseTarget = {
 const exportDesignerProcessPhaseAgentPoolQueueTarget:
   | AgentPoolQueueTarget
   | object = {
-  executionOptions: designerProcessPhaseAgentPoolQueueTargetExecutionOptions,
+  executionOptions: object({
+    type: 0, // no parallelism
+  }),
   allowScriptsAuthAccessOption: true,
   type: filterProp,
-}
-
-const exportDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions: AgentTargetExecutionOptions = {
-  type: 0, // no parallelism
-}
-
-const exportDesignerProcessStep: BuildDefinitionStep | object = {
-  environment: filterIfEmpty,
-  enabled: true,
-  continueOnError: false,
-  alwaysRun: false,
-  timeoutInMinutes: 0,
-}
-
-const exportQueue: AgentPoolQueue | object = {
-  _links: filterProp,
-  id: filterProp,
-  url: filterProp,
-  pool: filterProp,
-}
-
-const exportBuildRepository: BuildRepository | object = {
-  type: 'TfsGit',
-  defaultBranch: 'refs/heads/master',
-  clean: 'true',
-  checkoutSubmodules: false,
-  properties: buildRepositoryProperties,
-  url: filterProp,
-  name: filterProp, // TODO not if repo can be given by name, then replace this by id
-}
-
-const exportBuildRepositoryProperties: { [key: string]: string } | object = {
-  id: filterProp,
-  cleanOptions: '3',
-  labelSources: '0',
-  labelSourcesFormat: '$(build.buildNumber)',
-  reportBuildStatus: 'true',
-  gitLfsSupport: 'false',
-  skipSyncSource: 'false',
-  checkoutNestedSubmodules: 'false',
-  fetchDepth: '0',
 }
 
 const exportVariable: BuildDefinitionVariable = {
