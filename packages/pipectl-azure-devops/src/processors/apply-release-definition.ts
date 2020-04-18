@@ -5,6 +5,7 @@ import {
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
+import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import { releaseApi } from '../adapters/release-api'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
 
@@ -30,12 +31,21 @@ class ApplyReleaseDefinition implements ActionProcessor {
     )
     const releaseDefinition = azureReleaseDefinition.spec
     const project = azureReleaseDefinition.project
+    const id = releaseDefinition.id
 
-    const existingReleaseDefinition = await releaseApi.findReleaseDefinitionByNameAndPath(
-      releaseDefinition.name!,
-      releaseDefinition.path!,
-      project
-    )
+    let existingReleaseDefinition: ReleaseDefinition | null
+    if (id) {
+      existingReleaseDefinition = await releaseApi.findReleaseDefinitionById(
+        id,
+        project
+      )
+    } else {
+      existingReleaseDefinition = await releaseApi.findReleaseDefinitionByNameAndPath(
+        releaseDefinition.name!,
+        releaseDefinition.path!,
+        project
+      )
+    }
     if (existingReleaseDefinition) {
       releaseDefinition.id = existingReleaseDefinition.id
       releaseDefinition.revision = existingReleaseDefinition.revision

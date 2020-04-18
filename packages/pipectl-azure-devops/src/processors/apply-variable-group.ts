@@ -7,6 +7,7 @@ import {
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { variableGroupApi } from '../adapters/variable-group-api'
 import { AzureVariableGroup } from '../model/azure-variable-group'
+import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 
 class ApplyVariableGroup implements ActionProcessor {
   canProcess(
@@ -28,11 +29,20 @@ class ApplyVariableGroup implements ActionProcessor {
     log.debug(`[ApplyVariableGroup] ${JSON.stringify(azureVariableGroup)}`)
     const variableGroup = azureVariableGroup.spec
     const project = azureVariableGroup.project
+    const id = variableGroup.id
 
-    const existingVariableGroup = await variableGroupApi.findVariableGroupByName(
-      variableGroup.name!,
-      project
-    )
+    let existingVariableGroup: VariableGroup | null
+    if (id) {
+      existingVariableGroup = await variableGroupApi.findVariableGroupById(
+        id,
+        project
+      )
+    } else {
+      existingVariableGroup = await variableGroupApi.findVariableGroupByName(
+        variableGroup.name!,
+        project
+      )
+    }
     if (existingVariableGroup) {
       variableGroup.id = existingVariableGroup.id
       if (args.dryRun) {
