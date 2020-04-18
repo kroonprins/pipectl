@@ -1,4 +1,3 @@
-
 import { filterProp } from './export'
 import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 
