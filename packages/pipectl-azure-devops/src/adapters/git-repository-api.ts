@@ -1,6 +1,7 @@
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { GitApi } from 'azure-devops-node-api/GitApi'
 import { GitRepository } from 'azure-devops-node-api/interfaces/GitInterfaces'
+import memoize from 'p-memoize'
 import { azureConnection } from './connection'
 
 class GitRepositoryApi {
@@ -13,6 +14,26 @@ class GitRepositoryApi {
       log.debug('Initialized GitRepositoryApi')
     }
     return this._gitApi
+  }
+
+  findGitRepositoryIdByName = memoize(this._findGitRepositoryIdByName, {
+    cacheKey: JSON.stringify,
+  })
+
+  private async _findGitRepositoryIdByName(
+    name: string,
+    project: string
+  ): Promise<string> {
+    log.debug(
+      `[GitRepositoryApi._findGitRepositoryIdByName] name[${name}], project[${project}]`
+    )
+    const search = await this.findGitRepositoryByName(name, project)
+    if (search) {
+      return search.id!
+    }
+    throw new Error(
+      `Git repository with name ${name} not found in project ${project}. It either doesn't exist or you do not have the required access for it.`
+    )
   }
 
   async findGitRepositoryByName(

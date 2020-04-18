@@ -23,7 +23,7 @@ spec:
       agentSpecification:
         identifier: ubuntu-18.04
   repository:
-    id: b7c02e89-d596-44ee-86b2-b502324c1938
+    name: My Git Repository
   queue:
     name: Azure Pipelines
   variables:
