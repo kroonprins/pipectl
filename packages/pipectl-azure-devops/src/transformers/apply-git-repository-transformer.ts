@@ -1,14 +1,14 @@
 import { Action, CommonArguments } from '@kroonprins/pipectl/dist/actions/model'
 import { Definition } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
-import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
+import { GitRepository } from 'azure-devops-node-api/interfaces/GitInterfaces'
 import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
+import { GitRepositoryTransformer } from './git-repository-transformer'
 import { applyDefaults } from './util/defaults'
-import { defaultsVariableGroup } from './util/defaults-variable-group'
-import { VariableGroupTransformer } from './variable-group-transformer'
+import { defaultsGitRepository } from './util/defaults-git-repository'
 
-class ApplyVariableGroupTransformer extends VariableGroupTransformer {
+class ApplyGitRepositoryTransformer extends GitRepositoryTransformer {
   canTransform(
     definition: Definition,
     action: Action,
@@ -16,26 +16,26 @@ class ApplyVariableGroupTransformer extends VariableGroupTransformer {
   ): boolean {
     return (
       isAzureDevOps(definition.apiVersion) &&
-      definition.kind === Kind.VARIABLE_GROUP &&
+      definition.kind === Kind.GIT_REPOSITORY &&
       action === Action.APPLY
     )
   }
 
-  protected async setVariableGroupDefaults(
+  protected async setGitRepositoryDefaults(
     definition: Definition
-  ): Promise<VariableGroup> {
+  ): Promise<GitRepository> {
     log.debug(
-      `[ApplyVariableGroupTransformer.setVariableGroupDefaults] before[${JSON.stringify(
+      `[ApplyGitRepositoryTransformer.setGitRepositoryDefaults] before[${JSON.stringify(
         definition
       )}]`
     )
     const updatedSpec = await applyDefaults(
-      await super.setVariableGroupDefaults(definition),
-      defaultsVariableGroup,
+      await super.setGitRepositoryDefaults(definition),
+      defaultsGitRepository,
       definition
     )
     log.debug(
-      `[ApplyVariableGroupTransformer.setVariableGroupDefaults] after[${JSON.stringify(
+      `[ApplyGitRepositoryTransformer.setGitRepositoryDefaults] after[${JSON.stringify(
         updatedSpec
       )}]`
     )
@@ -44,4 +44,4 @@ class ApplyVariableGroupTransformer extends VariableGroupTransformer {
   }
 }
 
-export { ApplyVariableGroupTransformer }
+export { ApplyGitRepositoryTransformer }

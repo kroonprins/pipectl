@@ -20,6 +20,7 @@ enum Kind {
   BUILD_DEFINITION = 'BuildDefinition',
   RELEASE_DEFINITION = 'ReleaseDefinition',
   VARIABLE_GROUP = 'VariableGroup',
+  GIT_REPOSITORY = 'GitRepository',
 }
 
 export { AzureDefinition, Kind }
