@@ -6,7 +6,6 @@
   - task group by name
   - subscription by name
   - approver by name
-  - git repo by name
 - handle -f option on get
 - handle remote file for -f
 - clear error message when definition file can't be parsed if file has no extension (stdin)

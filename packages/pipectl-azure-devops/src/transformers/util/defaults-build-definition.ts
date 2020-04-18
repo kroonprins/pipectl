@@ -27,6 +27,7 @@ import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInter
 import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { coreApi } from '../../adapters/core-api'
+import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
@@ -133,12 +134,22 @@ const queue = async (
 
 const repository = async (
   buildDefinition: BuildDefinition,
-  _definition: Definition
+  definition: Definition
 ): Promise<BuildRepository> => {
-  return applyDefaults(
+  const defaultsApplied = await applyDefaults(
     buildDefinition.repository || {},
     defaultsBuildRepository
   )
+  if (
+    !defaultsApplied.hasOwnProperty('id') &&
+    defaultsApplied.hasOwnProperty('name')
+  ) {
+    defaultsApplied.id = await gitRepositoryApi.findGitRepositoryIdByName(
+      defaultsApplied.name!,
+      (await project(buildDefinition, definition)).id!
+    )
+  }
+  return defaultsApplied
 }
 
 const buildRepositoryProperties = async (

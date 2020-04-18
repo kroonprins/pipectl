@@ -132,7 +132,7 @@ const exportBuildDefinition: BuildDefinition | object = {
       fetchDepth: '0',
     }),
     url: filterProp,
-    name: filterProp, // TODO not if repo can be given by name, then replace this by id
+    id: filterProp,
   }),
   revision: filterProp,
   tags: filterIfEmpty,
