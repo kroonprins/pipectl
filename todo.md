@@ -23,4 +23,4 @@
 
 - check if yarn workspaces can be alternative for lerna
 
-- allow id in definition in case rename/move is needed
+- proper column printing instead of \t (related to -o wide)

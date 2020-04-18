@@ -1,5 +1,6 @@
-import { VariableGroup } from 'azure-devops-node-api/interfaces/BuildInterfaces'
+
 import { filterProp } from './export'
+import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 
 const variables = (
   variableGroup: VariableGroup

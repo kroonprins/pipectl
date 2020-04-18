@@ -1,0 +1,4 @@
+apiVersion: azure-devops
+kind: GitRepository
+spec:
+  name: My Git Repository

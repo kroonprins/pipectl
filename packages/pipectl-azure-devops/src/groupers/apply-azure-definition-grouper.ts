@@ -5,12 +5,26 @@ import { Kind } from '../model'
 import { isAzureDevOps } from '../util'
 
 class ApplyAzureDefinitionGrouper implements DefinitionGrouper {
+  private static mapping: Map<string, string> = new Map([
+    [Kind.GIT_REPOSITORY, 'AzureDevOps_0'],
+    [Kind.VARIABLE_GROUP, 'AzureDevOps_0'],
+    [Kind.BUILD_DEFINITION, 'AzureDevOps_1'],
+    [Kind.RELEASE_DEFINITION, 'AzureDevOps_2'],
+  ])
+  private static groups = [
+    ...new Set(ApplyAzureDefinitionGrouper.mapping.values()),
+  ].sort()
+
   canGroup(
     definition: Definition,
     action: Action,
     _args: CommonArguments
   ): boolean {
-    return isAzureDevOps(definition.apiVersion) && action === Action.APPLY
+    return (
+      isAzureDevOps(definition.apiVersion) &&
+      action === Action.APPLY &&
+      !!ApplyAzureDefinitionGrouper.mapping.get(definition.kind)
+    )
   }
   group(
     definition: Definition,
@@ -19,8 +33,8 @@ class ApplyAzureDefinitionGrouper implements DefinitionGrouper {
   ): [string, string[]] {
     log.debug(`[ApplyAzureDefinitionGrouper] ${definition.kind}`)
     return [
-      definition.kind,
-      [Kind.VARIABLE_GROUP, Kind.BUILD_DEFINITION, Kind.RELEASE_DEFINITION],
+      ApplyAzureDefinitionGrouper.mapping.get(definition.kind)!,
+      ApplyAzureDefinitionGrouper.groups,
     ]
   }
 }
