@@ -23,3 +23,4 @@
 - check if yarn workspaces can be alternative for lerna
 
 - proper column printing instead of \t (related to -o wide)
+- extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)

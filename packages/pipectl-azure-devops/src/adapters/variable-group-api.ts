@@ -3,6 +3,7 @@ import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfa
 import { ITaskAgentApi } from 'azure-devops-node-api/TaskAgentApi'
 import memoize from 'p-memoize'
 import { azureConnection } from './connection'
+import { coreApi } from './core-api'
 
 class VariableGroupApi {
   private _taskAgentApi: ITaskAgentApi | null = null
@@ -99,7 +100,9 @@ class VariableGroupApi {
       `[VariableGroupApi.deleteVariableGroup] id[${id}], project[${project}]`
     )
     const api = await this.getApi()
-    return api.deleteVariableGroup(id, [project])
+    return api.deleteVariableGroup(id, [
+      await coreApi.findProjectIdByName(project),
+    ])
   }
 }
 
