@@ -22,3 +22,5 @@
 - remove some duplication in azure devops reporters, transformers, etc
 
 - check if yarn workspaces can be alternative for lerna
+
+- allow id in definition in case rename/move is needed
