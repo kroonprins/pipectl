@@ -11,6 +11,7 @@ const exportGitRepository: GitRepository | object = {
   webUrl: filterProp,
   size: filterProp,
   project: filterProp,
+  defaultBranch: 'refs/heads/master',
 }
 
 export { exportGitRepository }

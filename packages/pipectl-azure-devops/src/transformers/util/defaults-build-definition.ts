@@ -4,6 +4,7 @@ import {
   AgentPoolQueueTarget,
   AgentTargetExecutionOptions,
   BuildAuthorizationScope,
+  BuildCompletionTrigger,
   BuildDefinition,
   BuildDefinitionStep,
   BuildDefinitionVariable,
@@ -12,6 +13,7 @@ import {
   BuildTrigger,
   ContinuousIntegrationTrigger,
   DefinitionQuality,
+  DefinitionReference,
   DefinitionTriggerType,
   DefinitionType,
   DesignerProcess,
@@ -26,6 +28,7 @@ import {
 import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
 import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
+import { buildApi } from '../../adapters/build-api'
 import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
@@ -188,14 +191,22 @@ const tags = (
 
 const triggers = async (
   buildDefinition: BuildDefinition,
-  _definition: Definition
+  definition: Definition
 ): Promise<BuildTrigger[]> => {
   return Promise.all(
-    (buildDefinition.triggers || []).map((trigger) => {
+    (buildDefinition.triggers || []).map(async (trigger) => {
       if (trigger.triggerType === DefinitionTriggerType.ContinuousIntegration) {
         return applyDefaults(trigger, defaultsContinuousIntegrationTrigger)
       } else if (trigger.triggerType === DefinitionTriggerType.Schedule) {
         return applyDefaults(trigger, defaultsScheduleTrigger)
+      } else if (
+        trigger.triggerType === DefinitionTriggerType.BuildCompletion
+      ) {
+        return applyDefaults(
+          trigger,
+          defaultsBuildCompletion,
+          (await project(buildDefinition, definition)).id
+        )
       } // TODO other trigger types
       return Object.assign({}, trigger)
     })
@@ -210,6 +221,24 @@ const schedules = async (
       applyDefaults(schedule, defaultsSchedule)
     )
   )
+}
+
+const buildCompletionTriggerDefinition = async (
+  buildCompletionTrigger: BuildCompletionTrigger,
+  projectId: string
+): Promise<DefinitionReference | undefined> => {
+  if (
+    buildCompletionTrigger.definition &&
+    !buildCompletionTrigger.definition.hasOwnProperty('id')
+  ) {
+    const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(
+      buildCompletionTrigger.definition.name!,
+      buildCompletionTrigger.definition.path!,
+      projectId
+    )
+    return { id: buildDefinition!.id, project: { id: projectId } }
+  }
+  return buildCompletionTrigger.definition
 }
 
 const variables = async (
@@ -295,6 +324,7 @@ const defaultsDesignerProcess: DesignerProcess | object = {
 }
 
 const defaultsDesignerProcessPhase: Phase | object = {
+  condition: 'succeeded()',
   name: phaseName,
   jobAuthorizationScope: BuildAuthorizationScope.ProjectCollection,
   jobCancelTimeoutInMinutes: 0,
@@ -318,6 +348,7 @@ const defaultsDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions: AgentTar
 }
 
 const defaultsDesignerProcessStep: BuildDefinitionStep | object = {
+  condition: 'succeeded()',
   enabled: true,
   continueOnError: false,
   alwaysRun: false,
@@ -354,6 +385,7 @@ const defaultsRetentionRule: RetentionPolicy = {
 }
 
 const defaultsContinuousIntegrationTrigger: ContinuousIntegrationTrigger = {
+  branchFilters: ['+refs/heads/master'],
   pathFilters: [],
   batchChanges: true,
   maxConcurrentBuildsPerBranch: 1,
@@ -376,6 +408,12 @@ const defaultsSchedule: Schedule = {
   startHours: 0,
   startMinutes: 0,
   timeZoneId: 'UTC', // Timezone column on this page https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones, TODO can get it from script execution environment?,
+}
+
+const defaultsBuildCompletion: BuildCompletionTrigger | object = {
+  requiresSuccessfulBuild: true,
+  branchFilters: ['+refs/heads/master'],
+  definition: buildCompletionTriggerDefinition,
 }
 
 const defaultsVariableGroup: VariableGroup | object = {

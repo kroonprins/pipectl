@@ -1,12 +1,14 @@
 import {
   AgentPoolQueueTarget,
   BuildAuthorizationScope,
+  BuildCompletionTrigger,
   BuildDefinition,
   BuildDefinitionVariable,
   BuildProcess,
   BuildTrigger,
   ContinuousIntegrationTrigger,
   DefinitionQuality,
+  DefinitionReference,
   DefinitionTriggerType,
   DefinitionType,
   DesignerProcess,
@@ -15,7 +17,15 @@ import {
   ScheduleDays,
   ScheduleTrigger,
 } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { applyExport, array, filterIfEmpty, filterProp, object } from './export'
+import { buildApi } from '../../adapters/build-api'
+import {
+  applyExport,
+  array,
+  filterArrayIfEquals,
+  filterIfEmpty,
+  filterProp,
+  object,
+} from './export'
 
 const process = async (
   buildDefinition: BuildDefinition
@@ -55,10 +65,32 @@ const triggers = async (
         return applyExport(trigger, exportContinuousIntegrationTrigger)
       } else if (trigger.triggerType === DefinitionTriggerType.Schedule) {
         return applyExport(trigger, exportScheduleTrigger)
+      } else if (
+        trigger.triggerType === DefinitionTriggerType.BuildCompletion
+      ) {
+        return applyExport(trigger, exportBuildCompletion)
       } // TODO other trigger types
       return Object.assign({}, trigger)
     })
   )
+
+const buildCompletionTriggerDefinition = async (
+  buildCompletionTrigger: BuildCompletionTrigger
+): Promise<DefinitionReference> => {
+  const exportApplied = await applyExport(
+    buildCompletionTrigger.definition,
+    exportBuildCompletionTriggerDefinition
+  )
+  const buildDefinition = await buildApi.findBuildDefinitionById(
+    buildCompletionTrigger.definition!.id!,
+    buildCompletionTrigger.definition!.project!.id!
+  )
+  exportApplied.name = buildDefinition.name!
+  exportApplied.path = buildDefinition.path
+  delete exportApplied.id
+  delete exportApplied.project
+  return exportApplied
+}
 
 const variableGroups = async (
   buildDefinition: BuildDefinition
@@ -106,6 +138,7 @@ const exportBuildDefinition: BuildDefinition | object = {
   drafts: filterIfEmpty,
   id: filterProp,
   process,
+  processParameters: filterIfEmpty,
   project: filterProp,
   properties: filterIfEmpty,
   queue: object({
@@ -134,6 +167,15 @@ const exportBuildDefinition: BuildDefinition | object = {
     url: filterProp,
     id: filterProp,
   }),
+  retentionRules: array({
+    branches: array('+refs/heads/*'),
+    artifacts: filterIfEmpty,
+    artifactTypesToDelete: filterArrayIfEquals(['FilePath', 'SymbolStore']),
+    daysToKeep: 10,
+    minimumToKeep: 1,
+    deleteBuildRecord: true,
+    deleteTestResults: true,
+  }),
   revision: filterProp,
   tags: filterIfEmpty,
   triggers,
@@ -143,8 +185,11 @@ const exportBuildDefinition: BuildDefinition | object = {
   variableGroups,
 }
 
-const exportContinuousIntegrationTrigger: ContinuousIntegrationTrigger = {
-  pathFilters: [], // TODO array
+const exportContinuousIntegrationTrigger:
+  | ContinuousIntegrationTrigger
+  | object = {
+  pathFilters: filterIfEmpty,
+  branchFilters: filterArrayIfEquals(['+refs/heads/master']),
   batchChanges: true,
   maxConcurrentBuildsPerBranch: 1,
   pollingInterval: 0,
@@ -153,7 +198,7 @@ const exportContinuousIntegrationTrigger: ContinuousIntegrationTrigger = {
 const exportScheduleTrigger: ScheduleTrigger | object = {
   schedules: array({
     scheduleOnlyWithChanges: true,
-    branchFilters: ['+refs/heads/master'], // TODO array
+    branchFilters: filterArrayIfEquals(['+refs/heads/master']),
     daysToBuild:
       ScheduleDays.Monday +
       ScheduleDays.Tuesday +
@@ -166,12 +211,24 @@ const exportScheduleTrigger: ScheduleTrigger | object = {
   }),
 }
 
+const exportBuildCompletion: BuildCompletionTrigger | object = {
+  branchFilters: filterArrayIfEquals(['+refs/heads/master']),
+  requiresSuccessfulBuild: true,
+  definition: buildCompletionTriggerDefinition,
+}
+
+const exportBuildCompletionTriggerDefinition: DefinitionReference | object = {
+  url: filterProp,
+  queueStatus: filterProp,
+}
+
 const exportProcess: BuildProcess = {
   type: 1,
 }
 
 const exportDesignerProcess: DesignerProcess | object = {
   phases: array({
+    condition: 'succeeded()',
     refName: filterProp,
     jobAuthorizationScope: 'projectCollection', // BuildAuthorizationScope.ProjectCollection, (appears to be bug in API that this comes back as a string)
     jobCancelTimeoutInMinutes: 0,
@@ -179,6 +236,7 @@ const exportDesignerProcess: DesignerProcess | object = {
     steps: array({
       environment: filterIfEmpty,
       enabled: true,
+      condition: 'succeeded()',
       continueOnError: false,
       alwaysRun: false,
       timeoutInMinutes: 0,

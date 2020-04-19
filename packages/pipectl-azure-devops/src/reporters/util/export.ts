@@ -58,6 +58,27 @@ const filterIfEmpty = <T, K extends keyof T>(source: T, key: K) => {
   return source[key]
 }
 
+const filterArrayIfEquals = (testArray: (string | number)[]) => {
+  return <
+    T extends { [key: string]: (string | number)[] | undefined },
+    K extends keyof T
+  >(
+    source: T,
+    key: K
+  ) => {
+    const sourceArray = source[key]
+    if (!sourceArray || sourceArray.length !== testArray.length) {
+      return sourceArray
+    }
+    for (const [index, item] of sourceArray.entries()) {
+      if (item !== testArray[index]) {
+        return sourceArray
+      }
+    }
+    return
+  }
+}
+
 const object = <T extends { [key: string]: U }, U, V extends keyof T>(
   descriptor: U | object
 ): ((
@@ -97,6 +118,7 @@ export {
   applyExportOnArray,
   filterProp,
   filterIfEmpty,
+  filterArrayIfEquals,
   object,
   array,
 }
