@@ -17,7 +17,7 @@
 - logs command
 - in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
 
-- register stuff via annotations?
+- register stuff via annotations? (e.g. via tsyringe)
 - remove some duplication in azure devops reporters, transformers, etc
 
 - check if yarn workspaces can be alternative for lerna
