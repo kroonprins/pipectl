@@ -13,7 +13,7 @@
   ],
   "devDependencies": {
     "@kroonprins/pipectl": "0.0.1-alpha.1",
-    "updates": "10.2.7"
+    "updates": "10.2.8"
   },
   "dependencies": {
     "@types/js-yaml": "3.12.3",

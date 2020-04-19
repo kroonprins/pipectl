@@ -17,7 +17,7 @@
     "release": "lerna publish"
   },
   "devDependencies": {
-    "@types/node": "13.11.1",
+    "@types/node": "13.13.0",
     "@types/yargs": "15.0.4",
     "husky": "4.2.5",
     "lerna": "3.20.2",
@@ -26,6 +26,6 @@
     "ts-node": "8.8.2",
     "tslint": "6.1.1",
     "typescript": "3.8.3",
-    "updates": "10.2.7"
+    "updates": "10.2.8"
   }
 }
