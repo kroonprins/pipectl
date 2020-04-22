@@ -4,12 +4,13 @@
   "description": "pipectl plugin for Azure DevOps",
   "scripts": {
     "build": "tsc",
+    "test": "jest --passWithNoTests",
     "updates": "updates -e @kroonprins/pipectl",
     "updates-apply": "updates -e @kroonprins/pipectl -u"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/!(*.test).js",
+    "dist/**/!(*.test).d.ts"
   ],
   "devDependencies": {
     "@kroonprins/pipectl": "0.0.1-alpha.1",
