@@ -6,7 +6,7 @@ import {
 } from '@kroonprins/pipectl/dist/registration'
 import { registerCommand } from '@kroonprins/pipectl/dist/util/yargs'
 import { Argv } from 'yargs'
-import test from './actions/test'
+import test from './actions/test-azure-devops'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
 import { ApplyBuildDefinition } from './processors/apply-build-definition'
