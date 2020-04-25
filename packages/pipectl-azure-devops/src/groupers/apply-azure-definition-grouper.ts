@@ -8,6 +8,7 @@ class ApplyAzureDefinitionGrouper implements DefinitionGrouper {
   private static mapping: Map<string, string> = new Map([
     [Kind.GIT_REPOSITORY, 'AzureDevOps_0'],
     [Kind.VARIABLE_GROUP, 'AzureDevOps_0'],
+    [Kind.GIT_PULL_REQUEST, 'AzureDevOps_1'],
     [Kind.BUILD_DEFINITION, 'AzureDevOps_1'],
     [Kind.RELEASE_DEFINITION, 'AzureDevOps_2'],
   ])

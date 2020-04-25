@@ -45,6 +45,9 @@ import { BuildDefinitionTransformer } from './transformers/build-definition-tran
 import { GitRepositoryTransformer } from './transformers/git-repository-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
 import { VariableGroupTransformer } from './transformers/variable-group-transformer'
+import { GitPullRequestTransformer } from './transformers/git-pull-request-transformer'
+import { GetAllGitPullRequests } from './processors/get-all-git-pull-requests'
+import { GetGitPullRequestReporter } from './reporters/get-git-pull-request-reporter'
 
 export default (yargs: Argv) => {
   registerCommand(
@@ -61,6 +64,7 @@ export default (yargs: Argv) => {
     new ApplyVariableGroupTransformer(),
     new GitRepositoryTransformer(),
     new ApplyGitRepositoryTransformer(),
+    new GitPullRequestTransformer(),
     new BuildDefinitionTransformer(),
     new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
@@ -76,6 +80,7 @@ export default (yargs: Argv) => {
     new GetOneGitRepository(),
     new ApplyGitRepository(),
     new DeleteGitRepository(),
+    new GetAllGitPullRequests(),
     new ApplyBuildDefinition(),
     new DeleteBuildDefinition(),
     new GetAllBuildDefinitions(),
@@ -93,6 +98,7 @@ export default (yargs: Argv) => {
     new GetGitRepositoryReporter(),
     new GetGitRepositoryYamlReporter(),
     new GetGitRepositoryJsonReporter(),
+    new GetGitPullRequestReporter(),
     new GetBuildDefinitionReporter(),
     new GetBuildDefinitionYamlReporter(),
     new GetBuildDefinitionJsonReporter(),
