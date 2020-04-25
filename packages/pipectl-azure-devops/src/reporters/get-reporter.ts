@@ -1,6 +1,7 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import { Reporter, TransformedDefinition } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
+import textTable from 'text-table'
 import { GetProcessResult } from '../model/get-process-result'
 
 abstract class GetReporter<
@@ -39,19 +40,18 @@ abstract class GetReporter<
     )
 
     const columns = this.columns()
-    log.info(columns.join('\t'))
-    processResult.results!.forEach((result) => {
-      const line = this.line(result)
-      const formatted = columns.reduce(
-        (p: string, column: string) => p + line[column] + '\t',
-        ''
-      )
-      log.info(formatted)
-    })
+    const lines = [
+      columns,
+      processResult.results!.flatMap((result) => {
+        const line = this.line(result)
+        return columns.map((column) => `${line[column]}`)
+      }),
+    ]
+    log.info(textTable(lines))
   }
 
   abstract columns(): string[]
-  abstract line(result: W): { [column: string]: string }
+  abstract line(result: W): { [column: string]: string | undefined }
 }
 
 export { GetReporter }
