@@ -1,0 +1,10 @@
+apiVersion: azure-devops
+kind: GitPullRequest
+spec:
+  repository:
+    name: My Git Repository
+  title: My Pull Request
+  sourceRefName: refs/heads/testing
+  targetRefName: refs/heads/master
+  reviewers:
+    - marcodebac@outlook.com

@@ -46,7 +46,7 @@ class DeleteGitRepository implements ActionProcessor {
     if (existingGitRepository) {
       if (args.dryRun) {
         return {
-          info: `Git repository ${gitRepository.name} deletion skipped because dry run.`,
+          info: `Git repository '${gitRepository.name}' deletion skipped because dry run.`,
         }
       } else {
         try {
@@ -63,7 +63,7 @@ class DeleteGitRepository implements ActionProcessor {
       }
     } else {
       return {
-        info: `Git repository ${gitRepository.name} not deleted because it does not exist.`,
+        info: `Git repository '${gitRepository.name}' not deleted because it does not exist.`,
       }
     }
   }

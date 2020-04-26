@@ -47,7 +47,7 @@ class ApplyGitRepository implements ActionProcessor {
       gitRepository.id = existingGitRepository.id
       if (args.dryRun) {
         return {
-          info: `Git repository ${gitRepository.name} update skipped because dry run.`,
+          info: `Git repository '${gitRepository.name}' update skipped because dry run.`,
         }
       } else {
         try {
@@ -62,7 +62,7 @@ class ApplyGitRepository implements ActionProcessor {
     } else {
       if (args.dryRun) {
         return {
-          info: `Git repository ${gitRepository.name} creation skipped because dry run.`,
+          info: `Git repository '${gitRepository.name}' creation skipped because dry run.`,
         }
       } else {
         try {

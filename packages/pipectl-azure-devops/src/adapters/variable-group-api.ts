@@ -8,7 +8,7 @@ import { coreApi } from './core-api'
 class VariableGroupApi {
   private _taskAgentApi: ITaskAgentApi | null = null
 
-  /*private*/ async getApi(): Promise<ITaskAgentApi> {
+  private async getApi(): Promise<ITaskAgentApi> {
     if (!this._taskAgentApi) {
       log.debug('Initializing VariableGroupAPI')
       this._taskAgentApi = await azureConnection.get().getTaskAgentApi()
@@ -31,6 +31,9 @@ class VariableGroupApi {
     const api = await this.getApi()
     const search = await api.getVariableGroups(project, name)
     if (search && search.length && search[0].id) {
+      log.debug(
+        `[VariableGroupApi._findVariableGroupIdByName] ${search[0].id} for name[${name}], project[${project}]`
+      )
       return search[0].id
     }
     throw new Error(

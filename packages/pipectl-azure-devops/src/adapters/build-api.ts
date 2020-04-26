@@ -6,7 +6,7 @@ import { azureConnection } from './connection'
 class BuildApi {
   private _buildApi: IBuildApi | null = null
 
-  /*private*/ async getApi(): Promise<IBuildApi> {
+  private async getApi(): Promise<IBuildApi> {
     if (!this._buildApi) {
       log.debug('Initializing BuildAPI')
       this._buildApi = await azureConnection.get().getBuildApi()

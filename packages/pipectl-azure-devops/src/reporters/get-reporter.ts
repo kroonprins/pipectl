@@ -42,7 +42,7 @@ abstract class GetReporter<
     const columns = this.columns()
     const lines = [
       columns,
-      processResult.results!.flatMap((result) => {
+      ...processResult.results!.map((result) => {
         const line = this.line(result)
         return columns.map((column) => `${line[column]}`)
       }),

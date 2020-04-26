@@ -10,6 +10,7 @@ import test from './actions/test-azure-devops'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
 import { ApplyBuildDefinition } from './processors/apply-build-definition'
+import { ApplyGitPullRequest } from './processors/apply-git-pull-request'
 import { ApplyGitRepository } from './processors/apply-git-repository'
 import { ApplyReleaseDefinition } from './processors/apply-release-definition'
 import { ApplyVariableGroup } from './processors/apply-variable-group'
@@ -43,6 +44,7 @@ import { GetVariableGroupJsonReporter } from './reporters/get-variable-group-jso
 import { GetVariableGroupReporter } from './reporters/get-variable-group-reporter'
 import { GetVariableGroupYamlReporter } from './reporters/get-variable-group-yaml-reporter'
 import { ApplyBuildDefinitionTransformer } from './transformers/apply-build-definition-transformer'
+import { ApplyGitPullRequestTransformer } from './transformers/apply-git-pull-request-transformer'
 import { ApplyGitRepositoryTransformer } from './transformers/apply-git-repository-transformer'
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
 import { ApplyVariableGroupTransformer } from './transformers/apply-variable-group-transformer'
@@ -68,6 +70,7 @@ export default (yargs: Argv) => {
     new GitRepositoryTransformer(),
     new ApplyGitRepositoryTransformer(),
     new GitPullRequestTransformer(),
+    new ApplyGitPullRequestTransformer(),
     new BuildDefinitionTransformer(),
     new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
@@ -85,6 +88,7 @@ export default (yargs: Argv) => {
     new DeleteGitRepository(),
     new GetAllGitPullRequests(),
     new GetOneGitPullRequest(),
+    new ApplyGitPullRequest(),
     new ApplyBuildDefinition(),
     new DeleteBuildDefinition(),
     new GetAllBuildDefinitions(),

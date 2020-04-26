@@ -10,7 +10,17 @@ const reviewers = async (gitPullRequest: GitPullRequest): Promise<string[]> => {
   )
 }
 
+const description = async (
+  gitPullRequest: GitPullRequest
+): Promise<string | undefined> => {
+  return gitPullRequest.description !== gitPullRequest.title
+    ? gitPullRequest.description
+    : undefined
+}
+
 const exportGitPullRequest: GitPullRequest | object = {
+  pullRequestId: filterProp,
+  description,
   repository: object({
     id: filterProp,
     url: filterProp,

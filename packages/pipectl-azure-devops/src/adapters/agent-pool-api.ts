@@ -6,7 +6,7 @@ import { azureConnection } from './connection'
 class AgentPoolApi {
   private _taskAgentApi: ITaskAgentApi | null = null
 
-  /*private*/ async getApi(): Promise<ITaskAgentApi> {
+  private async getApi(): Promise<ITaskAgentApi> {
     if (!this._taskAgentApi) {
       log.debug('Initializing AgentPoolApi')
       this._taskAgentApi = await azureConnection.get().getTaskAgentApi()

@@ -5,9 +5,9 @@ import {
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
+import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { variableGroupApi } from '../adapters/variable-group-api'
 import { AzureVariableGroup } from '../model/azure-variable-group'
-import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 
 class ApplyVariableGroup implements ActionProcessor {
   canProcess(
@@ -47,7 +47,7 @@ class ApplyVariableGroup implements ActionProcessor {
       variableGroup.id = existingVariableGroup.id
       if (args.dryRun) {
         return {
-          info: `Variable group ${variableGroup.name} update skipped because dry run.`,
+          info: `Variable group '${variableGroup.name}' update skipped because dry run.`,
         }
       } else {
         try {
@@ -62,7 +62,7 @@ class ApplyVariableGroup implements ActionProcessor {
     } else {
       if (args.dryRun) {
         return {
-          info: `Variable group ${variableGroup.name} creation skipped because dry run.`,
+          info: `Variable group '${variableGroup.name}' creation skipped because dry run.`,
         }
       } else {
         try {

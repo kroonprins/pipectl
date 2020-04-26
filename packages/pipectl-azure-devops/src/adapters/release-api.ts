@@ -6,7 +6,7 @@ import { azureConnection } from './connection'
 class ReleaseApi {
   private _releaseApi: IReleaseApi | null = null
 
-  /*private*/ async getApi(): Promise<IReleaseApi> {
+  private async getApi(): Promise<IReleaseApi> {
     if (!this._releaseApi) {
       log.debug('Initializing ReleaseAPI')
       this._releaseApi = await azureConnection.get().getReleaseApi()
