@@ -1,3 +1,5 @@
+import { $enum } from 'ts-enum-util'
+
 const applyExport = async <T>(
   source: T | undefined,
   descriptor: T | object,
@@ -113,6 +115,21 @@ const array = <T extends { [key: string]: U[] }, U, V extends keyof T>(
     ...extraFunctionArgs
   )
 
+const enumValue = <E extends Record<Extract<keyof E, string>, number | string>>(
+  enumType: E,
+  defaultValue: number | string
+) => {
+  return <T extends { [key: string]: number | string }, K extends keyof T>(
+    source: T,
+    key: K
+  ) => {
+    if (source[key] === defaultValue) {
+      return undefined
+    }
+    return $enum(enumType).getKeyOrThrow(source[key])
+  }
+}
+
 export {
   applyExport,
   applyExportOnArray,
@@ -121,4 +138,5 @@ export {
   filterArrayIfEquals,
   object,
   array,
+  enumValue,
 }

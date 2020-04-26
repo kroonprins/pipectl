@@ -13,15 +13,20 @@ class GetGitPullRequestReporter extends GetReporter<
   }
 
   columns(): string[] {
-    return ['NAME', 'DESCRIPTION']
+    return ['NAME', 'DESCRIPTION', 'REVIEWERS']
   }
 
   line(
     gitPullRequest: GitPullRequest
   ): { [column: string]: string | undefined } {
     return {
-      NAME: `${gitPullRequest.repository!.id}/${gitPullRequest.pullRequestId}`,
+      NAME: `${gitPullRequest.repository!.id}${AzureGitPullRequest.SEPARATOR}${
+        gitPullRequest.pullRequestId
+      }`,
       DESCRIPTION: gitPullRequest.title,
+      REVIEWERS: gitPullRequest.reviewers
+        ?.map((reviewer) => reviewer.uniqueName)
+        .join(','),
     }
   }
 }

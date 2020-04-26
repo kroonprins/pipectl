@@ -18,16 +18,21 @@ import { DeleteGitRepository } from './processors/delete-git-repository'
 import { DeleteReleaseDefinition } from './processors/delete-release-definition'
 import { DeleteVariableGroup } from './processors/delete-variable-group'
 import { GetAllBuildDefinitions } from './processors/get-all-build-definitions'
+import { GetAllGitPullRequests } from './processors/get-all-git-pull-requests'
 import { GetAllGitRepositories } from './processors/get-all-git-repositories'
 import { GetAllReleaseDefinitions } from './processors/get-all-release-definitions'
 import { GetAllVariableGroups } from './processors/get-all-variable-groups'
 import { GetOneBuildDefinition } from './processors/get-one-build-definition'
+import { GetOneGitPullRequest } from './processors/get-one-git-pull-request'
 import { GetOneGitRepository } from './processors/get-one-git-repository'
 import { GetOneReleaseDefinition } from './processors/get-one-release-definition'
 import { GetOneVariableGroup } from './processors/get-one-variable-group'
 import { GetBuildDefinitionJsonReporter } from './reporters/get-build-definition-json-reporter'
 import { GetBuildDefinitionReporter } from './reporters/get-build-definition-reporter'
 import { GetBuildDefinitionYamlReporter } from './reporters/get-build-definition-yaml-reporter'
+import { GetGitPullRequestJsonReporter } from './reporters/get-git-pull-request-json-reporter'
+import { GetGitPullRequestReporter } from './reporters/get-git-pull-request-reporter'
+import { GetGitPullRequestYamlReporter } from './reporters/get-git-pull-request-yaml-reporter'
 import { GetGitRepositoryJsonReporter } from './reporters/get-git-repository-json-reporter'
 import { GetGitRepositoryReporter } from './reporters/get-git-repository-reporter'
 import { GetGitRepositoryYamlReporter } from './reporters/get-git-repository-yaml-reporter'
@@ -42,12 +47,10 @@ import { ApplyGitRepositoryTransformer } from './transformers/apply-git-reposito
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
 import { ApplyVariableGroupTransformer } from './transformers/apply-variable-group-transformer'
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
+import { GitPullRequestTransformer } from './transformers/git-pull-request-transformer'
 import { GitRepositoryTransformer } from './transformers/git-repository-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
 import { VariableGroupTransformer } from './transformers/variable-group-transformer'
-import { GitPullRequestTransformer } from './transformers/git-pull-request-transformer'
-import { GetAllGitPullRequests } from './processors/get-all-git-pull-requests'
-import { GetGitPullRequestReporter } from './reporters/get-git-pull-request-reporter'
 
 export default (yargs: Argv) => {
   registerCommand(
@@ -81,6 +84,7 @@ export default (yargs: Argv) => {
     new ApplyGitRepository(),
     new DeleteGitRepository(),
     new GetAllGitPullRequests(),
+    new GetOneGitPullRequest(),
     new ApplyBuildDefinition(),
     new DeleteBuildDefinition(),
     new GetAllBuildDefinitions(),
@@ -99,6 +103,8 @@ export default (yargs: Argv) => {
     new GetGitRepositoryYamlReporter(),
     new GetGitRepositoryJsonReporter(),
     new GetGitPullRequestReporter(),
+    new GetGitPullRequestYamlReporter(),
+    new GetGitPullRequestJsonReporter(),
     new GetBuildDefinitionReporter(),
     new GetBuildDefinitionYamlReporter(),
     new GetBuildDefinitionJsonReporter(),
