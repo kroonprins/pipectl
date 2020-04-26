@@ -4,9 +4,7 @@ import {
   registerReporter,
   registerTransformer,
 } from '@kroonprins/pipectl/dist/registration'
-import { registerCommand } from '@kroonprins/pipectl/dist/util/yargs'
 import { Argv } from 'yargs'
-import test from './actions/test-azure-devops'
 import { ApplyAzureDefinitionGrouper } from './groupers/apply-azure-definition-grouper'
 import { AzureDefinitionGrouper } from './groupers/azure-definition-grouper'
 import { ApplyBuildDefinition } from './processors/apply-build-definition'
@@ -56,11 +54,7 @@ import { GitRepositoryTransformer } from './transformers/git-repository-transfor
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
 import { VariableGroupTransformer } from './transformers/variable-group-transformer'
 
-export default (yargs: Argv) => {
-  registerCommand(
-    yargs.command('test-azure-devops', 'todo', (_yarg) => undefined, test)
-  )
-
+export default (_yargs: Argv) => {
   registerGrouper(
     new AzureDefinitionGrouper(),
     new ApplyAzureDefinitionGrouper()

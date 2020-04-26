@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.1",
+    "@kroonprins/pipectl-azure-devops-imperative-extensions": "0.0.1-alpha.1",
     "updates": "10.2.10"
   },
   "dependencies": {
