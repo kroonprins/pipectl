@@ -26,6 +26,7 @@ import { applyDefaults } from './defaults'
 
 const artifacts = async (
   releaseDefinition: ReleaseDefinition,
+  _key: string,
   definition: Definition
 ): Promise<Artifact[]> => {
   return Promise.all(
@@ -44,6 +45,7 @@ const artifacts = async (
 
 const definitionReference = async (
   artifact: Artifact,
+  _key: string,
   projectId: string
 ): Promise<{ [key: string]: ArtifactSourceReference }> => {
   return applyDefaults(
@@ -64,6 +66,7 @@ const defaultVersionType = async (definitionRef: {
 
 const project = async (
   definitionRef: { [key: string]: ArtifactSourceReference },
+  _key: string,
   projectId: string
 ): Promise<ArtifactSourceReference> => {
   if (!definitionRef.hasOwnProperty('project')) {
@@ -83,6 +86,7 @@ const project = async (
 
 const definitionReferenceDefinition = async (
   definitionRef: { [key: string]: ArtifactSourceReference },
+  key: string,
   namespace: string
 ): Promise<ArtifactSourceReference> => {
   if (
@@ -93,7 +97,7 @@ const definitionReferenceDefinition = async (
   ) {
     const buildName = definitionRef.definition.name!
     const buildPath = (definitionRef.definition as any).path
-    const projectId = (await project(definitionRef, namespace)).id!
+    const projectId = (await project(definitionRef, key, namespace)).id!
     const buildDefinition = await buildApi.findBuildDefinitionByNameAndPath(
       buildName,
       buildPath,
@@ -108,6 +112,7 @@ const definitionReferenceDefinition = async (
 
 const environments = async (
   releaseDefinition: ReleaseDefinition,
+  _key: string,
   definition: Definition
 ): Promise<ReleaseDefinitionEnvironment[]> => {
   const projectId = definition.metadata.namespace
@@ -120,12 +125,13 @@ const environments = async (
   )
 }
 
-const rank = async (_: any, index: number): Promise<number> => {
+const rank = async (_: any, _key: string, index: number): Promise<number> => {
   return index + 1
 }
 
 const environmentOptions = async (
   environment: ReleaseDefinitionEnvironment,
+  _key: string,
   _index: number,
   projectId: string
 ): Promise<EnvironmentOptions> => {
@@ -156,6 +162,7 @@ const retentionPolicy = async (
 
 const deployPhases = async (
   environment: ReleaseDefinitionEnvironment,
+  _key: string,
   _index: number,
   projectId: string
 ): Promise<DeployPhase[]> => {
@@ -195,6 +202,7 @@ const workflowTasks = async (
 
 const deploymentInput = async (
   deployPhase: AgentBasedDeployPhase,
+  _key: string,
   projectId: string
 ): Promise<AgentDeploymentInput> => {
   return applyDefaults(
@@ -206,6 +214,7 @@ const deploymentInput = async (
 
 const queueId = async (
   agentDeploymentInput: AgentDeploymentInput,
+  _key: string,
   projectId: string
 ): Promise<number | undefined> => {
   if (
@@ -276,21 +285,24 @@ const approvalOptions = async (
 
 const variables = async (
   releaseDefinition: ReleaseDefinition,
-  _definition?: Definition
+  key: string
 ): Promise<{ [key: string]: ConfigurationVariableValue }> => {
-  return _variables(releaseDefinition, { isDefault: true })
+  return _variables(releaseDefinition, key, { isDefault: true })
 }
 
 const variablesScoped = async (
   environment: ReleaseDefinitionEnvironment,
-  index: number,
-  _projectId: string
+  key: string,
+  index: number
 ): Promise<{ [key: string]: ConfigurationVariableValue }> => {
-  return _variables(environment, { key: await rank(undefined, index) })
+  return _variables(environment, key, {
+    key: await rank(undefined, key, index),
+  })
 }
 
 const _variables = async (
   source: ReleaseDefinition | ReleaseDefinitionEnvironment,
+  _key: string,
   scope: { [key: string]: any }
 ): Promise<{ [key: string]: ConfigurationVariableValue }> => {
   return Object.entries(source.variables || {})
@@ -310,21 +322,24 @@ const _variables = async (
 
 const variableGroups = async (
   releaseDefinition: ReleaseDefinition,
+  key: string,
   definition: Definition
 ): Promise<number[]> => {
-  return _variableGroups(releaseDefinition, definition.metadata.namespace)
+  return _variableGroups(releaseDefinition, key, definition.metadata.namespace)
 }
 
 const variableGroupsScoped = async (
   environment: ReleaseDefinitionEnvironment,
+  key: string,
   _index: number,
   projectId: string
 ): Promise<number[]> => {
-  return _variableGroups(environment, projectId)
+  return _variableGroups(environment, key, projectId)
 }
 
 const _variableGroups = async (
   source: ReleaseDefinition | ReleaseDefinitionEnvironment,
+  _key: string,
   projectId: string
 ): Promise<number[]> => {
   return Promise.all(

@@ -23,3 +23,4 @@
 - check if yarn workspaces can be alternative for lerna
 
 - extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)
+- apply enumValue function for defaults/exports also for other resource types

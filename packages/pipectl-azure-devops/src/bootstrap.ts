@@ -15,6 +15,7 @@ import { ApplyGitRepository } from './processors/apply-git-repository'
 import { ApplyReleaseDefinition } from './processors/apply-release-definition'
 import { ApplyVariableGroup } from './processors/apply-variable-group'
 import { DeleteBuildDefinition } from './processors/delete-build-definition'
+import { DeleteGitPullRequest } from './processors/delete-git-pull-request'
 import { DeleteGitRepository } from './processors/delete-git-repository'
 import { DeleteReleaseDefinition } from './processors/delete-release-definition'
 import { DeleteVariableGroup } from './processors/delete-variable-group'
@@ -49,6 +50,7 @@ import { ApplyGitRepositoryTransformer } from './transformers/apply-git-reposito
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
 import { ApplyVariableGroupTransformer } from './transformers/apply-variable-group-transformer'
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
+import { DeleteGitPullRequestTransformer } from './transformers/delete-git-pull-request-transformer'
 import { GitPullRequestTransformer } from './transformers/git-pull-request-transformer'
 import { GitRepositoryTransformer } from './transformers/git-repository-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
@@ -71,6 +73,7 @@ export default (yargs: Argv) => {
     new ApplyGitRepositoryTransformer(),
     new GitPullRequestTransformer(),
     new ApplyGitPullRequestTransformer(),
+    new DeleteGitPullRequestTransformer(),
     new BuildDefinitionTransformer(),
     new ApplyBuildDefinitionTransformer(),
     new ReleaseDefinitionTransformer(),
@@ -89,6 +92,7 @@ export default (yargs: Argv) => {
     new GetAllGitPullRequests(),
     new GetOneGitPullRequest(),
     new ApplyGitPullRequest(),
+    new DeleteGitPullRequest(),
     new ApplyBuildDefinition(),
     new DeleteBuildDefinition(),
     new GetAllBuildDefinitions(),

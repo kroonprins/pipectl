@@ -13,7 +13,14 @@ class GetGitPullRequestReporter extends GetReporter<
   }
 
   columns(): string[] {
-    return ['NAME', 'DESCRIPTION', 'REVIEWERS']
+    return [
+      'NAME',
+      'DESCRIPTION',
+      'REPOSITORY',
+      'REVIEWERS',
+      'SOURCE',
+      'TARGET',
+    ]
   }
 
   line(
@@ -24,9 +31,12 @@ class GetGitPullRequestReporter extends GetReporter<
         gitPullRequest.pullRequestId
       }`,
       DESCRIPTION: gitPullRequest.title,
+      REPOSITORY: gitPullRequest.repository?.name,
       REVIEWERS: gitPullRequest.reviewers
         ?.map((reviewer) => reviewer.uniqueName)
         .join(','),
+      SOURCE: gitPullRequest.sourceRefName,
+      TARGET: gitPullRequest.targetRefName,
     }
   }
 }

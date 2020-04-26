@@ -8,9 +8,11 @@ import {
 import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { userApi } from '../../adapters/user-api'
+import { enumValue } from './defaults'
 
 const repository = async (
   gitPullRequest: GitPullRequest,
+  _key: string,
   definition: Definition
 ): Promise<GitRepository> => {
   const gitRepository = gitPullRequest.repository
@@ -45,6 +47,7 @@ const repository = async (
 
 const reviewers = async (
   gitPullRequest: GitPullRequest,
+  _key: string,
   definition: Definition
 ): Promise<IdentityRefWithVote[]> => {
   const projectId = definition.metadata.namespace
@@ -72,8 +75,12 @@ const defaultsGitPullRequest: GitPullRequest | object = {
   isDraft: false,
   supportsIterations: true,
   repository,
-  status: PullRequestStatus.Active,
+  status: enumValue(PullRequestStatus, PullRequestStatus.Active),
   reviewers,
 }
 
-export { defaultsGitPullRequest }
+const defaultsGitPullRequestForDelete: GitPullRequest | object = {
+  repository,
+}
+
+export { defaultsGitPullRequest, defaultsGitPullRequestForDelete }

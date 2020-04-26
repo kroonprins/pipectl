@@ -9,7 +9,7 @@ import { GitPullRequest } from 'azure-devops-node-api/interfaces/GitInterfaces'
 import { gitPullRequestApi } from '../adapters/git-pull-request-api'
 import { AzureGitPullRequest } from '../model/azure-git-pull-request'
 
-class ApplyGitPullRequest implements ActionProcessor {
+class DeleteGitPullRequest implements ActionProcessor {
   canProcess(
     transformedDefinition: TransformedDefinition,
     action: Action,
@@ -17,7 +17,7 @@ class ApplyGitPullRequest implements ActionProcessor {
   ): boolean {
     return (
       transformedDefinition instanceof AzureGitPullRequest &&
-      action === Action.APPLY
+      action === Action.DELETE
     )
   }
 
@@ -26,16 +26,17 @@ class ApplyGitPullRequest implements ActionProcessor {
     _action: Action,
     args: ApplyArguments
   ): Promise<ProcessResult> {
-    log.debug(`[ApplyGitPullRequest] ${JSON.stringify(azureGitPullRequest)}`)
+    log.debug(`[DeleteGitPullRequest] ${JSON.stringify(azureGitPullRequest)}`)
     const gitPullRequest = azureGitPullRequest.spec
     const project = azureGitPullRequest.project
-    const id = gitPullRequest.pullRequestId
+    const pullRequestId = gitPullRequest.pullRequestId
+    const repositoryId = gitPullRequest.repository!.id!
 
     let existingGitPullRequest: GitPullRequest | undefined
-    if (id) {
+    if (pullRequestId) {
       existingGitPullRequest = await gitPullRequestApi.findGitPullRequestById(
-        id,
-        gitPullRequest.repository!.id!,
+        pullRequestId,
+        repositoryId,
         project
       )
     } else {
@@ -43,50 +44,35 @@ class ApplyGitPullRequest implements ActionProcessor {
         gitPullRequest.title!,
         gitPullRequest.sourceRefName!,
         gitPullRequest.targetRefName!,
-        gitPullRequest.repository!.id!,
+        repositoryId,
         project
       )
     }
     if (existingGitPullRequest) {
-      gitPullRequest.pullRequestId = existingGitPullRequest.pullRequestId
       if (args.dryRun) {
         return {
-          info: `Git pull request '${gitPullRequest.title}' update skipped because dry run.`,
+          info: `Git pull request '${gitPullRequest.title}' deletion skipped because dry run.`,
         }
       } else {
         try {
-          await gitPullRequestApi.updateGitPullRequest(
-            existingGitPullRequest,
-            gitPullRequest,
+          await gitPullRequestApi.deleteGitPullRequest(
+            repositoryId,
+            existingGitPullRequest.pullRequestId!,
             project
           )
           return {
-            info: `Successfully updated git pull request ${existingGitPullRequest.pullRequestId} (${existingGitPullRequest.title})`,
+            info: `Successfully deleted git pull request ${existingGitPullRequest.pullRequestId} (${existingGitPullRequest.title})`,
           }
         } catch (e) {
           return { error: e }
         }
       }
     } else {
-      if (args.dryRun) {
-        return {
-          info: `Git pull request '${gitPullRequest.title}' creation skipped because dry run.`,
-        }
-      } else {
-        try {
-          const createdGitPullRequest = await gitPullRequestApi.createGitPullRequest(
-            gitPullRequest,
-            project
-          )
-          return {
-            info: `Successfully created git pull request ${createdGitPullRequest.pullRequestId} (${createdGitPullRequest.title})`,
-          }
-        } catch (e) {
-          return { error: e }
-        }
+      return {
+        info: `Git pull request '${gitPullRequest.title}' not deleted because it does not exist.`,
       }
     }
   }
 }
 
-export { ApplyGitPullRequest }
+export { DeleteGitPullRequest }

@@ -18,7 +18,8 @@ class GitPullRequestTransformer implements DefinitionTransformer {
     return (
       isAzureDevOps(definition.apiVersion) &&
       definition.kind === Kind.GIT_PULL_REQUEST &&
-      action !== Action.APPLY
+      action !== Action.APPLY &&
+      action !== Action.DELETE
     )
   }
 
