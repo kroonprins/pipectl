@@ -1,6 +1,3 @@
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  testPathIgnorePatterns: ['/dist/', '/node_modules/'],
-  collectCoverage: true,
-}
+const defaultConfig = require('../../jest.config')
+
+module.exports = defaultConfig
