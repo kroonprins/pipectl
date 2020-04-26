@@ -49,7 +49,7 @@ class DeleteReleaseDefinition implements ActionProcessor {
     if (existingReleaseDefinition) {
       if (args.dryRun) {
         return {
-          info: `Release definition ${releaseDefinition.name} deletion skipped because dry run.`,
+          info: `Release definition '${releaseDefinition.name}' deletion skipped because dry run.`,
         }
       } else {
         try {
@@ -66,7 +66,7 @@ class DeleteReleaseDefinition implements ActionProcessor {
       }
     } else {
       return {
-        info: `Release definition ${releaseDefinition.name} not deleted because it does not exist.`,
+        info: `Release definition '${releaseDefinition.name}' not deleted because it does not exist.`,
       }
     }
   }

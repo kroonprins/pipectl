@@ -5,9 +5,9 @@ import {
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
+import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { variableGroupApi } from '../adapters/variable-group-api'
 import { AzureVariableGroup } from '../model/azure-variable-group'
-import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 
 class DeleteVariableGroup implements ActionProcessor {
   canProcess(
@@ -46,7 +46,7 @@ class DeleteVariableGroup implements ActionProcessor {
     if (existingVariableGroup) {
       if (args.dryRun) {
         return {
-          info: `Variable group ${variableGroup.name} deletion skipped because dry run.`,
+          info: `Variable group '${variableGroup.name}' deletion skipped because dry run.`,
         }
       } else {
         try {
@@ -63,7 +63,7 @@ class DeleteVariableGroup implements ActionProcessor {
       }
     } else {
       return {
-        info: `Variable group ${variableGroup.name} not deleted because it does not exist.`,
+        info: `Variable group '${variableGroup.name}' not deleted because it does not exist.`,
       }
     }
   }

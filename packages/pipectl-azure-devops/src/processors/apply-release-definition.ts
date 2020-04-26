@@ -51,7 +51,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
       releaseDefinition.revision = existingReleaseDefinition.revision
       if (args.dryRun) {
         return {
-          info: `Release definition ${releaseDefinition.name} update skipped because dry run.`,
+          info: `Release definition '${releaseDefinition.name}' update skipped because dry run.`,
         }
       } else {
         try {
@@ -66,7 +66,7 @@ class ApplyReleaseDefinition implements ActionProcessor {
     } else {
       if (args.dryRun) {
         return {
-          info: `Release definition ${releaseDefinition.name} creation skipped because dry run.`,
+          info: `Release definition '${releaseDefinition.name}' creation skipped because dry run.`,
         }
       } else {
         try {

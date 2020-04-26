@@ -6,7 +6,7 @@ import { azureConnection } from './connection'
 class CoreApi {
   private _coreApi: ICoreApi | null = null
 
-  /*private*/ async getApi(): Promise<ICoreApi> {
+  private async getApi(): Promise<ICoreApi> {
     if (!this._coreApi) {
       log.debug('Initializing CoreAPI')
       this._coreApi = await azureConnection.get().getCoreApi()

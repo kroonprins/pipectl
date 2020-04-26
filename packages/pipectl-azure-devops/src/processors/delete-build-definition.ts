@@ -47,7 +47,7 @@ class DeleteBuildDefinition implements ActionProcessor {
     if (existingBuildDefinition) {
       if (args.dryRun) {
         return {
-          info: `Build definition ${buildDefinition.name} deletion skipped because dry run.`,
+          info: `Build definition '${buildDefinition.name}' deletion skipped because dry run.`,
         }
       } else {
         try {
@@ -64,7 +64,7 @@ class DeleteBuildDefinition implements ActionProcessor {
       }
     } else {
       return {
-        info: `Build definition ${buildDefinition.name} not deleted because it does not exist.`,
+        info: `Build definition '${buildDefinition.name}' not deleted because it does not exist.`,
       }
     }
   }

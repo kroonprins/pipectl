@@ -7,7 +7,7 @@ import { azureConnection } from './connection'
 class GitRepositoryApi {
   private _gitApi: GitApi | null = null
 
-  /*private*/ async getApi(): Promise<GitApi> {
+  private async getApi(): Promise<GitApi> {
     if (!this._gitApi) {
       log.debug('Initializing GitRepositoryApi')
       this._gitApi = await azureConnection.get().getGitApi()
@@ -46,10 +46,11 @@ class GitRepositoryApi {
     const api = await this.getApi()
     const search = await api.getRepositories(project)
     if (search && search.length) {
+      const found = search.find((repo) => repo.name === name)
       log.debug(
-        `[GitRepositoryApi.findGitRepositoryByName] found ${search[0].id} (${search.length}) for name[${name}], project[${project}]`
+        `[GitRepositoryApi.findGitRepositoryByName] found ${found} (${search.length}) for name[${name}], project[${project}]`
       )
-      return search.find((repo) => repo.name === name)
+      return found
     }
     log.debug(
       `[GitRepositoryApi.findGitRepositoryByName] not found for name[${name}], project[${project}]`

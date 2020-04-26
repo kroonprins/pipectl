@@ -49,7 +49,7 @@ class ApplyBuildDefinition implements ActionProcessor {
       buildDefinition.revision = existingBuildDefinition.revision
       if (args.dryRun) {
         return {
-          info: `Build definition ${buildDefinition.name} update skipped because dry run.`,
+          info: `Build definition '${buildDefinition.name}' update skipped because dry run.`,
         }
       } else {
         try {
@@ -64,7 +64,7 @@ class ApplyBuildDefinition implements ActionProcessor {
     } else {
       if (args.dryRun) {
         return {
-          info: `Build definition ${buildDefinition.name} creation skipped because dry run.`,
+          info: `Build definition '${buildDefinition.name}' creation skipped because dry run.`,
         }
       } else {
         try {
