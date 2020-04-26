@@ -91,29 +91,114 @@ class GitPullRequestApi {
       gitPullRequest,
       gitPullRequest.repository!.id!,
       project
-    ) // TODO must give supportsIterations in input even though it is already in gitPullRequest?
+    )
   }
 
-  async updateGitPullRequest(gitPullRequest: GitPullRequest, project: string) {
+  async updateGitPullRequest(
+    existingGitPullRequest: GitPullRequest,
+    updatedGitPullRequest: GitPullRequest,
+    project: string
+  ) {
     log.debug(
-      `[GitPullRequestApi.updateGitPullRequest] ${gitPullRequest.title}, project[${project}]`
+      `[GitPullRequestApi.updateGitPullRequest] ${updatedGitPullRequest.title}, project[${project}]`
+    )
+    const repositoryId = updatedGitPullRequest.repository!.id!
+    const pullRequestId = updatedGitPullRequest.pullRequestId!
+    const updateRequest = {
+      title:
+        existingGitPullRequest.title !== updatedGitPullRequest.title
+          ? updatedGitPullRequest.title
+          : undefined,
+      description:
+        existingGitPullRequest.description !== updatedGitPullRequest.description
+          ? updatedGitPullRequest.description
+            ? updatedGitPullRequest.description
+            : ' '
+          : undefined,
+      status:
+        existingGitPullRequest.status !== updatedGitPullRequest.status
+          ? updatedGitPullRequest.status
+          : undefined,
+      targetRefName:
+        existingGitPullRequest.targetRefName !==
+        updatedGitPullRequest.targetRefName
+          ? updatedGitPullRequest.targetRefName
+          : undefined,
+    }
+    log.debug(
+      `[GitPullRequestApi.updateGitPullRequest] update request ${JSON.stringify(
+        updateRequest
+      )}`
+    )
+    const api = await this.getApi()
+    await api.updatePullRequest(
+      updateRequest,
+      repositoryId,
+      pullRequestId,
+      project
+    )
+
+    const existingGitPullRequestReviewers = (
+      existingGitPullRequest.reviewers || []
+    ).map((reviewer) => reviewer.id!)
+    const updatedGitPullRequestReviewers = (
+      updatedGitPullRequest.reviewers || []
+    ).map((reviewer) => reviewer.id!)
+
+    const reviewersToRemove = existingGitPullRequestReviewers.filter(
+      (x) => !updatedGitPullRequestReviewers.includes(x)
+    )
+    log.debug(
+      `[GitPullRequestApi.updateGitPullRequest] reviewers to remove ${JSON.stringify(
+        reviewersToRemove
+      )}`
+    )
+    const reviewersToAdd = updatedGitPullRequestReviewers.filter(
+      (x) => !existingGitPullRequestReviewers.includes(x)
+    )
+    log.debug(
+      `[GitPullRequestApi.updateGitPullRequest] reviewers to add ${JSON.stringify(
+        reviewersToAdd
+      )}`
+    )
+    return Promise.all([
+      ...reviewersToRemove.map(
+        (reviewerId) =>
+          api.deletePullRequestReviewer(
+            repositoryId,
+            pullRequestId,
+            reviewerId,
+            project
+          ),
+        ...reviewersToAdd.map((reviewerId) =>
+          api.createPullRequestReviewer(
+            { id: reviewerId },
+            repositoryId,
+            pullRequestId,
+            reviewerId,
+            project
+          )
+        )
+      ),
+    ])
+  }
+
+  async deleteGitPullRequest(
+    repositoryId: string,
+    pullRequestId: number,
+    project: string
+  ) {
+    log.debug(
+      `[GitPullRequestApi.deleteGitPullRequest] repositoryId[${repositoryId}], pullRequestId[${pullRequestId}], project[${project}]`
     )
     const api = await this.getApi()
     return api.updatePullRequest(
-      gitPullRequest,
-      gitPullRequest.repository!.id!,
-      gitPullRequest.pullRequestId!,
+      { status: PullRequestStatus.Abandoned },
+      repositoryId,
+      pullRequestId,
       project
     )
   }
-
-  // async deleteGitPullRequest(id: string, project: string) {
-  //   log.debug(
-  //     `[GitPullRequestApi.deleteGitPullRequest] id[${id}], project[${project}]`
-  //   )
-  //   const api = await this.getApi()
-  //   return api.deletePullRequest(id, project)
-  // }
 }
 
 const gitPullRequestApi = new GitPullRequestApi()

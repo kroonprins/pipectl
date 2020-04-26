@@ -35,8 +35,7 @@ import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
 const process = async (
-  buildDefinition: BuildDefinition,
-  _definition: Definition
+  buildDefinition: BuildDefinition
 ): Promise<BuildProcess> => {
   const commonDefaultsApplied = await applyDefaults(
     buildDefinition.process || {},
@@ -56,14 +55,15 @@ const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> => {
   )
 }
 
-const phaseName = async (_phase: Phase, index: number): Promise<string> => {
+const phaseName = async (
+  _phase: Phase,
+  _key: string,
+  index: number
+): Promise<string> => {
   return `Phase ${index + 1}`
 }
 
-const phaseTarget = async (
-  phase: Phase,
-  _index: number
-): Promise<PhaseTarget> => {
+const phaseTarget = async (phase: Phase): Promise<PhaseTarget> => {
   const commonDefaultsApplied = await applyDefaults(
     phase.target || {},
     defaultsDesignerProcessPhaseTarget
@@ -87,10 +87,7 @@ const designerProcessPhaseAgentPoolQueueTargetExecutionOptions = async (
   )
 }
 
-const phaseSteps = async (
-  phase: Phase,
-  _index: number
-): Promise<BuildDefinitionStep[]> => {
+const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> => {
   return Promise.all(
     (phase.steps || []).map((step) =>
       applyDefaults(step, defaultsDesignerProcessStep)
@@ -100,6 +97,7 @@ const phaseSteps = async (
 
 const project = async (
   buildDefinition: BuildDefinition,
+  _key: string,
   definition: Definition
 ): Promise<TeamProjectReference> => {
   if (!buildDefinition.hasOwnProperty('project')) {
@@ -118,6 +116,7 @@ const project = async (
 
 const queue = async (
   buildDefinition: BuildDefinition,
+  key: string,
   definition: Definition
 ): Promise<AgentPoolQueue> => {
   let id = buildDefinition.queue?.id
@@ -129,7 +128,7 @@ const queue = async (
   ) {
     id = await agentPoolApi.findAgentPoolIdByName(
       buildDefinition.queue.name!,
-      (await project(buildDefinition, definition)).id!
+      (await project(buildDefinition, key, definition)).id!
     )
   }
   return { id }
@@ -137,6 +136,7 @@ const queue = async (
 
 const repository = async (
   buildDefinition: BuildDefinition,
+  key: string,
   definition: Definition
 ): Promise<BuildRepository> => {
   const defaultsApplied = await applyDefaults(
@@ -149,7 +149,7 @@ const repository = async (
   ) {
     defaultsApplied.id = await gitRepositoryApi.findGitRepositoryIdByName(
       defaultsApplied.name!,
-      (await project(buildDefinition, definition)).id!
+      (await project(buildDefinition, key, definition)).id!
     )
   }
   return defaultsApplied
@@ -165,8 +165,7 @@ const buildRepositoryProperties = async (
 }
 
 const retentionRules = async (
-  buildDefinition: BuildDefinition,
-  _definition: Definition
+  buildDefinition: BuildDefinition
 ): Promise<RetentionPolicy[]> => {
   if (
     !buildDefinition.hasOwnProperty('retentionRules') ||
@@ -180,6 +179,7 @@ const retentionRules = async (
 
 const tags = (
   buildDefinition: BuildDefinition,
+  _key: string,
   definition: Definition
 ): string[] => {
   return (buildDefinition.tags || []).concat(
@@ -191,6 +191,7 @@ const tags = (
 
 const triggers = async (
   buildDefinition: BuildDefinition,
+  key: string,
   definition: Definition
 ): Promise<BuildTrigger[]> => {
   return Promise.all(
@@ -205,7 +206,7 @@ const triggers = async (
         return applyDefaults(
           trigger,
           defaultsBuildCompletion,
-          (await project(buildDefinition, definition)).id
+          (await project(buildDefinition, key, definition)).id
         )
       } // TODO other trigger types
       return Object.assign({}, trigger)
@@ -225,6 +226,7 @@ const schedules = async (
 
 const buildCompletionTriggerDefinition = async (
   buildCompletionTrigger: BuildCompletionTrigger,
+  _key: string,
   projectId: string
 ): Promise<DefinitionReference | undefined> => {
   if (
@@ -242,8 +244,7 @@ const buildCompletionTriggerDefinition = async (
 }
 
 const variables = async (
-  buildDefinition: BuildDefinition,
-  _definition: Definition
+  buildDefinition: BuildDefinition
 ): Promise<{ [key: string]: BuildDefinitionVariable }> => {
   return Object.entries(buildDefinition.variables || {})
     .map(([variable, value]) => {
@@ -262,9 +263,10 @@ const variables = async (
 
 const variableGroups = async (
   buildDefinition: BuildDefinition,
+  key: string,
   definition: Definition
 ): Promise<VariableGroup[]> => {
-  const projectId = (await project(buildDefinition, definition)).id
+  const projectId = (await project(buildDefinition, key, definition)).id
   return Promise.all(
     (buildDefinition.variableGroups || []).map((variableGroup) =>
       applyDefaults(variableGroup, defaultsVariableGroup, projectId)
@@ -274,6 +276,7 @@ const variableGroups = async (
 
 const variableGroupId = async (
   variableGroup: VariableGroup,
+  _key: string,
   projectId: string
 ): Promise<number | undefined> => {
   let id = variableGroup.id

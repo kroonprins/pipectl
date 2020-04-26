@@ -8,8 +8,7 @@ import {
 import { applyDefaults } from './defaults'
 
 const variables = async (
-  variableGroup: VariableGroup,
-  _definition: Definition
+  variableGroup: VariableGroup
 ): Promise<{ [key: string]: VariableValue }> => {
   return Object.entries(variableGroup.variables || {})
     .map(([variable, value]) => {
@@ -28,6 +27,7 @@ const variables = async (
 
 const variableGroupProjectReferences = async (
   variableGroup: VariableGroup,
+  _key: string,
   definition: Definition
 ): Promise<VariableGroupProjectReference[]> => {
   const project = definition.metadata.namespace
@@ -61,6 +61,7 @@ const variableGroupProjectReferences = async (
 
 const name = async (
   _variableGroupProjectReference: VariableGroupProjectReference,
+  _key: string,
   _project: string,
   variableGroup: VariableGroup
 ): Promise<string> => {
@@ -69,6 +70,7 @@ const name = async (
 
 const projectReference = async (
   _variableGroupProjectReference: VariableGroupProjectReference | undefined,
+  _key: string,
   project: string
 ): Promise<ProjectReference> => {
   return { name: project }
