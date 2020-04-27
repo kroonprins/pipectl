@@ -1,6 +1,7 @@
 import { Definition } from '@kroonprins/pipectl/dist/model'
 import {
   GitPullRequest,
+  GitPullRequestCompletionOptions,
   GitRepository,
   IdentityRefWithVote,
   PullRequestStatus,
@@ -8,7 +9,7 @@ import {
 import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { userApi } from '../../adapters/user-api'
-import { enumValue } from './defaults'
+import { applyDefaults, enumValue } from './defaults'
 
 const repository = async (
   gitPullRequest: GitPullRequest,
@@ -71,16 +72,42 @@ const reviewers = async (
   )
 }
 
+const completionOptions = async (
+  gitPullRequest: GitPullRequest
+): Promise<GitPullRequestCompletionOptions> =>
+  applyDefaults(
+    gitPullRequest.completionOptions || {},
+    defaultsCompletionOptions
+  )
+
+const completionOptionsForDelete = async (
+  gitPullRequest: GitPullRequest
+): Promise<GitPullRequestCompletionOptions> =>
+  applyDefaults(
+    gitPullRequest.completionOptions || {},
+    defaultsCompletionOptionsForDelete
+  )
+
 const defaultsGitPullRequest: GitPullRequest | object = {
   isDraft: false,
   supportsIterations: true,
   repository,
   status: enumValue(PullRequestStatus, PullRequestStatus.Active),
   reviewers,
+  completionOptions,
+}
+
+const defaultsCompletionOptions: GitPullRequestCompletionOptions = {
+  deleteSourceBranch: true,
 }
 
 const defaultsGitPullRequestForDelete: GitPullRequest | object = {
   repository,
+  completionOptionsForDelete,
+}
+
+const defaultsCompletionOptionsForDelete: GitPullRequestCompletionOptions = {
+  deleteSourceBranch: false,
 }
 
 export { defaultsGitPullRequest, defaultsGitPullRequestForDelete }

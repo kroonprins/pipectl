@@ -56,8 +56,8 @@ class DeleteGitPullRequest implements ActionProcessor {
       } else {
         try {
           await gitPullRequestApi.deleteGitPullRequest(
-            repositoryId,
-            existingGitPullRequest.pullRequestId!,
+            existingGitPullRequest,
+            gitPullRequest,
             project
           )
           return {

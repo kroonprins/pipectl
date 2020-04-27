@@ -9,7 +9,13 @@ export default (yargs: Argv) => {
       'abandon-pull-request <id>',
       'todo',
       (yarg) => {
-        yarg.positional('id', { type: 'string', description: 'todo' })
+        yarg.positional('id', { type: 'string', description: 'todo' }).options({
+          deleteSourceBranch: {
+            type: 'boolean',
+            alias: 'd',
+            description: 'todo',
+          },
+        })
       },
       abandonPullRequest
     ),
@@ -17,7 +23,12 @@ export default (yargs: Argv) => {
       'complete-pull-request <id>',
       'todo',
       (yarg) => {
-        yarg.positional('id', { type: 'string', description: 'todo' })
+        yarg.positional('id', { type: 'string', description: 'todo' }).options({
+          keepSourceBranch: {
+            type: 'boolean',
+            description: 'todo',
+          },
+        })
       },
       completePullRequest
     )

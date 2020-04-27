@@ -8,6 +8,7 @@ import { PullRequestStatus } from 'azure-devops-node-api/interfaces/GitInterface
 
 interface Arguments {
   id: string
+  keepSourceBranch: boolean
 }
 
 export default async (args: Arguments) => {
@@ -28,6 +29,9 @@ export default async (args: Arguments) => {
             id: repositoryId,
           },
           status: PullRequestStatus.Completed,
+          completionOptions: {
+            deleteSourceBranch: !!!args.keepSourceBranch,
+          },
         },
       },
     ],

@@ -2,6 +2,7 @@ import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { GitApi } from 'azure-devops-node-api/GitApi'
 import {
   GitPullRequest,
+  GitRefUpdate,
   PullRequestStatus,
 } from 'azure-devops-node-api/interfaces/GitInterfaces'
 import { azureConnection } from './connection'
@@ -137,6 +138,7 @@ class GitPullRequestApi {
         lastMergeSourceCommit: {
           commitId: existingGitPullRequest.lastMergeSourceCommit?.commitId,
         },
+        completionOptions: updatedGitPullRequest.completionOptions,
       }
     }
     log.debug(
@@ -199,20 +201,38 @@ class GitPullRequestApi {
   }
 
   async deleteGitPullRequest(
-    repositoryId: string,
-    pullRequestId: number,
+    existingGitPullRequest: GitPullRequest,
+    updatedGitPullRequest: GitPullRequest,
     project: string
   ) {
+    const api = await this.getApi()
+    const repositoryId = existingGitPullRequest.repository!.id!
+    const pullRequestId = existingGitPullRequest.pullRequestId!
     log.debug(
       `[GitPullRequestApi.deleteGitPullRequest] repositoryId[${repositoryId}], pullRequestId[${pullRequestId}], project[${project}]`
     )
-    const api = await this.getApi()
-    return api.updatePullRequest(
+
+    await api.updatePullRequest(
       { status: PullRequestStatus.Abandoned },
       repositoryId,
       pullRequestId,
       project
     )
+
+    if (updatedGitPullRequest.completionOptions?.deleteSourceBranch) {
+      const refUpdateRequest: GitRefUpdate = {
+        name: existingGitPullRequest.sourceRefName,
+        newObjectId: '0000000000000000000000000000000000000000',
+        oldObjectId: existingGitPullRequest!.lastMergeSourceCommit!.commitId!,
+        repositoryId,
+      }
+      log.debug(
+        `[GitPullRequestApi.deleteGitPullRequest] deleting source branch for repositoryId[${repositoryId}], pullRequestId[${pullRequestId}], project[${project}], updateRequest[${JSON.stringify(
+          refUpdateRequest
+        )}]`
+      )
+      await api.updateRefs([refUpdateRequest], repositoryId, project)
+    }
   }
 }
 
