@@ -84,7 +84,7 @@ class GitPullRequestApi {
 
   async createGitPullRequest(gitPullRequest: GitPullRequest, project: string) {
     log.debug(
-      `[GitPullRequestApi.createGitPullRequest] ${gitPullRequest.title}, project[${project}]`
+      `[GitPullRequestApi.createGitPullRequest] title[${gitPullRequest.title}], project[${project}]`
     )
     const api = await this.getApi()
     return api.createPullRequest(
@@ -100,11 +100,13 @@ class GitPullRequestApi {
     project: string
   ) {
     log.debug(
-      `[GitPullRequestApi.updateGitPullRequest] ${updatedGitPullRequest.title}, project[${project}]`
+      `[GitPullRequestApi.updateGitPullRequest] title[${updatedGitPullRequest.title}], project[${project}]`
     )
+    const api = await this.getApi()
     const repositoryId = updatedGitPullRequest.repository!.id!
     const pullRequestId = updatedGitPullRequest.pullRequestId!
-    const updateRequest = {
+
+    let updateRequest: GitPullRequest = {
       title:
         existingGitPullRequest.title !== updatedGitPullRequest.title
           ? updatedGitPullRequest.title
@@ -125,12 +127,23 @@ class GitPullRequestApi {
           ? updatedGitPullRequest.targetRefName
           : undefined,
     }
+
+    const isCompletionRequest =
+      existingGitPullRequest.status === PullRequestStatus.Active &&
+      updatedGitPullRequest.status === PullRequestStatus.Completed
+    if (isCompletionRequest) {
+      updateRequest = {
+        ...updateRequest,
+        lastMergeSourceCommit: {
+          commitId: existingGitPullRequest.lastMergeSourceCommit?.commitId,
+        },
+      }
+    }
     log.debug(
       `[GitPullRequestApi.updateGitPullRequest] update request ${JSON.stringify(
         updateRequest
       )}`
     )
-    const api = await this.getApi()
     await api.updatePullRequest(
       updateRequest,
       repositoryId,
@@ -138,49 +151,51 @@ class GitPullRequestApi {
       project
     )
 
-    const existingGitPullRequestReviewers = (
-      existingGitPullRequest.reviewers || []
-    ).map((reviewer) => reviewer.id!)
-    const updatedGitPullRequestReviewers = (
-      updatedGitPullRequest.reviewers || []
-    ).map((reviewer) => reviewer.id!)
+    if (updatedGitPullRequest.status === PullRequestStatus.Active) {
+      const existingGitPullRequestReviewers = (
+        existingGitPullRequest.reviewers || []
+      ).map((reviewer) => reviewer.id!)
+      const updatedGitPullRequestReviewers = (
+        updatedGitPullRequest.reviewers || []
+      ).map((reviewer) => reviewer.id!)
 
-    const reviewersToRemove = existingGitPullRequestReviewers.filter(
-      (x) => !updatedGitPullRequestReviewers.includes(x)
-    )
-    log.debug(
-      `[GitPullRequestApi.updateGitPullRequest] reviewers to remove ${JSON.stringify(
-        reviewersToRemove
-      )}`
-    )
-    const reviewersToAdd = updatedGitPullRequestReviewers.filter(
-      (x) => !existingGitPullRequestReviewers.includes(x)
-    )
-    log.debug(
-      `[GitPullRequestApi.updateGitPullRequest] reviewers to add ${JSON.stringify(
-        reviewersToAdd
-      )}`
-    )
-    return Promise.all([
-      ...reviewersToRemove.map(
-        (reviewerId) =>
-          api.deletePullRequestReviewer(
-            repositoryId,
-            pullRequestId,
-            reviewerId,
-            project
-          ),
-        ...reviewersToAdd.map((reviewerId) =>
-          api.createPullRequestReviewer(
-            { id: reviewerId },
-            repositoryId,
-            pullRequestId,
-            reviewerId,
-            project
+      const reviewersToRemove = existingGitPullRequestReviewers.filter(
+        (x) => !updatedGitPullRequestReviewers.includes(x)
+      )
+      log.debug(
+        `[GitPullRequestApi.updateGitPullRequest] reviewers to remove ${JSON.stringify(
+          reviewersToRemove
+        )}`
+      )
+      const reviewersToAdd = updatedGitPullRequestReviewers.filter(
+        (x) => !existingGitPullRequestReviewers.includes(x)
+      )
+      log.debug(
+        `[GitPullRequestApi.updateGitPullRequest] reviewers to add ${JSON.stringify(
+          reviewersToAdd
+        )}`
+      )
+      Promise.all([
+        ...reviewersToRemove.map(
+          (reviewerId) =>
+            api.deletePullRequestReviewer(
+              repositoryId,
+              pullRequestId,
+              reviewerId,
+              project
+            ),
+          ...reviewersToAdd.map((reviewerId) =>
+            api.createPullRequestReviewer(
+              { id: reviewerId },
+              repositoryId,
+              pullRequestId,
+              reviewerId,
+              project
+            )
           )
-        )
-      ),
-    ])
+        ),
+      ])
+    }
   }
 
   async deleteGitPullRequest(
