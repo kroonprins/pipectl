@@ -7,6 +7,7 @@ import { namespace } from '@kroonprins/pipectl/dist/util'
 
 interface Arguments {
   id: string
+  deleteSourceBranch: boolean
 }
 
 export default async (args: Arguments) => {
@@ -25,6 +26,9 @@ export default async (args: Arguments) => {
           pullRequestId,
           repository: {
             id: repositoryId,
+          },
+          completionOptions: {
+            deleteSourceBranch: !!args.deleteSourceBranch,
           },
         },
       },
