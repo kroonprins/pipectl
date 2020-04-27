@@ -1,6 +1,6 @@
 {
   "name": "@kroonprins/pipectl",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "",
   "main": "./dist/index.js",
   "bin": {
@@ -18,8 +18,8 @@
     "updates-apply": "updates -e @kroonprins/pipectl-azure-devops -u"
   },
   "devDependencies": {
-    "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.1",
-    "@kroonprins/pipectl-azure-devops-imperative-extensions": "0.0.1-alpha.1",
+    "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.2",
+    "@kroonprins/pipectl-azure-devops-imperative-extensions": "0.0.1-alpha.2",
     "updates": "10.2.10"
   },
   "dependencies": {
