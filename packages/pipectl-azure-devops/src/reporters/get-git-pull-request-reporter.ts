@@ -40,9 +40,32 @@ class GetGitPullRequestReporter extends GetReporter<
       REVIEWERS: gitPullRequest.reviewers
         ?.map((reviewer) => reviewer.uniqueName)
         .join(','),
-      SOURCE: gitPullRequest.sourceRefName,
-      TARGET: gitPullRequest.targetRefName,
+      SOURCE: gitPullRequest.sourceRefName?.replace('refs/heads/', ''),
+      TARGET: gitPullRequest.targetRefName?.replace('refs/heads/', ''),
       STATUS: $enum(PullRequestStatus).getKeyOrDefault(gitPullRequest.status),
+    }
+  }
+
+  options() {
+    return {
+      truncate: true,
+      config: {
+        DESCRIPTION: {
+          maxWidth: 40,
+        },
+        REPOSITORY: {
+          maxWidth: 30,
+        },
+        REVIEWERS: {
+          maxWidth: 30,
+        },
+        SOURCE: {
+          maxWidth: 25,
+        },
+        TARGET: {
+          maxWidth: 25,
+        },
+      },
     }
   }
 }

@@ -20,11 +20,11 @@
   "devDependencies": {
     "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.2",
     "@kroonprins/pipectl-azure-devops-imperative-extensions": "0.0.1-alpha.2",
-    "updates": "10.2.10"
+    "updates": "10.2.10",
+    "@types/js-yaml": "3.12.3",
+    "@types/parse-json": "4.0.0"
   },
   "dependencies": {
-    "@types/js-yaml": "3.12.3",
-    "@types/parse-json": "4.0.0",
     "get-stdin": "7.0.0",
     "glob": "7.1.6",
     "js-yaml": "3.13.1",

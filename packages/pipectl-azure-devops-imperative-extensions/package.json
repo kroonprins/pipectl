@@ -15,11 +15,11 @@
   "devDependencies": {
     "@kroonprins/pipectl": "0.0.1-alpha.2",
     "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.2",
-    "azure-devops-node-api": "10.1.1",
     "updates": "10.2.10"
   },
   "dependencies": {
-    "yargs": "15.3.1"
+    "yargs": "15.3.1",
+    "azure-devops-node-api": "10.1.1"
   },
   "peerDependencies": {
     "@kroonprins/pipectl": "*",
