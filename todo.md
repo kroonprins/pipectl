@@ -11,7 +11,7 @@
 - clear error message when definition file can't be parsed if file has no extension (stdin)
 - tags creation does not seem to work. If they would work the selector for "get" could be implemented
 - context / config commands
-- create command to create a build/release/pull request approval/... ?
+- create command to create a build/release/... ?
 - describe command
 - edit command
 - logs command
@@ -19,8 +19,7 @@
 
 - register stuff via annotations? (e.g. via tsyringe)
 - remove some duplication in azure devops reporters, transformers, etc
-
 - check if yarn workspaces can be alternative for lerna
-
+- yargs: no error when no command matches
 - extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)
 - apply enumValue function for defaults/exports also for other resource types
