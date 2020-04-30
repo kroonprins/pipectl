@@ -32,7 +32,7 @@ spec:
       alias: build-artifact
       definitionReference:
         definition:
-          name: My Build Definition
+          name: My Build Pipeline
           path: \
   variables:
     myReleaseVar: release
