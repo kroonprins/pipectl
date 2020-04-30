@@ -14,7 +14,6 @@ spec:
             task:
               id: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
               versionSpec: 3.*
-              definitionType: task
             inputs:
               targetType: inline
               script: |
@@ -22,8 +21,6 @@ spec:
           - displayName: Publish Artifact
             task:
               id: 2ff763a7-ce83-4e1f-bc89-0ae63477cebe
-              versionSpec: 1.*
-              definitionType: task
             inputs:
               PathtoPublish: $(Build.ArtifactStagingDirectory)
               ArtifactName: drop

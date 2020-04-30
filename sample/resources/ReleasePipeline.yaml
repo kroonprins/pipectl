@@ -21,7 +21,6 @@ spec:
           workflowTasks:
             - taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
               version: 3.*
-              definitionType: task
               inputs:
                 targetType: inline
                 name: Bash Script
