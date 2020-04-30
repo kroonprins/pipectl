@@ -3,7 +3,6 @@
   - --timeout
   - --validate
 - transformations:
-  - task group by name
   - subscription by name
   - approver by name
 - handle -f option on get
@@ -23,3 +22,4 @@
 - yargs: no error when no command matches
 - extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)
 - apply enumValue function for defaults/exports also for other resource types
+- filter deleted build definitions / release definitions from get list

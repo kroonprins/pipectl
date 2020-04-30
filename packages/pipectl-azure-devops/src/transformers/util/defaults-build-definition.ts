@@ -32,6 +32,7 @@ import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
 import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
+import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
@@ -99,10 +100,24 @@ const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> => {
 const buildDefinitionStepTask = async (
   buildDefinitionStep: BuildDefinitionStep
 ): Promise<TaskDefinitionReference> => {
-  return applyDefaults(
+  const defaultsApplied = await applyDefaults(
     buildDefinitionStep.task || {},
     defaultsBuildDefinitionStepTask
   )
+  if (defaultsApplied.definitionType === 'task') {
+    if (
+      !defaultsApplied.hasOwnProperty('id') &&
+      defaultsApplied.hasOwnProperty('name') &&
+      (defaultsApplied as any).name
+    ) {
+      defaultsApplied.id = await taskDefinitionApi.findTaskDefinitionIdByName(
+        (defaultsApplied as any).name
+      )
+    }
+  } else {
+    // task group
+  }
+  return defaultsApplied
 }
 
 const project = async (
