@@ -421,6 +421,8 @@ const defaultsWorkflowTask: WorkflowTask | object = {
   alwaysRun: false,
   continueOnError: false,
   timeoutInMinutes: 0,
+  definitionType: 'task',
+  version: '1.*',
 }
 
 const defaultsAgentBasedDeployPhase: AgentBasedDeployPhase | object = {

@@ -242,6 +242,8 @@ const exportDeployPhase: DeployPhase | object = {
     continueOnError: false,
     timeoutInMinutes: 0,
     overrideInputs: filterProp, // TODO
+    definitionType: 'task',
+    version: '1.*',
   }),
 }
 

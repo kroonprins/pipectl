@@ -240,6 +240,10 @@ const exportDesignerProcess: DesignerProcess | object = {
       continueOnError: false,
       alwaysRun: false,
       timeoutInMinutes: 0,
+      task: object({
+        definitionType: 'task',
+        versionSpec: '1.*',
+      }),
     }),
   }),
 }

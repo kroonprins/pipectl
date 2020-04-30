@@ -23,6 +23,7 @@ import {
   Schedule,
   ScheduleDays,
   ScheduleTrigger,
+  TaskDefinitionReference,
   VariableGroup,
 } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
@@ -92,6 +93,15 @@ const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> => {
     (phase.steps || []).map((step) =>
       applyDefaults(step, defaultsDesignerProcessStep)
     )
+  )
+}
+
+const buildDefinitionStepTask = async (
+  buildDefinitionStep: BuildDefinitionStep
+): Promise<TaskDefinitionReference> => {
+  return applyDefaults(
+    buildDefinitionStep.task || {},
+    defaultsBuildDefinitionStepTask
   )
 }
 
@@ -356,6 +366,12 @@ const defaultsDesignerProcessStep: BuildDefinitionStep | object = {
   continueOnError: false,
   alwaysRun: false,
   timeoutInMinutes: 0,
+  task: buildDefinitionStepTask,
+}
+
+const defaultsBuildDefinitionStepTask: TaskDefinitionReference | object = {
+  definitionType: 'task',
+  versionSpec: '1.*',
 }
 
 const defaultsBuildRepository: BuildRepository | object = {
