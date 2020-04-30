@@ -18,7 +18,15 @@ spec:
             inputs:
               targetType: inline
               script: |
-                echo 'Hello world'
+                echo 'Hello world' > ${BUILD_ARTIFACTSTAGINGDIRECTORY}/hello.txt
+          - displayName: Publish Artifact
+            task:
+              id: 2ff763a7-ce83-4e1f-bc89-0ae63477cebe
+              versionSpec: 1.*
+              definitionType: task
+            inputs:
+              PathtoPublish: $(Build.ArtifactStagingDirectory)
+              ArtifactName: drop
     target:
       agentSpecification:
         identifier: ubuntu-18.04
