@@ -7,7 +7,7 @@ import {
   TaskGroupStep,
 } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { taskDefinitionApi } from '../../adapters/task-definition-api'
-import { applyExport } from './export'
+import { applyExport, array, filterIfEmpty } from './export'
 
 const taskDefinitionReference = async (
   spec: BuildDefinitionStep | TaskGroupStep
@@ -38,4 +38,14 @@ const taskDefinitionReference = async (
   }
 }
 
-export { taskDefinitionReference }
+const tasks = array({
+  environment: filterIfEmpty,
+  alwaysRun: false,
+  continueOnError: false,
+  condition: 'succeeded()',
+  enabled: true,
+  timeoutInMinutes: 0,
+  task: taskDefinitionReference,
+})
+
+export { tasks }

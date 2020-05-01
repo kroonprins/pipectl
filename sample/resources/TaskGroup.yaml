@@ -1,0 +1,26 @@
+---
+apiVersion: azure-devops
+kind: TaskGroup
+spec:
+  tasks:
+    - displayName: Bash Script
+      inputs:
+        targetType: inline
+        script: |
+          echo 'Hello'
+      task:
+        name: Bash
+        versionSpec: 3.*
+    - displayName: Bash Script
+      inputs:
+        targetType: inline
+        script: |
+          echo 'from task group with input $(my.build.parameter)'
+      task:
+        name: Bash
+        versionSpec: 3.*
+  name: My Build Task Group
+  category: Build
+  inputs:
+    - name: my.build.parameter
+      label: My Build Parameter

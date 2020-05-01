@@ -32,7 +32,7 @@ class GetOneTaskGroup implements ActionProcessor {
       const [id, majorVersion] = args.name!.split(AzureTaskGroup.SEPARATOR)
       const taskGroup = await taskGroupApi.findTaskGroupById(
         id,
-        majorVersion,
+        Number(majorVersion),
         project
       )
       if (taskGroup) {

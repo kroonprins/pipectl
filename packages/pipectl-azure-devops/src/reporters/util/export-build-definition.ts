@@ -26,7 +26,7 @@ import {
   filterProp,
   object,
 } from './export'
-import { taskDefinitionReference } from './export-common'
+import { tasks as steps } from './export-common'
 
 const process = async (
   buildDefinition: BuildDefinition
@@ -234,16 +234,7 @@ const exportDesignerProcess: DesignerProcess | object = {
     jobAuthorizationScope: 'projectCollection', // BuildAuthorizationScope.ProjectCollection, (appears to be bug in API that this comes back as a string)
     jobCancelTimeoutInMinutes: 0,
     target: phaseTarget,
-    steps: array({
-      environment: filterIfEmpty,
-      enabled: true,
-      condition: 'succeeded()',
-      continueOnError: false,
-      alwaysRun: false,
-      timeoutInMinutes: 0,
-      task: taskDefinitionReference,
-      inputs: filterIfEmpty,
-    }),
+    steps,
   }),
 }
 
