@@ -3,7 +3,6 @@ import {
   BuildAuthorizationScope,
   BuildCompletionTrigger,
   BuildDefinition,
-  BuildDefinitionStep,
   BuildDefinitionVariable,
   BuildProcess,
   BuildTrigger,
@@ -17,10 +16,8 @@ import {
   PhaseTarget,
   ScheduleDays,
   ScheduleTrigger,
-  TaskDefinitionReference,
 } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { buildApi } from '../../adapters/build-api'
-import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import {
   applyExport,
   array,
@@ -29,6 +26,7 @@ import {
   filterProp,
   object,
 } from './export'
+import { taskDefinitionReference } from './export-common'
 
 const process = async (
   buildDefinition: BuildDefinition
@@ -57,33 +55,6 @@ const phaseTarget = async (phase: Phase): Promise<PhaseTarget> => {
     } // TODO other target types?
   }
   return target
-}
-
-const buildDefinitionStepTask = async (
-  buildDefinitionStep: BuildDefinitionStep
-): Promise<TaskDefinitionReference> => {
-  const definitionType = buildDefinitionStep.task.definitionType
-  const exportApplied = await applyExport(
-    buildDefinitionStep.task,
-    exportBuildDefinitionStepTask
-  )
-  if (definitionType === 'task') {
-    const name = await taskDefinitionApi.findTaskDefinitionNameById(
-      exportApplied.id
-    )
-    if (name) {
-      const result = {
-        name,
-        ...exportApplied,
-      }
-      delete result.id
-      return result
-    } else {
-      return exportApplied
-    }
-  } else {
-    return exportApplied
-  }
 }
 
 const triggers = async (
@@ -270,14 +241,10 @@ const exportDesignerProcess: DesignerProcess | object = {
       continueOnError: false,
       alwaysRun: false,
       timeoutInMinutes: 0,
-      task: buildDefinitionStepTask,
+      task: taskDefinitionReference,
+      inputs: filterIfEmpty,
     }),
   }),
-}
-
-const exportBuildDefinitionStepTask: TaskDefinitionReference | object = {
-  definitionType: 'task',
-  versionSpec: '1.*',
 }
 
 const exportDesignerProcessPhaseTarget: PhaseTarget = {

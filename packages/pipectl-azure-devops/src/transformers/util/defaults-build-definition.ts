@@ -111,7 +111,8 @@ const buildDefinitionStepTask = async (
       (defaultsApplied as any).name
     ) {
       defaultsApplied.id = await taskDefinitionApi.findTaskDefinitionIdByName(
-        (defaultsApplied as any).name
+        (defaultsApplied as any).name,
+        defaultsApplied.versionSpec
       )
     }
   } else {

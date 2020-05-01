@@ -21,11 +21,13 @@ import { GetAllBuildDefinitions } from './processors/get-all-build-definitions'
 import { GetAllGitPullRequests } from './processors/get-all-git-pull-requests'
 import { GetAllGitRepositories } from './processors/get-all-git-repositories'
 import { GetAllReleaseDefinitions } from './processors/get-all-release-definitions'
+import { GetAllTaskGroups } from './processors/get-all-task-groups'
 import { GetAllVariableGroups } from './processors/get-all-variable-groups'
 import { GetOneBuildDefinition } from './processors/get-one-build-definition'
 import { GetOneGitPullRequest } from './processors/get-one-git-pull-request'
 import { GetOneGitRepository } from './processors/get-one-git-repository'
 import { GetOneReleaseDefinition } from './processors/get-one-release-definition'
+import { GetOneTaskGroup } from './processors/get-one-task-group'
 import { GetOneVariableGroup } from './processors/get-one-variable-group'
 import { GetBuildDefinitionJsonReporter } from './reporters/get-build-definition-json-reporter'
 import { GetBuildDefinitionReporter } from './reporters/get-build-definition-reporter'
@@ -39,6 +41,9 @@ import { GetGitRepositoryYamlReporter } from './reporters/get-git-repository-yam
 import { GetReleaseDefinitionJsonReporter } from './reporters/get-release-definition-json-reporter'
 import { GetReleaseDefinitionReporter } from './reporters/get-release-definition-reporter'
 import { GetReleaseDefinitionYamlReporter } from './reporters/get-release-definition-yaml-reporter'
+import { GetTaskGroupJsonReporter } from './reporters/get-task-group-json-reporter'
+import { GetTaskGroupReporter } from './reporters/get-task-group-reporter'
+import { GetTaskGroupYamlReporter } from './reporters/get-task-group-yaml-reporter'
 import { GetVariableGroupJsonReporter } from './reporters/get-variable-group-json-reporter'
 import { GetVariableGroupReporter } from './reporters/get-variable-group-reporter'
 import { GetVariableGroupYamlReporter } from './reporters/get-variable-group-yaml-reporter'
@@ -52,6 +57,7 @@ import { DeleteGitPullRequestTransformer } from './transformers/delete-git-pull-
 import { GitPullRequestTransformer } from './transformers/git-pull-request-transformer'
 import { GitRepositoryTransformer } from './transformers/git-repository-transformer'
 import { ReleaseDefinitionTransformer } from './transformers/release-definition-transformer'
+import { TaskGroupTransformer } from './transformers/task-group-transformer'
 import { VariableGroupTransformer } from './transformers/variable-group-transformer'
 
 export default (_yargs: Argv) => {
@@ -63,6 +69,7 @@ export default (_yargs: Argv) => {
   registerTransformer(
     new VariableGroupTransformer(),
     new ApplyVariableGroupTransformer(),
+    new TaskGroupTransformer(),
     new GitRepositoryTransformer(),
     new ApplyGitRepositoryTransformer(),
     new GitPullRequestTransformer(),
@@ -79,6 +86,8 @@ export default (_yargs: Argv) => {
     new GetOneVariableGroup(),
     new ApplyVariableGroup(),
     new DeleteVariableGroup(),
+    new GetAllTaskGroups(),
+    new GetOneTaskGroup(),
     new GetAllGitRepositories(),
     new GetOneGitRepository(),
     new ApplyGitRepository(),
@@ -101,6 +110,9 @@ export default (_yargs: Argv) => {
     new GetVariableGroupReporter(),
     new GetVariableGroupYamlReporter(),
     new GetVariableGroupJsonReporter(),
+    new GetTaskGroupReporter(),
+    new GetTaskGroupYamlReporter(),
+    new GetTaskGroupJsonReporter(),
     new GetGitRepositoryReporter(),
     new GetGitRepositoryYamlReporter(),
     new GetGitRepositoryJsonReporter(),
