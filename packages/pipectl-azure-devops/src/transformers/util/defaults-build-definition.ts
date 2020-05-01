@@ -106,7 +106,7 @@ const buildDefinitionStepTask = async (
   )
   if (defaultsApplied.definitionType === 'task') {
     if (
-      !defaultsApplied.hasOwnProperty('id') &&
+      !(defaultsApplied.hasOwnProperty('id') && defaultsApplied.id) &&
       defaultsApplied.hasOwnProperty('name') &&
       (defaultsApplied as any).name
     ) {
