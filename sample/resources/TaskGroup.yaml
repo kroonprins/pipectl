@@ -15,11 +15,11 @@ spec:
       inputs:
         targetType: inline
         script: |
-          echo 'from task group with input $(my.build.parameter)'
+          echo 'from task group with input $(my.task.group.parameter)'
       task:
         name: Bash
         versionSpec: 3.*
-  name: My Build Task Group
+  name: My Task Group
   inputs:
-    - name: my.build.parameter
-      label: My Build Parameter
+    - name: my.task.group.parameter
+      label: My Task Group Parameter

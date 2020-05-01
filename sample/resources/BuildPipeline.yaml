@@ -24,12 +24,12 @@ spec:
             inputs:
               PathtoPublish: $(Build.ArtifactStagingDirectory)
               ArtifactName: drop
-          - displayName: Execute my build task group
+          - displayName: Execute my task group
             task:
-              name: My Build Task Group
+              name: My Task Group
               definitionType: metaTask
             inputs:
-              my.build.parameter: My Build Parameter
+              my.task.group.parameter: My Build Parameter
     target:
       agentSpecification:
         identifier: ubuntu-18.04

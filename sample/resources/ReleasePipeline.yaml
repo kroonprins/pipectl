@@ -26,6 +26,11 @@ spec:
                 name: Bash Script
                 script: |
                   echo 'Hello world'
+            - displayName: Execute my task group
+              taskName: My Task Group
+              definitionType: metaTask
+              inputs:
+                my.task.group.parameter: My Release Parameter
   artifacts:
     - type: Build
       alias: build-artifact

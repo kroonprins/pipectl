@@ -22,6 +22,7 @@ import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
 import { coreApi } from '../../adapters/core-api'
 import { taskDefinitionApi } from '../../adapters/task-definition-api'
+import { taskGroupApi } from '../../adapters/task-group-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
@@ -173,7 +174,8 @@ const deployPhases = async (
         const commonDefaultsApplied = await applyDefaults(
           deployPhase,
           defaultsDeployPhase,
-          index
+          index,
+          projectId
         )
         if (
           commonDefaultsApplied.phaseType ===
@@ -192,7 +194,10 @@ const deployPhases = async (
 }
 
 const workflowTasks = async (
-  deployPhase: DeployPhase
+  deployPhase: DeployPhase,
+  _key: string,
+  _index: number,
+  projectId: string
 ): Promise<WorkflowTask[]> => {
   return Promise.all(
     (deployPhase.workflowTasks || []).map(async (workflowTask) => {
@@ -200,21 +205,25 @@ const workflowTasks = async (
         workflowTask,
         defaultsWorkflowTask
       )
-      if (defaultsApplied.definitionType === 'task') {
-        if (
-          !(
-            defaultsApplied.hasOwnProperty('taskId') && defaultsApplied.taskId
-          ) &&
-          defaultsApplied.hasOwnProperty('taskName') &&
-          (defaultsApplied as any).taskName
-        ) {
+      if (
+        !(defaultsApplied.hasOwnProperty('taskId') && defaultsApplied.taskId) &&
+        defaultsApplied.hasOwnProperty('taskName') &&
+        (defaultsApplied as any).taskName
+      ) {
+        if (defaultsApplied.definitionType === 'task') {
           defaultsApplied.taskId = await taskDefinitionApi.findTaskDefinitionIdByName(
             (defaultsApplied as any).taskName,
             defaultsApplied.version
           )
+        } else if (defaultsApplied.definitionType === 'metaTask') {
+          // metaTask = task group
+          defaultsApplied.taskId = await taskGroupApi.findTaskGroupIdByName(
+            (defaultsApplied as any).taskName,
+            defaultsApplied.version,
+            projectId
+          )
         }
-      } else {
-        // task group
+        delete (defaultsApplied as any).taskName
       }
       return defaultsApplied
     })
