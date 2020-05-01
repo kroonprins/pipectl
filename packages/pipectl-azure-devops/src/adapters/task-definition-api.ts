@@ -53,7 +53,7 @@ class TaskDefinitionApi {
       }
     }
     throw new Error(
-      `Task definition with name ${name} not found. It either doesn't exist or you do not have the required access for it.`
+      `Task definition with name ${name} and versionSpec[${versionSpec}] not found. It either doesn't exist or you do not have the required access for it.`
     )
   }
 

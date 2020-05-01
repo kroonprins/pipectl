@@ -20,7 +20,6 @@ spec:
         name: Bash
         versionSpec: 3.*
   name: My Build Task Group
-  category: Build
   inputs:
     - name: my.build.parameter
       label: My Build Parameter

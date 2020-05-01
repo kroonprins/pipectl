@@ -47,6 +47,7 @@ class ApplyTaskGroup implements ActionProcessor {
     }
     if (existingTaskGroup) {
       taskGroup.id = existingTaskGroup.id
+      taskGroup.revision = existingTaskGroup.revision
       if (args.dryRun) {
         return {
           info: `Task group '${taskGroup.name}' update skipped because dry run.`,
