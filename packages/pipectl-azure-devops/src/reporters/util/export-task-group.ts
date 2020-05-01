@@ -1,6 +1,6 @@
 import { TaskGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { array, filterIfEmpty, filterProp, object } from './export'
-import { taskDefinitionReference } from './export-common'
+import { tasks } from './export-common'
 
 const exportTaskGroup: TaskGroup | object = {
   runsOn: filterProp,
@@ -41,15 +41,7 @@ const exportTaskGroup: TaskGroup | object = {
     helpMarkDown: filterIfEmpty,
     groupName: filterIfEmpty,
   }),
-  tasks: array({
-    environment: filterIfEmpty,
-    alwaysRun: false,
-    continueOnError: false,
-    condition: 'succeeded()',
-    enabled: true,
-    timeoutInMinutes: 0,
-    task: taskDefinitionReference,
-  }),
+  tasks,
 }
 
 export { exportTaskGroup }

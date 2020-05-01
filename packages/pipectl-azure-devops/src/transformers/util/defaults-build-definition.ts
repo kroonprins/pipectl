@@ -6,7 +6,6 @@ import {
   BuildAuthorizationScope,
   BuildCompletionTrigger,
   BuildDefinition,
-  BuildDefinitionStep,
   BuildDefinitionVariable,
   BuildProcess,
   BuildRepository,
@@ -23,7 +22,6 @@ import {
   Schedule,
   ScheduleDays,
   ScheduleTrigger,
-  TaskDefinitionReference,
   VariableGroup,
 } from 'azure-devops-node-api/interfaces/BuildInterfaces'
 import { TeamProjectReference } from 'azure-devops-node-api/interfaces/CoreInterfaces'
@@ -32,9 +30,9 @@ import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
 import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
-import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
+import { tasks as steps } from './defaults-common'
 
 const process = async (
   buildDefinition: BuildDefinition
@@ -87,38 +85,6 @@ const designerProcessPhaseAgentPoolQueueTargetExecutionOptions = async (
     agentPoolQueueTarget.executionOptions || {},
     defaultsDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions
   )
-}
-
-const phaseSteps = async (phase: Phase): Promise<BuildDefinitionStep[]> => {
-  return Promise.all(
-    (phase.steps || []).map((step) =>
-      applyDefaults(step, defaultsDesignerProcessStep)
-    )
-  )
-}
-
-const buildDefinitionStepTask = async (
-  buildDefinitionStep: BuildDefinitionStep
-): Promise<TaskDefinitionReference> => {
-  const defaultsApplied = await applyDefaults(
-    buildDefinitionStep.task || {},
-    defaultsBuildDefinitionStepTask
-  )
-  if (defaultsApplied.definitionType === 'task') {
-    if (
-      !(defaultsApplied.hasOwnProperty('id') && defaultsApplied.id) &&
-      defaultsApplied.hasOwnProperty('name') &&
-      (defaultsApplied as any).name
-    ) {
-      defaultsApplied.id = await taskDefinitionApi.findTaskDefinitionIdByName(
-        (defaultsApplied as any).name,
-        defaultsApplied.versionSpec
-      )
-    }
-  } else {
-    // task group
-  }
-  return defaultsApplied
 }
 
 const project = async (
@@ -358,7 +324,7 @@ const defaultsDesignerProcessPhase: Phase | object = {
   jobAuthorizationScope: BuildAuthorizationScope.ProjectCollection,
   jobCancelTimeoutInMinutes: 0,
   target: phaseTarget,
-  steps: phaseSteps,
+  steps,
 }
 
 const defaultsDesignerProcessPhaseTarget: PhaseTarget = {
@@ -374,20 +340,6 @@ const defaultsDesignerProcessPhaseAgentPoolQueueTarget:
 
 const defaultsDesignerProcessPhaseAgentPoolQueueTargetExecutionOptions: AgentTargetExecutionOptions = {
   type: 0, // no parallelism
-}
-
-const defaultsDesignerProcessStep: BuildDefinitionStep | object = {
-  condition: 'succeeded()',
-  enabled: true,
-  continueOnError: false,
-  alwaysRun: false,
-  timeoutInMinutes: 0,
-  task: buildDefinitionStepTask,
-}
-
-const defaultsBuildDefinitionStepTask: TaskDefinitionReference | object = {
-  definitionType: 'task',
-  versionSpec: '1.*',
 }
 
 const defaultsBuildRepository: BuildRepository | object = {

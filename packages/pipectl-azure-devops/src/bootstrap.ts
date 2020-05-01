@@ -11,11 +11,13 @@ import { ApplyBuildDefinition } from './processors/apply-build-definition'
 import { ApplyGitPullRequest } from './processors/apply-git-pull-request'
 import { ApplyGitRepository } from './processors/apply-git-repository'
 import { ApplyReleaseDefinition } from './processors/apply-release-definition'
+import { ApplyTaskGroup } from './processors/apply-task-group'
 import { ApplyVariableGroup } from './processors/apply-variable-group'
 import { DeleteBuildDefinition } from './processors/delete-build-definition'
 import { DeleteGitPullRequest } from './processors/delete-git-pull-request'
 import { DeleteGitRepository } from './processors/delete-git-repository'
 import { DeleteReleaseDefinition } from './processors/delete-release-definition'
+import { DeleteTaskGroup } from './processors/delete-task-group'
 import { DeleteVariableGroup } from './processors/delete-variable-group'
 import { GetAllBuildDefinitions } from './processors/get-all-build-definitions'
 import { GetAllGitPullRequests } from './processors/get-all-git-pull-requests'
@@ -51,6 +53,7 @@ import { ApplyBuildDefinitionTransformer } from './transformers/apply-build-defi
 import { ApplyGitPullRequestTransformer } from './transformers/apply-git-pull-request-transformer'
 import { ApplyGitRepositoryTransformer } from './transformers/apply-git-repository-transformer'
 import { ApplyReleaseDefinitionTransformer } from './transformers/apply-release-definition-transformer'
+import { ApplyTaskGroupTransformer } from './transformers/apply-task-group-transformer'
 import { ApplyVariableGroupTransformer } from './transformers/apply-variable-group-transformer'
 import { BuildDefinitionTransformer } from './transformers/build-definition-transformer'
 import { DeleteGitPullRequestTransformer } from './transformers/delete-git-pull-request-transformer'
@@ -70,6 +73,7 @@ export default (_yargs: Argv) => {
     new VariableGroupTransformer(),
     new ApplyVariableGroupTransformer(),
     new TaskGroupTransformer(),
+    new ApplyTaskGroupTransformer(),
     new GitRepositoryTransformer(),
     new ApplyGitRepositoryTransformer(),
     new GitPullRequestTransformer(),
@@ -88,6 +92,8 @@ export default (_yargs: Argv) => {
     new DeleteVariableGroup(),
     new GetAllTaskGroups(),
     new GetOneTaskGroup(),
+    new ApplyTaskGroup(),
+    new DeleteTaskGroup(),
     new GetAllGitRepositories(),
     new GetOneGitRepository(),
     new ApplyGitRepository(),
