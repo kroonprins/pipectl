@@ -20,6 +20,7 @@ enum Kind {
   BUILD_DEFINITION = 'BuildDefinition',
   RELEASE_DEFINITION = 'ReleaseDefinition',
   VARIABLE_GROUP = 'VariableGroup',
+  TASK_GROUP = 'TaskGroup',
   GIT_REPOSITORY = 'GitRepository',
   GIT_PULL_REQUEST = 'GitPullRequest',
 }

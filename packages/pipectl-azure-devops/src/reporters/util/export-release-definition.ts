@@ -87,7 +87,8 @@ const workflowTasks = async (
     (deployPhase.workflowTasks || []).map(async (workflowTask) => {
       if (workflowTask.definitionType === 'task') {
         const taskName = await taskDefinitionApi.findTaskDefinitionNameById(
-          workflowTask.taskId
+          workflowTask.taskId,
+          workflowTask.version
         )
         if (taskName) {
           const result = {
@@ -276,7 +277,7 @@ const exportDeployPhase: DeployPhase | object = {
 
 const exportWorkflowTask: WorkflowTask | object = {
   enabled: true,
-  environment: filterProp, // TODO
+  environment: filterIfEmpty,
   refName: filterProp,
   alwaysRun: false,
   continueOnError: false,

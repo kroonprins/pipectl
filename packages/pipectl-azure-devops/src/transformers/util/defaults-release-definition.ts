@@ -209,7 +209,8 @@ const workflowTasks = async (
           (defaultsApplied as any).taskName
         ) {
           defaultsApplied.taskId = await taskDefinitionApi.findTaskDefinitionIdByName(
-            (defaultsApplied as any).taskName
+            (defaultsApplied as any).taskName,
+            defaultsApplied.version
           )
         }
       } else {

@@ -16,12 +16,21 @@ class TaskDefinitionApi {
     return this._taskAgentApi
   }
 
-  findTaskDefinitionIdByName = memoize(this._findTaskDefinitionIdByName)
-  findTaskDefinitionNameById = memoize(this._findTaskDefinitionNameById)
+  findTaskDefinitionIdByName = memoize(this._findTaskDefinitionIdByName, {
+    cacheKey: JSON.stringify,
+  })
+  findTaskDefinitionNameById = memoize(this._findTaskDefinitionNameById, {
+    cacheKey: JSON.stringify,
+  })
   private findTaskDefinitions = memoize(this._findTaskDefinitions)
 
-  private async _findTaskDefinitionIdByName(name: string): Promise<string> {
-    log.debug(`[TaskDefinitionApi._findTaskDefinitionIdByName] name[${name}]`)
+  private async _findTaskDefinitionIdByName(
+    name: string,
+    versionSpec: string
+  ): Promise<string> {
+    log.debug(
+      `[TaskDefinitionApi._findTaskDefinitionIdByName] name[${name}], versionSpec[${versionSpec}]`
+    )
     const taskDefinitions = await this.findTaskDefinitions()
     if (taskDefinitions && taskDefinitions.length) {
       log.debug(
@@ -29,13 +38,15 @@ class TaskDefinitionApi {
       )
       const found = taskDefinitions.find(
         (taskDefinition) =>
-          taskDefinition.name?.toLowerCase() === name.toLowerCase() ||
-          taskDefinition.friendlyName?.toLowerCase() === name.toLowerCase()
+          (taskDefinition.name?.toLowerCase() === name.toLowerCase() ||
+            taskDefinition.friendlyName?.toLowerCase() ===
+              name.toLowerCase()) &&
+          versionSpec === `${taskDefinition.version?.major}.*`
       )
       log.debug(
         `[TaskDefinitionApi._findTaskDefinitionIdByName] found[${JSON.stringify(
           found
-        )}] for name[${name}]`
+        )}] for name[${name}], versionSpec[${versionSpec}]`
       )
       if (found && found.id) {
         return found.id
@@ -47,31 +58,29 @@ class TaskDefinitionApi {
   }
 
   private async _findTaskDefinitionNameById(
-    id: string
+    id: string,
+    versionSpec: string
   ): Promise<string | undefined> {
-    log.debug(`[TaskDefinitionApi._findTaskDefinitionNameById] name[${id}]`)
-    const taskDefinitions = await this.findTaskDefinitions()
+    log.debug(
+      `[TaskDefinitionApi._findTaskDefinitionNameById] name[${id}], versionSpec[${versionSpec}]`
+    )
+    const taskDefinitions = await this.findTaskDefinitions() // using this instead of api.getTaskDefinition because all the definitions are normally already memoized
     if (taskDefinitions && taskDefinitions.length) {
       log.debug(
         `[TaskDefinitionApi._findTaskDefinitionNameById] ${taskDefinitions.length} results`
       )
-      const matching = taskDefinitions.filter(
-        (taskDefinition) => taskDefinition.id === id
+      const found = taskDefinitions.find(
+        (taskDefinition) =>
+          taskDefinition.id === id &&
+          versionSpec === `${taskDefinition.version?.major}.*`
       )
       log.debug(
-        `[TaskDefinitionApi._findTaskDefinitionIdByName] matching[${JSON.stringify(
-          matching
-        )}] for id[${id}]`
+        `[TaskDefinitionApi._findTaskDefinitionIdByName] found[${JSON.stringify(
+          found
+        )}] for id[${id}], versionSpec[${versionSpec}]`
       )
-      if (matching && matching.length) {
-        const sorted = matching.sort((a, b) => {
-          const major = b.version!.major! - a.version!.major!
-          return major !== 0 ? major : b.version!.minor! - a.version!.minor!
-        })
-        log.debug(
-          `[TaskDefinitionApi._findTaskDefinitionIdByName] selected[${sorted[0]}] for id[${id}]`
-        )
-        return sorted[0].friendlyName || sorted[0].name
+      if (found) {
+        return found.friendlyName || found.name
       }
     }
     return undefined
