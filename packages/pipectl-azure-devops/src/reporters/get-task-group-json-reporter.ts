@@ -25,7 +25,8 @@ class GetTaskGroupJsonReporter extends GetReporterJson<
       processResult,
       transformedDefinition,
       args,
-      (definition) => applyExport(definition, exportTaskGroup)
+      (definition) =>
+        applyExport(definition, exportTaskGroup, transformedDefinition.project)
     )
   }
 }

@@ -29,7 +29,9 @@ import {
 import { tasks as steps } from './export-common'
 
 const process = async (
-  buildDefinition: BuildDefinition
+  buildDefinition: BuildDefinition,
+  _key: string,
+  projectId: string
 ): Promise<BuildProcess> => {
   const commonExportApplied = await applyExport(
     buildDefinition.process,
@@ -37,7 +39,7 @@ const process = async (
   )
   if (buildDefinition.process) {
     if (buildDefinition.process.type === 1) {
-      return applyExport(commonExportApplied, exportDesignerProcess)
+      return applyExport(commonExportApplied, exportDesignerProcess, projectId)
     } // TODO other process types?
   }
   return commonExportApplied

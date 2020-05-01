@@ -23,6 +23,9 @@ class TaskGroupApi {
   findTaskGroupIdByName = memoize(this._findTaskGroupIdByName, {
     cacheKey: JSON.stringify,
   })
+  findTaskGroupNameById = memoize(this._findTaskGroupNameById, {
+    cacheKey: JSON.stringify,
+  })
   private findTaskGroups = memoize(this._findTaskGroups)
 
   private async _findTaskGroupIdByName(
@@ -62,6 +65,24 @@ class TaskGroupApi {
         revision: taskGroup.revision,
       }
     })
+  }
+
+  async _findTaskGroupNameById(
+    id: string,
+    versionSpec: string,
+    project: string
+  ): Promise<string> {
+    log.debug(
+      `[TaskGroupApi.findTaskGroupById] id[${id}], versionSpec[${versionSpec}], project[${project}]`
+    )
+    const api = await this.getApi()
+    const taskGroup = await api.getTaskGroup(project, id, versionSpec)
+    if (taskGroup && taskGroup.name) {
+      return taskGroup.friendlyName || taskGroup.name
+    }
+    throw new Error(
+      `Task group with id ${id} and versionSpec ${versionSpec} not found in project ${project}. It either doesn't exist or you do not have the required access for it.`
+    )
   }
 
   async findTaskGroupByName(
@@ -110,7 +131,7 @@ class TaskGroupApi {
       return taskGroup
     }
     throw new Error(
-      `Task group with id ${id} not found in project ${project}. It either doesn't exist or you do not have the required access for it.`
+      `Task group with id ${id} and majorVersion ${majorVersion} not found in project ${project}. It either doesn't exist or you do not have the required access for it.`
     )
   }
 
