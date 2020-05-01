@@ -25,7 +25,8 @@ class GetTaskGroupYamlReporter extends GetReporterYaml<
       processResult,
       transformedDefinition,
       args,
-      (definition) => applyExport(definition, exportTaskGroup)
+      (definition) =>
+        applyExport(definition, exportTaskGroup, transformedDefinition.project)
     )
   }
 }

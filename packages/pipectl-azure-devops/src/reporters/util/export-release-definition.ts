@@ -15,6 +15,7 @@ import {
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
 import { taskDefinitionApi } from '../../adapters/task-definition-api'
+import { taskGroupApi } from '../../adapters/task-group-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import {
   applyExport,
@@ -67,7 +68,8 @@ const deployPhases = async (
     (environment.deployPhases || []).map(async (deployPhase) => {
       const exportedDeployPhase = await applyExport(
         deployPhase,
-        exportDeployPhase
+        exportDeployPhase,
+        projectId
       )
       if (deployPhase.phaseType === DeployPhaseTypes.AgentBasedDeployment) {
         return applyExport(
@@ -81,25 +83,32 @@ const deployPhases = async (
   )
 
 const workflowTasks = async (
-  deployPhase: DeployPhase
+  deployPhase: DeployPhase,
+  _key: string,
+  projectId: string
 ): Promise<WorkflowTask[]> => {
   const workflowTasksWithTaskname = await Promise.all(
     (deployPhase.workflowTasks || []).map(async (workflowTask) => {
+      let taskName: string | undefined
       if (workflowTask.definitionType === 'task') {
-        const taskName = await taskDefinitionApi.findTaskDefinitionNameById(
+        taskName = await taskDefinitionApi.findTaskDefinitionNameById(
           workflowTask.taskId,
           workflowTask.version
         )
-        if (taskName) {
-          const result = {
-            taskName,
-            ...workflowTask,
-          }
-          delete result.taskId
-          return result
-        } else {
-          return workflowTask
+      } else if (workflowTask.definitionType === 'metaTask') {
+        taskName = await taskGroupApi.findTaskGroupNameById(
+          workflowTask.taskId,
+          workflowTask.version,
+          projectId
+        )
+      }
+      if (taskName) {
+        const result = {
+          taskName,
+          ...workflowTask,
         }
+        delete result.taskId
+        return result
       } else {
         return workflowTask
       }

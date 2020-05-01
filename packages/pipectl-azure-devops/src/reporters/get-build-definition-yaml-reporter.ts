@@ -25,7 +25,12 @@ class GetBuildDefinitionYamlReporter extends GetReporterYaml<
       processResult,
       transformedDefinition,
       args,
-      (definition) => applyExport(definition, exportBuildDefinition)
+      (definition) =>
+        applyExport(
+          definition,
+          exportBuildDefinition,
+          transformedDefinition.project
+        )
     )
   }
 }
