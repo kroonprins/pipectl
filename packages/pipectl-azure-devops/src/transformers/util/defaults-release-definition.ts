@@ -21,6 +21,7 @@ import { isNumber } from 'util'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
 import { coreApi } from '../../adapters/core-api'
+import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
 
@@ -194,9 +195,28 @@ const workflowTasks = async (
   deployPhase: DeployPhase
 ): Promise<WorkflowTask[]> => {
   return Promise.all(
-    (deployPhase.workflowTasks || []).map((workflowTask) =>
-      applyDefaults(workflowTask, defaultsWorkflowTask)
-    )
+    (deployPhase.workflowTasks || []).map(async (workflowTask) => {
+      const defaultsApplied = await applyDefaults(
+        workflowTask,
+        defaultsWorkflowTask
+      )
+      if (defaultsApplied.definitionType === 'task') {
+        if (
+          !(
+            defaultsApplied.hasOwnProperty('taskId') && defaultsApplied.taskId
+          ) &&
+          defaultsApplied.hasOwnProperty('taskName') &&
+          (defaultsApplied as any).taskName
+        ) {
+          defaultsApplied.taskId = await taskDefinitionApi.findTaskDefinitionIdByName(
+            (defaultsApplied as any).taskName
+          )
+        }
+      } else {
+        // task group
+      }
+      return defaultsApplied
+    })
   )
 }
 

@@ -19,7 +19,7 @@ spec:
             queueId: Azure Pipelines
           name: Agent job
           workflowTasks:
-            - taskId: 6c731c3c-3c68-459a-a5c9-bde6e6595b5b
+            - taskName: Bash
               version: 3.*
               inputs:
                 targetType: inline

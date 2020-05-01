@@ -10,11 +10,20 @@ import {
   ReleaseDefinitionApprovals,
   ReleaseDefinitionEnvironment,
   ReleaseDefinitionGatesStep,
+  WorkflowTask,
 } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
 import { agentPoolApi } from '../../adapters/agent-pool-api'
 import { buildApi } from '../../adapters/build-api'
+import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
-import { applyExport, array, filterIfEmpty, filterProp, object } from './export'
+import {
+  applyExport,
+  applyExportOnArray,
+  array,
+  filterIfEmpty,
+  filterProp,
+  object,
+} from './export'
 
 const artifacts = async (
   releaseDefinition: ReleaseDefinition
@@ -71,7 +80,35 @@ const deployPhases = async (
     })
   )
 
+const workflowTasks = async (
+  deployPhase: DeployPhase
+): Promise<WorkflowTask[]> => {
+  const workflowTasksWithTaskname = await Promise.all(
+    (deployPhase.workflowTasks || []).map(async (workflowTask) => {
+      if (workflowTask.definitionType === 'task') {
+        const taskName = await taskDefinitionApi.findTaskDefinitionNameById(
+          workflowTask.taskId
+        )
+        if (taskName) {
+          const result = {
+            taskName,
+            ...workflowTask,
+          }
+          delete result.taskId
+          return result
+        } else {
+          return workflowTask
+        }
+      } else {
+        return workflowTask
+      }
+    })
+  )
+  return applyExportOnArray(workflowTasksWithTaskname, exportWorkflowTask)
+}
+
 const queueId = async (
+  // TODO make it queueName instead of queueId to be more consistent with how id<>name is handled elsewhere?
   agentDeploymentInput: AgentDeploymentInput,
   _key: string,
   projectId: string
@@ -234,17 +271,19 @@ const exportDeployPhase: DeployPhase | object = {
   rank: filterProp,
   phaseType: DeployPhaseTypes.AgentBasedDeployment,
   refName: filterProp,
-  workflowTasks: array({
-    enabled: true,
-    environment: filterProp, // TODO
-    refName: filterProp,
-    alwaysRun: false,
-    continueOnError: false,
-    timeoutInMinutes: 0,
-    overrideInputs: filterProp, // TODO
-    definitionType: 'task',
-    version: '1.*',
-  }),
+  workflowTasks,
+}
+
+const exportWorkflowTask: WorkflowTask | object = {
+  enabled: true,
+  environment: filterProp, // TODO
+  refName: filterProp,
+  alwaysRun: false,
+  continueOnError: false,
+  timeoutInMinutes: 0,
+  overrideInputs: filterProp, // TODO
+  definitionType: 'task',
+  version: '1.*',
 }
 
 const exportAgentBasedDeployPhase: AgentBasedDeployPhase | object = {
