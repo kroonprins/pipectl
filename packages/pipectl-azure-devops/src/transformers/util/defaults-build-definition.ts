@@ -6,6 +6,7 @@ import {
   BuildAuthorizationScope,
   BuildCompletionTrigger,
   BuildDefinition,
+  BuildDefinitionStep,
   BuildDefinitionVariable,
   BuildProcess,
   BuildRepository,
@@ -32,25 +33,35 @@ import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { applyDefaults } from './defaults'
-import { tasks as steps } from './defaults-common'
+import { tasks } from './defaults-common'
 
 const process = async (
-  buildDefinition: BuildDefinition
+  buildDefinition: BuildDefinition,
+  key: string,
+  definition: Definition
 ): Promise<BuildProcess> => {
   const commonDefaultsApplied = await applyDefaults(
     buildDefinition.process || {},
     defaultsProcess
   )
   if (commonDefaultsApplied.type === 1) {
-    return applyDefaults(commonDefaultsApplied, defaultsDesignerProcess)
+    return applyDefaults(
+      commonDefaultsApplied,
+      defaultsDesignerProcess,
+      (await project(buildDefinition, key, definition)).id
+    )
   } // TODO other process types?
   return commonDefaultsApplied
 }
 
-const phases = async (designerProcess: DesignerProcess): Promise<Phase[]> => {
+const phases = async (
+  designerProcess: DesignerProcess,
+  _key: string,
+  projectId: string
+): Promise<Phase[]> => {
   return Promise.all(
     [...(designerProcess.phases || []).entries()].map(([index, phase]) =>
-      applyDefaults(phase, defaultsDesignerProcessPhase, index)
+      applyDefaults(phase, defaultsDesignerProcessPhase, index, projectId)
     )
   )
 }
@@ -76,6 +87,15 @@ const phaseTarget = async (phase: Phase): Promise<PhaseTarget> => {
     )
   } // TODO other target types?
   return commonDefaultsApplied
+}
+
+const steps = async (
+  phase: Phase,
+  key: string,
+  _index: number,
+  projectId: string
+): Promise<BuildDefinitionStep[]> => {
+  return tasks(phase, key, projectId) as Promise<BuildDefinitionStep[]>
 }
 
 const designerProcessPhaseAgentPoolQueueTargetExecutionOptions = async (

@@ -9,42 +9,51 @@ import {
   TaskGroupStep,
 } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { taskDefinitionApi } from '../../adapters/task-definition-api'
+import { taskGroupApi } from '../../adapters/task-group-api'
 import { applyDefaults } from './defaults'
 
 const tasks = async (
   spec: Phase | TaskGroup,
-  key: keyof Phase | keyof TaskGroup
-): Promise<BuildDefinitionStep[]> => {
+  key: string,
+  projectId: string
+): Promise<(BuildDefinitionStep | TaskGroupStep)[]> => {
   return Promise.all(
     (
       (spec as any)[key] || []
     ).map((step: BuildDefinitionStep | TaskGroupStep) =>
-      applyDefaults(step, defaultsStep)
+      applyDefaults(step, defaultsStep, projectId)
     )
   )
 }
 
 const task = async (
   step: BuildDefinitionStep | TaskGroupStep,
-  key: string
+  key: string,
+  projectId: string
 ): Promise<BuildTaskDefinitionReference | TaskDefinitionReference> => {
   const defaultsApplied = (await applyDefaults(
     (step as any)[key] || {},
     defaultsTask
   )) as BuildTaskDefinitionReference | TaskDefinitionReference
-  if (defaultsApplied.definitionType === 'task') {
-    if (
-      !(defaultsApplied.hasOwnProperty('id') && defaultsApplied.id) &&
-      defaultsApplied.hasOwnProperty('name') &&
-      (defaultsApplied as any).name
-    ) {
+  if (
+    !(defaultsApplied.hasOwnProperty('id') && defaultsApplied.id) &&
+    defaultsApplied.hasOwnProperty('name') &&
+    (defaultsApplied as any).name
+  ) {
+    if (defaultsApplied.definitionType === 'task') {
       defaultsApplied.id = await taskDefinitionApi.findTaskDefinitionIdByName(
         (defaultsApplied as any).name,
         defaultsApplied.versionSpec
       )
+    } else if (defaultsApplied.definitionType === 'metaTask') {
+      // metaTask = task group
+      defaultsApplied.id = await taskGroupApi.findTaskGroupIdByName(
+        (defaultsApplied as any).name,
+        defaultsApplied.versionSpec,
+        projectId
+      )
     }
-  } else {
-    // task group
+    delete (defaultsApplied as any).name
   }
   return defaultsApplied
 }

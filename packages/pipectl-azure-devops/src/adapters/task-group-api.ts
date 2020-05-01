@@ -5,6 +5,7 @@ import {
   TaskGroupUpdateParameter,
 } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
 import { ITaskAgentApi } from 'azure-devops-node-api/TaskAgentApi'
+import memoize from 'p-memoize'
 import { azureConnection } from './connection'
 
 class TaskGroupApi {
@@ -19,6 +20,50 @@ class TaskGroupApi {
     return this._taskAgentApi
   }
 
+  findTaskGroupIdByName = memoize(this._findTaskGroupIdByName, {
+    cacheKey: JSON.stringify,
+  })
+  private findTaskGroups = memoize(this._findTaskGroups)
+
+  private async _findTaskGroupIdByName(
+    name: string,
+    versionSpec: string,
+    project: string
+  ): Promise<string> {
+    log.debug(
+      `[TaskGroupApi._findTaskGroupIdByName] name[${name}], versionSpec[${versionSpec}], project[${project}]`
+    )
+    const search = await this.findTaskGroups(project)
+    if (search && search.length) {
+      const found = search.find(
+        (taskGroup) =>
+          taskGroup.name === name &&
+          `${taskGroup.version?.major}.*` === versionSpec
+      )
+      log.debug(
+        `[TaskGroupApi.findTaskGroupByName] found ${found} (${search.length}) for name[${name}], project[${project}]`
+      )
+      if (found && found.id) {
+        return found.id
+      }
+    }
+    throw new Error(
+      `Task group with name ${name} and versionSpec[${versionSpec}] not found for project[${project}]. It either doesn't exist or you do not have the required access for it.`
+    )
+  }
+
+  private async _findTaskGroups(project: string) {
+    const api = await this.getApi()
+    return (await api.getTaskGroups(project)).map((taskGroup) => {
+      return {
+        id: taskGroup.id,
+        name: taskGroup.name,
+        version: taskGroup.version,
+        revision: taskGroup.revision,
+      }
+    })
+  }
+
   async findTaskGroupByName(
     name: string,
     majorVersion: number,
@@ -27,8 +72,7 @@ class TaskGroupApi {
     log.debug(
       `[TaskGroupApi.findTaskGroupByName] name[${name}], project[${project}]`
     )
-    const api = await this.getApi()
-    const search = await api.getTaskGroups(project)
+    const search = await this.findTaskGroups(project)
     if (search && search.length) {
       const found = search.find(
         (taskGroup) =>
