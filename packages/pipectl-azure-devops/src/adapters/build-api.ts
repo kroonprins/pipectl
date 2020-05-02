@@ -60,7 +60,9 @@ class BuildApi {
       `[BuildApi.findBuildDefinitionById] id[${id}], project[${project}]`
     )
     const api = await this.getApi()
-    return api.getDefinition(project, id)
+    const buildDefinition = await api.getDefinition(project, id)
+    buildDefinition.tags = await api.getBuildTags(project, id)
+    return buildDefinition
   }
 
   async findAllBuildDefinitions(project: string): Promise<BuildDefinition[]> {
@@ -95,7 +97,19 @@ class BuildApi {
       `[BuildApi.createBuildDefinition] ${buildDefinition.path}\\${buildDefinition.name}, project[${project}]`
     )
     const api = await this.getApi()
-    return api.createDefinition(buildDefinition, project)
+    const createdBuildDefinition = await api.createDefinition(
+      buildDefinition,
+      project
+    )
+    if (buildDefinition.tags && buildDefinition.tags.length) {
+      log.debug(
+        `[BuildApi.createBuildDefinition] add tags ${JSON.stringify(
+          buildDefinition.tags
+        )}`
+      )
+      await api.addBuildTags(buildDefinition.tags, project, buildDefinition.id!)
+    }
+    return createdBuildDefinition
   }
 
   async updateBuildDefinition(
@@ -106,7 +120,38 @@ class BuildApi {
       `[BuildApi.updateBuildDefinition] ${buildDefinition.path}\\${buildDefinition.name}, project[${project}]`
     )
     const api = await this.getApi()
-    return api.updateDefinition(buildDefinition, project, buildDefinition.id!)
+    const updatedBuildDefinition = await api.updateDefinition(
+      buildDefinition,
+      project,
+      buildDefinition.id!
+    )
+    if (buildDefinition.tags && buildDefinition.tags.length) {
+      const currentTags =
+        (await api.getBuildTags(project, buildDefinition.id!)) || []
+      const tagsToAdd = buildDefinition.tags.filter(
+        (x) => !currentTags.includes(x)
+      )
+      log.debug(
+        `[BuildApi.updateBuildDefinition] tags to add ${JSON.stringify(
+          tagsToAdd
+        )}`
+      )
+      const tagsToRemove = currentTags.filter(
+        (x) => !buildDefinition.tags!.includes(x)
+      )
+      log.debug(
+        `[BuildApi.updateBuildDefinition] tags to remove ${JSON.stringify(
+          tagsToRemove
+        )}`
+      )
+      await Promise.all([
+        api.addBuildTags(tagsToAdd, project, buildDefinition.id!),
+        ...tagsToRemove.map((tag) =>
+          api.deleteBuildTag(project, buildDefinition.id!, tag)
+        ),
+      ])
+    }
+    return updatedBuildDefinition
   }
 
   async deleteBuildDefinition(buildDefinitionId: number, project: string) {

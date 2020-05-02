@@ -1,12 +1,12 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
+  ProcessResult,
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { variableGroupApi } from '../adapters/variable-group-api'
 import { AzureVariableGroup } from '../model/azure-variable-group'
-import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
 
 class GetAllVariableGroups implements ActionProcessor {
   canProcess(
@@ -25,7 +25,7 @@ class GetAllVariableGroups implements ActionProcessor {
     azureVariableGroup: AzureVariableGroup,
     _action: Action,
     _args: GetArguments
-  ): Promise<GetVariableGroupProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(`[GetAllVariableGroups] ${JSON.stringify(azureVariableGroup)}`)
     try {
       const project = azureVariableGroup.project
@@ -33,9 +33,22 @@ class GetAllVariableGroups implements ActionProcessor {
         project
       )
       if (variableGroups) {
-        return new GetVariableGroupProcessResult(variableGroups)
+        return {
+          results: variableGroups.map((variableGroup) => {
+            return {
+              apiVersion: azureVariableGroup.apiVersion,
+              kind: azureVariableGroup.kind,
+              metadata: {
+                namespace: azureVariableGroup.project,
+                labels: {},
+              },
+              spec: variableGroup,
+            }
+          }),
+          properties: { type: azureVariableGroup.kind },
+        }
       } else {
-        return new GetVariableGroupProcessResult([])
+        return { results: [], properties: { type: azureVariableGroup.kind } }
       }
     } catch (e) {
       return { error: e }

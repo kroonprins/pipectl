@@ -8,21 +8,17 @@ import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { safeDump } from 'js-yaml'
 import { ReportingTransformationResult } from './model'
 
-abstract class GetReporterYaml<
-  U extends ProcessResult,
-  V extends TransformedDefinition
-> implements Reporter {
-  constructor(private transformedDefinitionType: new () => U) {}
+abstract class GetReporterYaml implements Reporter {
+  constructor(private type: string) {}
 
   canReport(
-    processResult: U,
-    _transformedDefinition: V,
+    processResult: ProcessResult,
+    _transformedDefinition: TransformedDefinition,
     _action: Action,
     args: GetArguments
   ): boolean {
     const result =
-      processResult instanceof this.transformedDefinitionType &&
-      args.output === 'yaml'
+      processResult.properties?.type === this.type && args.output === 'yaml'
     log.debug(
       `[GetReporterYaml] canReport[${result}], processResult[${JSON.stringify(
         processResult
@@ -32,8 +28,8 @@ abstract class GetReporterYaml<
   }
 
   async report(
-    processResult: U,
-    transformedDefinition: V,
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
     action: Action,
     args: GetArguments
   ): Promise<void> {
@@ -50,8 +46,8 @@ abstract class GetReporterYaml<
   }
 
   abstract transform(
-    processResult: U,
-    transformedDefinition: V,
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
     action: Action,
     args: GetArguments
   ): Promise<ReportingTransformationResult>

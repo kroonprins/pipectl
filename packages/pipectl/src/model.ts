@@ -96,6 +96,8 @@ interface ActionProcessor {
 class ProcessResult {
   public error?: Error
   public info?: string
+  public results?: Definition[]
+  public properties?: { [key: string]: string }
 }
 
 interface Reporter {

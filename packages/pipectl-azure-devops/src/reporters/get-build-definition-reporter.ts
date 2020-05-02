@@ -1,15 +1,10 @@
 import { BuildDefinition } from 'azure-devops-node-api/interfaces/BuildInterfaces'
-import { AzureBuildDefinition } from '../model/azure-build-definition'
-import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
+import { Kind } from '../model'
 import { GetReporter } from './get-reporter'
 
-class GetBuildDefinitionReporter extends GetReporter<
-  GetBuildDefinitionProcessResult,
-  AzureBuildDefinition,
-  BuildDefinition
-> {
+class GetBuildDefinitionReporter extends GetReporter<BuildDefinition> {
   constructor() {
-    super(GetBuildDefinitionProcessResult)
+    super(Kind.BUILD_DEFINITION)
   }
 
   columns(): string[] {

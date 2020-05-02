@@ -1,29 +1,27 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
+import { ProcessResult } from '@kroonprins/pipectl/dist/model'
+import { Kind } from '../model'
 import { AzureGitPullRequest } from '../model/azure-git-pull-request'
-import { GetGitPullRequestProcessResult } from '../model/get-git-pull-request-process-result'
 import { GetReporterYaml } from './get-reporter-yaml'
 import { ReportingTransformationResult } from './model'
 import { applyExport } from './util/export'
 import { exportGitPullRequest } from './util/export-git-pull-request'
 import { transformForGetReporting } from './util/get-reporting'
 
-class GetGitPullRequestYamlReporter extends GetReporterYaml<
-  GetGitPullRequestProcessResult,
-  AzureGitPullRequest
-> {
+class GetGitPullRequestYamlReporter extends GetReporterYaml {
   constructor() {
-    super(GetGitPullRequestProcessResult)
+    super(Kind.GIT_PULL_REQUEST)
   }
 
   transform(
-    processResult: GetGitPullRequestProcessResult,
+    processResult: ProcessResult,
     transformedDefinition: AzureGitPullRequest,
     _action: Action,
     args: GetArguments
   ): Promise<ReportingTransformationResult> {
     return transformForGetReporting(
       processResult,
-      transformedDefinition,
+      transformedDefinition.apiVersion,
       args,
       (definition) => applyExport(definition, exportGitPullRequest)
     )

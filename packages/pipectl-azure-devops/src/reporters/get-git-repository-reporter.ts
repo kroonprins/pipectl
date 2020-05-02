@@ -1,15 +1,10 @@
 import { GitRepository } from 'azure-devops-node-api/interfaces/GitInterfaces'
-import { AzureGitRepository } from '../model/azure-git-repository'
-import { GetGitRepositoryProcessResult } from '../model/get-git-repository-process-result'
+import { Kind } from '../model'
 import { GetReporter } from './get-reporter'
 
-class GetGitRepositoryReporter extends GetReporter<
-  GetGitRepositoryProcessResult,
-  AzureGitRepository,
-  GitRepository
-> {
+class GetGitRepositoryReporter extends GetReporter<GitRepository> {
   constructor() {
-    super(GetGitRepositoryProcessResult)
+    super(Kind.GIT_REPOSITORY)
   }
 
   columns(): string[] {

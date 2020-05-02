@@ -1,12 +1,13 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
+  ProcessResult,
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { buildApi } from '../adapters/build-api'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
-import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
+import { toLabels } from '../reporters/util/tags'
 
 class GetOneBuildDefinition implements ActionProcessor {
   canProcess(
@@ -25,7 +26,7 @@ class GetOneBuildDefinition implements ActionProcessor {
     azureBuildDefinition: AzureBuildDefinition,
     _action: Action,
     args: GetArguments
-  ): Promise<GetBuildDefinitionProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(`[GetOneBuildDefinition] ${JSON.stringify(azureBuildDefinition)}`)
     try {
       const project = azureBuildDefinition.project
@@ -34,7 +35,20 @@ class GetOneBuildDefinition implements ActionProcessor {
         project
       )
       if (buildDefinition) {
-        return new GetBuildDefinitionProcessResult([buildDefinition])
+        return {
+          results: [
+            {
+              apiVersion: azureBuildDefinition.apiVersion,
+              kind: azureBuildDefinition.kind,
+              metadata: {
+                namespace: azureBuildDefinition.project,
+                labels: toLabels(buildDefinition.tags),
+              },
+              spec: buildDefinition,
+            },
+          ],
+          properties: { type: azureBuildDefinition.kind },
+        }
       } else {
         return {
           error: new Error(

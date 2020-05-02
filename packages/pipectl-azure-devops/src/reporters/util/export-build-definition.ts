@@ -180,7 +180,7 @@ const exportBuildDefinition: BuildDefinition | object = {
     deleteTestResults: true,
   }),
   revision: filterProp,
-  tags: filterIfEmpty,
+  tags: filterProp, // they are set as labels on the definition
   triggers,
   uri: filterProp,
   url: filterProp,

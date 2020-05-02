@@ -1,15 +1,11 @@
 import { TaskGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
+import { Kind } from '../model'
 import { AzureTaskGroup } from '../model/azure-task-group'
-import { GetTaskGroupProcessResult } from '../model/get-task-group-process-result'
 import { GetReporter } from './get-reporter'
 
-class GetTaskGroupReporter extends GetReporter<
-  GetTaskGroupProcessResult,
-  AzureTaskGroup,
-  TaskGroup
-> {
+class GetTaskGroupReporter extends GetReporter<TaskGroup> {
   constructor() {
-    super(GetTaskGroupProcessResult)
+    super(Kind.TASK_GROUP)
   }
 
   columns(): string[] {

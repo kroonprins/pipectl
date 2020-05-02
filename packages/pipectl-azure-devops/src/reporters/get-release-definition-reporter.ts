@@ -1,15 +1,10 @@
 import { ReleaseDefinition } from 'azure-devops-node-api/interfaces/ReleaseInterfaces'
-import { AzureReleaseDefinition } from '../model/azure-release-definition'
-import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
+import { Kind } from '../model'
 import { GetReporter } from './get-reporter'
 
-class GetReleaseDefinitionReporter extends GetReporter<
-  GetReleaseDefinitionProcessResult,
-  AzureReleaseDefinition,
-  ReleaseDefinition
-> {
+class GetReleaseDefinitionReporter extends GetReporter<ReleaseDefinition> {
   constructor() {
-    super(GetReleaseDefinitionProcessResult)
+    super(Kind.RELEASE_DEFINITION)
   }
 
   columns(): string[] {

@@ -2,11 +2,11 @@ import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
   TransformedDefinition,
+  ProcessResult,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { gitPullRequestApi } from '../adapters/git-pull-request-api'
 import { AzureGitPullRequest } from '../model/azure-git-pull-request'
-import { GetGitPullRequestProcessResult } from '../model/get-git-pull-request-process-result'
 
 class GetAllGitPullRequests implements ActionProcessor {
   canProcess(
@@ -25,7 +25,7 @@ class GetAllGitPullRequests implements ActionProcessor {
     azureGitPullRequest: AzureGitPullRequest,
     _action: Action,
     _args: GetArguments
-  ): Promise<GetGitPullRequestProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(`[GetAllGitPullRequests] ${JSON.stringify(azureGitPullRequest)}`)
     try {
       const project = azureGitPullRequest.project
@@ -33,9 +33,22 @@ class GetAllGitPullRequests implements ActionProcessor {
         project
       )
       if (gitPullRequests) {
-        return new GetGitPullRequestProcessResult(gitPullRequests)
+        return {
+          results: gitPullRequests.map((gitPullRequest) => {
+            return {
+              apiVersion: azureGitPullRequest.apiVersion,
+              kind: azureGitPullRequest.kind,
+              metadata: {
+                namespace: azureGitPullRequest.project,
+                labels: {},
+              },
+              spec: gitPullRequest,
+            }
+          }),
+          properties: { type: azureGitPullRequest.kind },
+        }
       } else {
-        return new GetGitPullRequestProcessResult([])
+        return { results: [], properties: { type: azureGitPullRequest.kind } }
       }
     } catch (e) {
       return { error: e }
