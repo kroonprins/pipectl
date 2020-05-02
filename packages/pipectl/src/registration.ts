@@ -1,7 +1,8 @@
 import {
   ActionProcessor,
-  DefinitionFilter,
   DefinitionGrouper,
+  DefinitionPreFilter,
+  DefinitionPostFilter,
   DefinitionTransformer,
   Reporter,
 } from './model'
@@ -47,15 +48,15 @@ const transformers = (): readonly DefinitionTransformer[] => {
   return _transformers.get()
 }
 
-const _filters = new Registrations<DefinitionFilter>()
-const registerFilter = (...s: DefinitionFilter[]): void => {
-  _filters.register(...s)
+const _preFilters = new Registrations<DefinitionPreFilter>()
+const registerPreFilter = (...s: DefinitionPreFilter[]): void => {
+  _preFilters.register(...s)
 }
-const registerFallbackFilter = (s: DefinitionFilter): void => {
-  _filters.registerFallback(s)
+const registerFallbackPreFilter = (s: DefinitionPreFilter): void => {
+  _preFilters.registerFallback(s)
 }
-const filters = (): readonly DefinitionFilter[] => {
-  return _filters.get()
+const preFilters = (): readonly DefinitionPreFilter[] => {
+  return _preFilters.get()
 }
 
 const _actionProcessors = new Registrations<ActionProcessor>()
@@ -67,6 +68,17 @@ const registerFallbackActionProcessor = (p: ActionProcessor): void => {
 }
 const processors = (): readonly ActionProcessor[] => {
   return _actionProcessors.get()
+}
+
+const _postFilters = new Registrations<DefinitionPostFilter>()
+const registerPostFilter = (...s: DefinitionPostFilter[]): void => {
+  _postFilters.register(...s)
+}
+const registerFallbackPostFilter = (s: DefinitionPostFilter): void => {
+  _postFilters.registerFallback(s)
+}
+const postFilters = (): readonly DefinitionPostFilter[] => {
+  return _postFilters.get()
 }
 
 const _reporters = new Registrations<Reporter>()
@@ -87,12 +99,15 @@ export {
   registerTransformer,
   registerFallbackTransformer,
   transformers,
-  registerFilter,
-  registerFallbackFilter,
-  filters,
+  registerPreFilter,
+  registerFallbackPreFilter,
+  preFilters,
   registerActionProcessor,
   registerFallbackActionProcessor,
   processors,
+  registerPostFilter,
+  registerFallbackPostFilter,
+  postFilters,
   registerReporter,
   registerFallbackReporter,
   reporters,

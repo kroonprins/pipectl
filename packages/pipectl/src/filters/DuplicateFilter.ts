@@ -1,8 +1,8 @@
 import { Action, CommonArguments } from '../actions/model'
-import { DefinitionFilter, TransformedDefinition } from '../model'
+import { DefinitionPreFilter, TransformedDefinition } from '../model'
 import { log } from '../util/logging'
 
-class DuplicateFilter implements DefinitionFilter {
+class DuplicateFilter implements DefinitionPreFilter {
   canFilter(
     _transformedDefinition: TransformedDefinition,
     _transformedDefinitions: TransformedDefinition[],

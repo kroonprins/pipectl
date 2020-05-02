@@ -1,5 +1,5 @@
 import { Action, CommonArguments } from './actions/model'
-import { filter } from './filter'
+import { postFilter, preFilter } from './filter'
 import { group } from './group'
 import { Definition, DefinitionGroup, TransformedDefinition } from './model'
 import { processors, reporters } from './registration'
@@ -45,7 +45,11 @@ const processAction = async (
         )
 
         log.debug('[Process] filter definitions')
-        const filteredDefinitions = filter(transformedDefinitions, action, args)
+        const filteredDefinitions = preFilter(
+          transformedDefinitions,
+          action,
+          args
+        )
 
         log.debug('[Process] process and report')
         return Promise.all(
@@ -64,18 +68,36 @@ const processAction = async (
             )
 
             log.debug(
-              `[Process] report result for ${definition.shortName()}, result '${JSON.stringify(
+              `[Process] process result for ${definition.shortName()}, result '${JSON.stringify(
                 processResult
               )}'`
             )
 
+            const filteredProcessResult = postFilter(
+              processResult,
+              definition,
+              action,
+              args
+            )
+
+            log.debug(
+              `[Process] filtered process result for ${definition.shortName()}, result '${JSON.stringify(
+                filteredProcessResult
+              )}'`
+            )
+
             const reporter = reporters().find((r) =>
-              r.canReport(processResult, definition, action, args)
+              r.canReport(filteredProcessResult, definition, action, args)
             )
             if (!reporter) {
               throw new Error('TODO no reporter registered')
             }
-            return reporter.report(processResult, definition, action, args)
+            return reporter.report(
+              filteredProcessResult,
+              definition,
+              action,
+              args
+            )
           })
         )
       })

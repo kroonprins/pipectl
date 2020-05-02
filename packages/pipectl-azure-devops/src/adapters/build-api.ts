@@ -68,24 +68,35 @@ class BuildApi {
   async findAllBuildDefinitions(project: string): Promise<BuildDefinition[]> {
     log.debug(`[BuildApi.findAllBuildDefinitions] project[${project}]`)
     const api = await this.getApi()
-    return api.getDefinitions(
-      project,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      true,
-      false,
-      undefined,
-      undefined,
-      undefined
+    return Promise.all(
+      (
+        await api.getDefinitions(
+          project,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          true,
+          false,
+          undefined,
+          undefined,
+          undefined
+        )
+      ).map(async (buildDefinitionReference) => {
+        const buildDefinition = buildDefinitionReference as BuildDefinition
+        buildDefinition.tags = await api.getBuildTags(
+          project,
+          buildDefinition.id!
+        )
+        return buildDefinition
+      })
     )
   }
 
