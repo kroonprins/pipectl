@@ -65,7 +65,7 @@ interface DefinitionTransformer {
   ): Promise<TransformedDefinition>
 }
 
-interface DefinitionFilter {
+interface DefinitionPreFilter {
   canFilter(
     transformedDefinition: TransformedDefinition,
     transformedDefinitions: TransformedDefinition[],
@@ -75,6 +75,21 @@ interface DefinitionFilter {
   filter(
     transformedDefinition: TransformedDefinition,
     transformedDefinitions: TransformedDefinition[],
+    action: Action,
+    args: CommonArguments
+  ): boolean
+}
+
+interface DefinitionPostFilter {
+  canFilter(
+    definition: Definition,
+    transformedDefinition: TransformedDefinition,
+    action: Action,
+    args: CommonArguments
+  ): boolean
+  filter(
+    definition: Definition,
+    transformedDefinition: TransformedDefinition,
     action: Action,
     args: CommonArguments
   ): boolean
@@ -118,7 +133,8 @@ interface Reporter {
 export {
   Resource,
   Definition,
-  DefinitionFilter,
+  DefinitionPreFilter,
+  DefinitionPostFilter,
   DefinitionGrouper,
   DefinitionGroup,
   DefinitionGroupItem,

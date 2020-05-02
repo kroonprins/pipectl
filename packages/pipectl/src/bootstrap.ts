@@ -3,8 +3,13 @@ import apply from './actions/apply'
 import _delete from './actions/delete'
 import get from './actions/get'
 import { DuplicateFilter } from './filters/DuplicateFilter'
-import { SelectorFilter } from './filters/SelectorFilter'
-import { registerFallbackReporter, registerFilter } from './registration'
+import { SelectorPostFilter } from './filters/SelectorPostFilter'
+import { SelectorPreFilter } from './filters/SelectorPreFilter'
+import {
+  registerFallbackReporter,
+  registerPostFilter,
+  registerPreFilter,
+} from './registration'
 import { FallbackReporter } from './reporter'
 import { registerCommand } from './util/yargs'
 
@@ -89,7 +94,8 @@ const bootstrapCore: BootstrapFunction = (yargs: Argv) => {
     )
   )
 
-  registerFilter(new SelectorFilter(), new DuplicateFilter())
+  registerPreFilter(new SelectorPreFilter(), new DuplicateFilter())
+  registerPostFilter(new SelectorPostFilter())
 
   registerFallbackReporter(new FallbackReporter())
 }
