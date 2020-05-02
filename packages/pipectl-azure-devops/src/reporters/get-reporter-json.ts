@@ -7,21 +7,17 @@ import {
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { ReportingTransformationResult } from './model'
 
-abstract class GetReporterJson<
-  U extends ProcessResult,
-  V extends TransformedDefinition
-> implements Reporter {
-  constructor(private transformedDefinitionType: new () => U) {}
+abstract class GetReporterJson implements Reporter {
+  constructor(private type: string) {}
 
   canReport(
-    processResult: U,
-    _transformedDefinition: V,
+    processResult: ProcessResult,
+    _transformedDefinition: TransformedDefinition,
     _action: Action,
     args: GetArguments
   ): boolean {
     const result =
-      processResult instanceof this.transformedDefinitionType &&
-      args.output === 'json'
+      processResult.properties?.type === this.type && args.output === 'json'
     log.debug(
       `[GetReporterJson] canReport[${result}], processResult[${JSON.stringify(
         processResult
@@ -31,8 +27,8 @@ abstract class GetReporterJson<
   }
 
   async report(
-    processResult: U,
-    transformedDefinition: V,
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
     action: Action,
     args: GetArguments
   ): Promise<void> {
@@ -56,8 +52,8 @@ abstract class GetReporterJson<
   }
 
   abstract transform(
-    processResult: U,
-    transformedDefinition: V,
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
     action: Action,
     args: GetArguments
   ): Promise<ReportingTransformationResult>

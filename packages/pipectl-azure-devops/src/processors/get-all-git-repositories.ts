@@ -1,12 +1,12 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
+  ProcessResult,
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { gitRepositoryApi } from '../adapters/git-repository-api'
 import { AzureGitRepository } from '../model/azure-git-repository'
-import { GetGitRepositoryProcessResult } from '../model/get-git-repository-process-result'
 
 class GetAllGitRepositories implements ActionProcessor {
   canProcess(
@@ -25,17 +25,30 @@ class GetAllGitRepositories implements ActionProcessor {
     azureGitRepository: AzureGitRepository,
     _action: Action,
     _args: GetArguments
-  ): Promise<GetGitRepositoryProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(`[GetAllGitRepositories] ${JSON.stringify(azureGitRepository)}`)
     try {
       const project = azureGitRepository.project
-      const gitRepositorys = await gitRepositoryApi.findAllGitRepositories(
+      const gitRepositories = await gitRepositoryApi.findAllGitRepositories(
         project
       )
-      if (gitRepositorys) {
-        return new GetGitRepositoryProcessResult(gitRepositorys)
+      if (gitRepositories) {
+        return {
+          results: gitRepositories.map((gitRepository) => {
+            return {
+              apiVersion: azureGitRepository.apiVersion,
+              kind: azureGitRepository.kind,
+              metadata: {
+                namespace: azureGitRepository.project,
+                labels: {},
+              },
+              spec: gitRepository,
+            }
+          }),
+          properties: { type: azureGitRepository.kind },
+        }
       } else {
-        return new GetGitRepositoryProcessResult([])
+        return { results: [], properties: { type: azureGitRepository.kind } }
       }
     } catch (e) {
       return { error: e }

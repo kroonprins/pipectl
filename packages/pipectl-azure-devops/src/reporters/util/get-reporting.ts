@@ -1,51 +1,35 @@
 import { GetArguments } from '@kroonprins/pipectl/dist/actions/model'
-import { Definition } from '@kroonprins/pipectl/dist/model'
+import { Definition, ProcessResult } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
-import { AzureDefinition } from '../../model'
-import { GetProcessResult } from '../../model/get-process-result'
 import { ReportingTransformationResult } from '../model'
 
-const transformForGetReporting = async <
-  U extends GetProcessResult<any>,
-  V extends AzureDefinition<any>
->(
-  processResult: U,
-  transformedDefinition: V,
+const transformForGetReporting = async (
+  processResult: ProcessResult,
+  apiVersion: string,
   args: GetArguments,
-  applyExport: (definition: V) => Promise<V>
+  applyExport: (definition: object) => Promise<object>
 ): Promise<ReportingTransformationResult> => {
   const definitions: Definition[] = await Promise.all(
-    processResult
-      .results!.map((definition) => {
-        return {
-          apiVersion: transformedDefinition.apiVersion,
-          kind: transformedDefinition.kind,
-          metadata: {
-            namespace: transformedDefinition.project,
-          },
-          spec: definition,
-        }
-      })
-      .map(async (definition) => {
-        if (args.export) {
-          log.debug(
-            `[transformForGetReporting apply export] before[${JSON.stringify(
-              definition
-            )}]`
-          )
-          definition.spec = await applyExport(definition.spec)
-          log.debug(
-            `[transformForGetReporting apply export] after[${JSON.stringify(
-              definition
-            )}]`
-          )
-        }
-        return definition
-      })
+    processResult.results!.map(async (definition) => {
+      if (args.export) {
+        log.debug(
+          `[transformForGetReporting apply export] before[${JSON.stringify(
+            definition
+          )}]`
+        )
+        definition.spec = await applyExport(definition.spec)
+        log.debug(
+          `[transformForGetReporting apply export] after[${JSON.stringify(
+            definition
+          )}]`
+        )
+      }
+      return definition
+    })
   )
   if (definitions.length > 1) {
     return {
-      apiVersion: transformedDefinition.apiVersion,
+      apiVersion,
       items: definitions,
     }
   } else {

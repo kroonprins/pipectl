@@ -3,17 +3,13 @@ import {
   PullRequestStatus,
 } from 'azure-devops-node-api/interfaces/GitInterfaces'
 import { $enum } from 'ts-enum-util'
+import { Kind } from '../model'
 import { AzureGitPullRequest } from '../model/azure-git-pull-request'
-import { GetGitPullRequestProcessResult } from '../model/get-git-pull-request-process-result'
 import { GetReporter } from './get-reporter'
 
-class GetGitPullRequestReporter extends GetReporter<
-  GetGitPullRequestProcessResult,
-  AzureGitPullRequest,
-  GitPullRequest
-> {
+class GetGitPullRequestReporter extends GetReporter<GitPullRequest> {
   constructor() {
-    super(GetGitPullRequestProcessResult)
+    super(Kind.GIT_PULL_REQUEST)
   }
 
   columns(): string[] {

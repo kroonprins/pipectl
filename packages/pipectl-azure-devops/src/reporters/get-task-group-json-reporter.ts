@@ -1,29 +1,27 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
+import { ProcessResult } from '@kroonprins/pipectl/dist/model'
+import { Kind } from '../model'
 import { AzureTaskGroup } from '../model/azure-task-group'
-import { GetTaskGroupProcessResult } from '../model/get-task-group-process-result'
 import { GetReporterJson } from './get-reporter-json'
 import { ReportingTransformationResult } from './model'
 import { applyExport } from './util/export'
 import { exportTaskGroup } from './util/export-task-group'
 import { transformForGetReporting } from './util/get-reporting'
 
-class GetTaskGroupJsonReporter extends GetReporterJson<
-  GetTaskGroupProcessResult,
-  AzureTaskGroup
-> {
+class GetTaskGroupJsonReporter extends GetReporterJson {
   constructor() {
-    super(GetTaskGroupProcessResult)
+    super(Kind.TASK_GROUP)
   }
 
   transform(
-    processResult: GetTaskGroupProcessResult,
+    processResult: ProcessResult,
     transformedDefinition: AzureTaskGroup,
     _action: Action,
     args: GetArguments
   ): Promise<ReportingTransformationResult> {
     return transformForGetReporting(
       processResult,
-      transformedDefinition,
+      transformedDefinition.apiVersion,
       args,
       (definition) =>
         applyExport(definition, exportTaskGroup, transformedDefinition.project)

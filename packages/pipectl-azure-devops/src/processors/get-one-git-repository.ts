@@ -1,12 +1,12 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
+  ProcessResult,
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { gitRepositoryApi } from '../adapters/git-repository-api'
 import { AzureGitRepository } from '../model/azure-git-repository'
-import { GetGitRepositoryProcessResult } from '../model/get-git-repository-process-result'
 
 class GetOneGitRepository implements ActionProcessor {
   canProcess(
@@ -25,7 +25,7 @@ class GetOneGitRepository implements ActionProcessor {
     azureGitRepository: AzureGitRepository,
     _action: Action,
     args: GetArguments
-  ): Promise<GetGitRepositoryProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(`[GetOneGitRepository] ${JSON.stringify(azureGitRepository)}`)
     try {
       const project = azureGitRepository.project
@@ -34,7 +34,20 @@ class GetOneGitRepository implements ActionProcessor {
         project
       )
       if (gitRepository) {
-        return new GetGitRepositoryProcessResult([gitRepository])
+        return {
+          results: [
+            {
+              apiVersion: azureGitRepository.apiVersion,
+              kind: azureGitRepository.kind,
+              metadata: {
+                namespace: azureGitRepository.project,
+                labels: {},
+              },
+              spec: gitRepository,
+            },
+          ],
+          properties: { type: azureGitRepository.kind },
+        }
       } else {
         return {
           error: new Error(

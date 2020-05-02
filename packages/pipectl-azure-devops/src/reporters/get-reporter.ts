@@ -1,24 +1,22 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
-import { Reporter, TransformedDefinition } from '@kroonprins/pipectl/dist/model'
+import {
+  ProcessResult,
+  Reporter,
+  TransformedDefinition,
+} from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import columnify from 'columnify'
-import { GetProcessResult } from '../model/get-process-result'
 
-abstract class GetReporter<
-  U extends GetProcessResult<W>,
-  V extends TransformedDefinition,
-  W
-> implements Reporter {
-  constructor(private transformedDefinitionType: new () => U) {}
+abstract class GetReporter<T> implements Reporter {
+  constructor(private type: string) {}
 
   canReport(
-    processResult: U,
-    _transformedDefinition: V,
+    processResult: ProcessResult,
+    _transformedDefinition: TransformedDefinition,
     _action: Action,
     args: GetArguments
   ): boolean {
-    const result =
-      processResult instanceof this.transformedDefinitionType && !args.output
+    const result = processResult.properties?.type === this.type && !args.output
     log.debug(
       `[GetReporter] canReport[${result}], processResult[${JSON.stringify(
         processResult
@@ -28,8 +26,8 @@ abstract class GetReporter<
   }
 
   async report(
-    processResult: U,
-    transformedDefinition: V,
+    processResult: ProcessResult,
+    transformedDefinition: TransformedDefinition,
     _action: Action,
     _args: GetArguments
   ): Promise<void> {
@@ -40,7 +38,9 @@ abstract class GetReporter<
     )
 
     const columns = this.columns()
-    const lines = processResult.results!.map((result) => this.line(result))
+    const lines = processResult.results!.map((result) =>
+      this.line((result.spec as unknown) as T)
+    )
     log.info(
       columnify(lines, {
         columns,
@@ -50,7 +50,7 @@ abstract class GetReporter<
   }
 
   abstract columns(): string[]
-  abstract line(result: W): { [column: string]: string | undefined }
+  abstract line(result: T): { [column: string]: string | undefined }
   options() {
     return {}
   }

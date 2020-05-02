@@ -1,12 +1,13 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
+  ProcessResult,
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { buildApi } from '../adapters/build-api'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
-import { GetBuildDefinitionProcessResult } from '../model/get-build-definition-process-result'
+import { toLabels } from '../reporters/util/tags'
 
 class GetAllBuildDefinitions implements ActionProcessor {
   canProcess(
@@ -25,7 +26,7 @@ class GetAllBuildDefinitions implements ActionProcessor {
     azureBuildDefinition: AzureBuildDefinition,
     _action: Action,
     _args: GetArguments
-  ): Promise<GetBuildDefinitionProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(
       `[GetAllBuildDefinitions] ${JSON.stringify(azureBuildDefinition)}`
     )
@@ -33,9 +34,22 @@ class GetAllBuildDefinitions implements ActionProcessor {
       const project = azureBuildDefinition.project
       const buildDefinitions = await buildApi.findAllBuildDefinitions(project)
       if (buildDefinitions) {
-        return new GetBuildDefinitionProcessResult(buildDefinitions)
+        return {
+          results: buildDefinitions.map((buildDefinition) => {
+            return {
+              apiVersion: azureBuildDefinition.apiVersion,
+              kind: azureBuildDefinition.kind,
+              metadata: {
+                namespace: azureBuildDefinition.project,
+                labels: toLabels(buildDefinition.tags),
+              },
+              spec: buildDefinition,
+            }
+          }),
+          properties: { type: azureBuildDefinition.kind },
+        }
       } else {
-        return new GetBuildDefinitionProcessResult([])
+        return { results: [], properties: { type: azureBuildDefinition.kind } }
       }
     } catch (e) {
       return { error: e }

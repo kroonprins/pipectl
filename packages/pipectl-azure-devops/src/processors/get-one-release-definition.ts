@@ -1,12 +1,13 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
 import {
   ActionProcessor,
+  ProcessResult,
   TransformedDefinition,
 } from '@kroonprins/pipectl/dist/model'
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { releaseApi } from '../adapters/release-api'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
-import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
+import { toLabels } from '../reporters/util/tags'
 
 class GetOneReleaseDefinition implements ActionProcessor {
   canProcess(
@@ -25,7 +26,7 @@ class GetOneReleaseDefinition implements ActionProcessor {
     azureReleaseDefinition: AzureReleaseDefinition,
     _action: Action,
     args: GetArguments
-  ): Promise<GetReleaseDefinitionProcessResult> {
+  ): Promise<ProcessResult> {
     log.debug(
       `[GetOneReleaseDefinition] ${JSON.stringify(azureReleaseDefinition)}`
     )
@@ -36,7 +37,20 @@ class GetOneReleaseDefinition implements ActionProcessor {
         project
       )
       if (releaseDefinition) {
-        return new GetReleaseDefinitionProcessResult([releaseDefinition])
+        return {
+          results: [
+            {
+              apiVersion: azureReleaseDefinition.apiVersion,
+              kind: azureReleaseDefinition.kind,
+              metadata: {
+                namespace: azureReleaseDefinition.project,
+                labels: toLabels(releaseDefinition.tags),
+              },
+              spec: releaseDefinition,
+            },
+          ],
+          properties: { type: azureReleaseDefinition.kind },
+        }
       } else {
         return {
           error: new Error(

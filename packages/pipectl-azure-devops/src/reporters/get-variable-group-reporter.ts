@@ -1,15 +1,10 @@
 import { VariableGroup } from 'azure-devops-node-api/interfaces/TaskAgentInterfaces'
-import { AzureVariableGroup } from '../model/azure-variable-group'
-import { GetVariableGroupProcessResult } from '../model/get-variable-group-process-result'
+import { Kind } from '../model'
 import { GetReporter } from './get-reporter'
 
-class GetVariableGroupReporter extends GetReporter<
-  GetVariableGroupProcessResult,
-  AzureVariableGroup,
-  VariableGroup
-> {
+class GetVariableGroupReporter extends GetReporter<VariableGroup> {
   constructor() {
-    super(GetVariableGroupProcessResult)
+    super(Kind.VARIABLE_GROUP)
   }
 
   columns(): string[] {

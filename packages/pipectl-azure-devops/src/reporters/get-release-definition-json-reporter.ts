@@ -1,29 +1,27 @@
 import { Action, GetArguments } from '@kroonprins/pipectl/dist/actions/model'
+import { ProcessResult } from '@kroonprins/pipectl/dist/model'
+import { Kind } from '../model'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
-import { GetReleaseDefinitionProcessResult } from '../model/get-release-definition-process-result'
 import { GetReporterJson } from './get-reporter-json'
 import { ReportingTransformationResult } from './model'
 import { applyExport } from './util/export'
 import { exportReleaseDefinition } from './util/export-release-definition'
 import { transformForGetReporting } from './util/get-reporting'
 
-class GetReleaseDefinitionJsonReporter extends GetReporterJson<
-  GetReleaseDefinitionProcessResult,
-  AzureReleaseDefinition
-> {
+class GetReleaseDefinitionJsonReporter extends GetReporterJson {
   constructor() {
-    super(GetReleaseDefinitionProcessResult)
+    super(Kind.RELEASE_DEFINITION)
   }
 
   transform(
-    processResult: GetReleaseDefinitionProcessResult,
+    processResult: ProcessResult,
     transformedDefinition: AzureReleaseDefinition,
     _action: Action,
     args: GetArguments
   ): Promise<ReportingTransformationResult> {
     return transformForGetReporting(
       processResult,
-      transformedDefinition,
+      transformedDefinition.apiVersion,
       args,
       (definition) =>
         applyExport(
