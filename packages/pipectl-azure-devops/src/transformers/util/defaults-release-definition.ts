@@ -24,6 +24,7 @@ import { coreApi } from '../../adapters/core-api'
 import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import { taskGroupApi } from '../../adapters/task-group-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
+import { toTags } from '../../util/tags'
 import { applyDefaults } from './defaults'
 
 const artifacts = async (
@@ -313,6 +314,16 @@ const approvalOptions = async (
   )
 }
 
+const tags = (
+  releaseDefinition: ReleaseDefinition,
+  _key: string,
+  definition: Definition
+): string[] => {
+  return (releaseDefinition.tags || []).concat(
+    toTags(definition.metadata.labels)
+  )
+}
+
 const variables = async (
   releaseDefinition: ReleaseDefinition,
   key: string
@@ -389,6 +400,7 @@ const defaultsReleaseDefinition: ReleaseDefinition | object = {
   artifacts,
   environments,
   path: '\\',
+  tags,
   variableGroups,
   variables,
 }

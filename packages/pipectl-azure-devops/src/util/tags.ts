@@ -5,4 +5,8 @@ const toLabels = (tags: string[] | undefined): { [key: string]: string } =>
     return p
   }, {} as any)
 
-export { toLabels }
+const toTags = (labels: { [key: string]: string } | undefined): string[] => {
+  return Object.entries(labels || {}).map(([k, v]) => `${k}=${v}`)
+}
+
+export { toLabels, toTags }

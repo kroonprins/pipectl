@@ -7,7 +7,7 @@ import {
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { releaseApi } from '../adapters/release-api'
 import { AzureReleaseDefinition } from '../model/azure-release-definition'
-import { toLabels } from '../reporters/util/tags'
+import { toLabels } from '../util/tags'
 
 class GetOneReleaseDefinition implements ActionProcessor {
   canProcess(
