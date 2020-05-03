@@ -32,6 +32,7 @@ import { buildApi } from '../../adapters/build-api'
 import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
+import { toTags } from '../../util/tags'
 import { applyDefaults } from './defaults'
 import { tasks } from './defaults-common'
 
@@ -194,11 +195,7 @@ const tags = (
   _key: string,
   definition: Definition
 ): string[] => {
-  return (buildDefinition.tags || []).concat(
-    Object.entries(definition.metadata.labels || {}).map(
-      ([k, v]) => `${k}=${v}`
-    )
-  )
+  return (buildDefinition.tags || []).concat(toTags(definition.metadata.labels))
 }
 
 const triggers = async (

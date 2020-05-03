@@ -7,7 +7,7 @@ import {
 import { log } from '@kroonprins/pipectl/dist/util/logging'
 import { buildApi } from '../adapters/build-api'
 import { AzureBuildDefinition } from '../model/azure-build-definition'
-import { toLabels } from '../reporters/util/tags'
+import { toLabels } from '../util/tags'
 
 class GetOneBuildDefinition implements ActionProcessor {
   canProcess(

@@ -197,6 +197,7 @@ const exportDeploymentGates: ReleaseDefinitionGatesStep | object = {
 
 const exportReleaseDefinition: ReleaseDefinition | object = {
   _links: filterProp,
+  lastRelease: filterProp,
   artifacts,
   createdBy: filterProp,
   createdOn: filterProp,

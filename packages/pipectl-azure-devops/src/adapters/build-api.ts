@@ -47,7 +47,7 @@ class BuildApi {
       log.debug(
         `[BuildApi.findBuildDefinitionByNameAndPath] found ${search[0].id} (${search.length}) for name[${name}], path[${path}], project[${project}]`
       )
-      return search[0]
+      return this.setTags(search[0], project)
     }
     log.debug(
       `[BuildApi.findBuildDefinitionByNameAndPath] not found for name[${name}], path[${path}], project[${project}]`
@@ -61,8 +61,7 @@ class BuildApi {
     )
     const api = await this.getApi()
     const buildDefinition = await api.getDefinition(project, id)
-    buildDefinition.tags = await api.getBuildTags(project, id)
-    return buildDefinition
+    return this.setTags(buildDefinition, project)
   }
 
   async findAllBuildDefinitions(project: string): Promise<BuildDefinition[]> {
@@ -89,14 +88,7 @@ class BuildApi {
           undefined,
           undefined
         )
-      ).map(async (buildDefinitionReference) => {
-        const buildDefinition = buildDefinitionReference as BuildDefinition
-        buildDefinition.tags = await api.getBuildTags(
-          project,
-          buildDefinition.id!
-        )
-        return buildDefinition
-      })
+      ).map((buildDefinition) => this.setTags(buildDefinition, project))
     )
   }
 
@@ -120,7 +112,7 @@ class BuildApi {
       )
       await api.addBuildTags(buildDefinition.tags, project, buildDefinition.id!)
     }
-    return createdBuildDefinition
+    return { ...createdBuildDefinition, tags: buildDefinition.tags }
   }
 
   async updateBuildDefinition(
@@ -162,7 +154,7 @@ class BuildApi {
         ),
       ])
     }
-    return updatedBuildDefinition
+    return { ...updatedBuildDefinition, tags: buildDefinition.tags }
   }
 
   async deleteBuildDefinition(buildDefinitionId: number, project: string) {
@@ -171,6 +163,17 @@ class BuildApi {
     )
     const api = await this.getApi()
     return api.deleteDefinition(project, buildDefinitionId)
+  }
+
+  private async setTags(
+    buildDefinition: BuildDefinition,
+    project: string
+  ): Promise<BuildDefinition> {
+    const api = await this.getApi()
+    return {
+      ...buildDefinition,
+      tags: await api.getBuildTags(project, buildDefinition.id!),
+    }
   }
 }
 

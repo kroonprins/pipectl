@@ -45,7 +45,7 @@ class ReleaseApi {
       log.debug(
         `[ReleaseApi.findReleaseDefinitionByNameAndPath] found ${search[0].id} (${search.length}) for name[${name}], path[${path}], project[${project}]`
       )
-      return search[0]
+      return this.setTags(search[0], project)
     }
     log.debug(
       `[ReleaseApi.findReleaseDefinitionByNameAndPath] not found for name[${name}], path[${path}], project[${project}]`
@@ -58,28 +58,33 @@ class ReleaseApi {
       `[ReleaseApi.findReleaseDefinitionById] id[${id}], project[${project}]`
     )
     const api = await this.getApi()
-    return api.getReleaseDefinition(project, id)
+    const releaseDefinition = await api.getReleaseDefinition(project, id)
+    return this.setTags(releaseDefinition, project)
   }
 
   async findAllReleaseDefinitions(project: string) {
     log.debug(`[ReleaseApi.findAllReleaseDefinitions] project[${project}]`)
     const api = await this.getApi()
-    return api.getReleaseDefinitions(
-      project,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      false,
-      undefined
+    return Promise.all(
+      (
+        await api.getReleaseDefinitions(
+          project,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          false,
+          undefined
+        )
+      ).map((releaseDefinition) => this.setTags(releaseDefinition, project))
     )
   }
 
@@ -91,7 +96,23 @@ class ReleaseApi {
       `[ReleaseApi.createReleaseDefinition] ${releaseDefinition.path}\\${releaseDefinition.name}, project[${project}]`
     )
     const api = await this.getApi()
-    return api.createReleaseDefinition(releaseDefinition, project)
+    const createdReleaseDefinition = await api.createReleaseDefinition(
+      releaseDefinition,
+      project
+    )
+    if (releaseDefinition.tags && releaseDefinition.tags.length) {
+      log.debug(
+        `[ReleaseApi.createReleaseDefinition] add tags ${JSON.stringify(
+          releaseDefinition.tags
+        )}`
+      )
+      await api.addReleaseTags(
+        releaseDefinition.tags,
+        project,
+        releaseDefinition.id!
+      )
+    }
+    return { ...createdReleaseDefinition, tags: releaseDefinition.tags }
   }
 
   async updateReleaseDefinition(
@@ -102,7 +123,37 @@ class ReleaseApi {
       `[ReleaseApi.updateReleaseDefinition] ${releaseDefinition.path}\\${releaseDefinition.name}, project[${project}]`
     )
     const api = await this.getApi()
-    return api.updateReleaseDefinition(releaseDefinition, project)
+    const updatedReleaseDefinition = await api.updateReleaseDefinition(
+      releaseDefinition,
+      project
+    )
+    if (releaseDefinition.tags && releaseDefinition.tags.length) {
+      const currentTags =
+        (await api.getDefinitionTags(project, releaseDefinition.id!)) || []
+      const tagsToAdd = releaseDefinition.tags.filter(
+        (x) => !currentTags.includes(x)
+      )
+      log.debug(
+        `[ReleaseApi.updateReleaseDefinition] tags to add ${JSON.stringify(
+          tagsToAdd
+        )}`
+      )
+      const tagsToRemove = currentTags.filter(
+        (x) => !releaseDefinition.tags!.includes(x)
+      )
+      log.debug(
+        `[ReleaseApi.updateReleaseDefinition] tags to remove ${JSON.stringify(
+          tagsToRemove
+        )}`
+      )
+      await Promise.all([
+        api.addDefinitionTags(tagsToAdd, project, releaseDefinition.id!),
+        ...tagsToRemove.map((tag) =>
+          api.deleteDefinitionTag(project, releaseDefinition.id!, tag)
+        ),
+      ])
+    }
+    return { ...updatedReleaseDefinition, tags: releaseDefinition.tags }
   }
 
   async deleteReleaseDefinition(releaseDefinitionId: number, project: string) {
@@ -111,6 +162,17 @@ class ReleaseApi {
     )
     const api = await this.getApi()
     return api.deleteReleaseDefinition(project, releaseDefinitionId)
+  }
+
+  private async setTags(
+    releaseDefinition: ReleaseDefinition,
+    project: string
+  ): Promise<ReleaseDefinition> {
+    const api = await this.getApi()
+    return {
+      ...releaseDefinition,
+      tags: await api.getDefinitionTags(project, releaseDefinition.id!),
+    }
   }
 }
 
