@@ -21,6 +21,7 @@ import {
   applyExport,
   applyExportOnArray,
   array,
+  enumValue,
   filterIfEmpty,
   filterProp,
   object,
@@ -280,7 +281,7 @@ const exportArtifactSourceReference: ArtifactSourceReference | object = {
 
 const exportDeployPhase: DeployPhase | object = {
   rank: filterProp,
-  phaseType: DeployPhaseTypes.AgentBasedDeployment,
+  phaseType: enumValue(DeployPhaseTypes, DeployPhaseTypes.AgentBasedDeployment),
   refName: filterProp,
   workflowTasks,
 }

@@ -35,6 +35,8 @@ spec:
         identifier: ubuntu-18.04
   repository:
     name: My Git Repository
+  triggers:
+    - triggerType: ContinuousIntegration
   queue:
     name: Azure Pipelines
   variables:
