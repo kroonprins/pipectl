@@ -117,7 +117,7 @@ const array = <T extends { [key: string]: U[] }, U, V extends keyof T>(
 
 const enumValue = <E extends Record<Extract<keyof E, string>, number | string>>(
   enumType: E,
-  defaultValue: number | string
+  defaultValue: number | string | undefined
 ) => {
   return <T extends { [key: string]: number | string }, K extends keyof T>(
     source: T,
@@ -126,6 +126,19 @@ const enumValue = <E extends Record<Extract<keyof E, string>, number | string>>(
     if (source[key] === defaultValue) {
       return undefined
     }
+    return $enum(enumType).getKeyOrThrow(source[key])
+  }
+}
+
+const translateEnumValue = <
+  E extends Record<Extract<keyof E, string>, number | string>
+>(
+  enumType: E
+) => {
+  return <T extends { [key: string]: number | string }, K extends keyof T>(
+    source: T,
+    key: K
+  ) => {
     return $enum(enumType).getKeyOrThrow(source[key])
   }
 }
@@ -139,4 +152,5 @@ export {
   object,
   array,
   enumValue,
+  translateEnumValue,
 }

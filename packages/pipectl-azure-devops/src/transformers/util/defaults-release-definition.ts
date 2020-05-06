@@ -25,7 +25,7 @@ import { taskDefinitionApi } from '../../adapters/task-definition-api'
 import { taskGroupApi } from '../../adapters/task-group-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { toTags } from '../../util/tags'
-import { applyDefaults } from './defaults'
+import { applyDefaults, enumValue } from './defaults'
 
 const artifacts = async (
   releaseDefinition: ReleaseDefinition,
@@ -454,7 +454,7 @@ const defaultsRetentionPolicy: EnvironmentRetentionPolicy = {
 
 const defaultsDeployPhase: DeployPhase | object = {
   rank,
-  phaseType: DeployPhaseTypes.AgentBasedDeployment,
+  phaseType: enumValue(DeployPhaseTypes, DeployPhaseTypes.AgentBasedDeployment),
   workflowTasks,
 }
 

@@ -4,6 +4,7 @@ import {
   BuildCompletionTrigger,
   BuildDefinition,
   BuildDefinitionVariable,
+  BuildOption,
   BuildProcess,
   BuildTrigger,
   ContinuousIntegrationTrigger,
@@ -21,12 +22,20 @@ import { buildApi } from '../../adapters/build-api'
 import {
   applyExport,
   array,
+  enumValue,
   filterArrayIfEquals,
   filterIfEmpty,
   filterProp,
   object,
+  translateEnumValue,
 } from './export'
 import { tasks as steps } from './export-common'
+
+const options = async (
+  buildDefinition: BuildDefinition
+): Promise<BuildOption[]> => {
+  return (buildDefinition.options || []).filter((option) => option.enabled)
+}
 
 const process = async (
   buildDefinition: BuildDefinition,
@@ -63,17 +72,18 @@ const triggers = async (
   buildDefinition: BuildDefinition
 ): Promise<BuildTrigger[]> =>
   Promise.all(
-    (buildDefinition.triggers || []).map((trigger) => {
+    (buildDefinition.triggers || []).map(async (trigger) => {
+      const exportApplied = await applyExport(trigger, exportTrigger)
       if (trigger.triggerType === DefinitionTriggerType.ContinuousIntegration) {
-        return applyExport(trigger, exportContinuousIntegrationTrigger)
+        return applyExport(exportApplied, exportContinuousIntegrationTrigger)
       } else if (trigger.triggerType === DefinitionTriggerType.Schedule) {
-        return applyExport(trigger, exportScheduleTrigger)
+        return applyExport(exportApplied, exportScheduleTrigger)
       } else if (
         trigger.triggerType === DefinitionTriggerType.BuildCompletion
       ) {
-        return applyExport(trigger, exportBuildCompletion)
+        return applyExport(exportApplied, exportBuildCompletion)
       } // TODO other trigger types
-      return Object.assign({}, trigger)
+      return exportApplied
     })
   )
 
@@ -129,17 +139,21 @@ const variables = async (
   )
 
 const exportBuildDefinition: BuildDefinition | object = {
-  type: DefinitionType.Build,
-  jobAuthorizationScope: BuildAuthorizationScope.ProjectCollection,
+  type: enumValue(DefinitionType, DefinitionType.Build),
+  jobAuthorizationScope: enumValue(
+    BuildAuthorizationScope,
+    BuildAuthorizationScope.ProjectCollection
+  ),
   jobTimeoutInMinutes: 60,
   jobCancelTimeoutInMinutes: 5,
   path: '\\',
-  quality: DefinitionQuality.Definition,
+  quality: enumValue(DefinitionQuality, DefinitionQuality.Definition),
   _links: filterProp,
   authoredBy: filterProp,
   createdDate: filterProp,
   drafts: filterIfEmpty,
   id: filterProp,
+  options,
   process,
   processParameters: filterIfEmpty,
   project: filterProp,
@@ -186,6 +200,10 @@ const exportBuildDefinition: BuildDefinition | object = {
   url: filterProp,
   variables,
   variableGroups,
+}
+
+const exportTrigger: BuildTrigger | object = {
+  triggerType: translateEnumValue(DefinitionTriggerType),
 }
 
 const exportContinuousIntegrationTrigger:

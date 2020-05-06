@@ -33,7 +33,7 @@ import { coreApi } from '../../adapters/core-api'
 import { gitRepositoryApi } from '../../adapters/git-repository-api'
 import { variableGroupApi } from '../../adapters/variable-group-api'
 import { toTags } from '../../util/tags'
-import { applyDefaults } from './defaults'
+import { applyDefaults, enumValue } from './defaults'
 import { tasks } from './defaults-common'
 
 const process = async (
@@ -205,12 +205,25 @@ const triggers = async (
 ): Promise<BuildTrigger[]> => {
   return Promise.all(
     (buildDefinition.triggers || []).map(async (trigger) => {
-      if (trigger.triggerType === DefinitionTriggerType.ContinuousIntegration) {
-        return applyDefaults(trigger, defaultsContinuousIntegrationTrigger)
-      } else if (trigger.triggerType === DefinitionTriggerType.Schedule) {
-        return applyDefaults(trigger, defaultsScheduleTrigger)
+      const commonDefaultsApplied = await applyDefaults(
+        trigger,
+        defaultsTrigger
+      )
+      if (
+        commonDefaultsApplied.triggerType ===
+        DefinitionTriggerType.ContinuousIntegration
+      ) {
+        return applyDefaults(
+          commonDefaultsApplied,
+          defaultsContinuousIntegrationTrigger
+        )
       } else if (
-        trigger.triggerType === DefinitionTriggerType.BuildCompletion
+        commonDefaultsApplied.triggerType === DefinitionTriggerType.Schedule
+      ) {
+        return applyDefaults(commonDefaultsApplied, defaultsScheduleTrigger)
+      } else if (
+        commonDefaultsApplied.triggerType ===
+        DefinitionTriggerType.BuildCompletion
       ) {
         return applyDefaults(
           trigger,
@@ -218,7 +231,7 @@ const triggers = async (
           (await project(buildDefinition, key, definition)).id
         )
       } // TODO other trigger types
-      return Object.assign({}, trigger)
+      return commonDefaultsApplied
     })
   )
 }
@@ -310,12 +323,15 @@ const variableGroupId = async (
 }
 
 const defaultsBuildDefinition: BuildDefinition | object = {
-  type: DefinitionType.Build,
-  jobAuthorizationScope: BuildAuthorizationScope.ProjectCollection,
+  type: enumValue(DefinitionType, DefinitionType.Build),
+  jobAuthorizationScope: enumValue(
+    BuildAuthorizationScope,
+    BuildAuthorizationScope.ProjectCollection
+  ),
   jobTimeoutInMinutes: 60,
   jobCancelTimeoutInMinutes: 5,
   path: '\\',
-  quality: DefinitionQuality.Definition,
+  quality: enumValue(DefinitionQuality, DefinitionQuality.Definition),
   process,
   project,
   queue,
@@ -338,7 +354,10 @@ const defaultsDesignerProcess: DesignerProcess | object = {
 const defaultsDesignerProcessPhase: Phase | object = {
   condition: 'succeeded()',
   name: phaseName,
-  jobAuthorizationScope: BuildAuthorizationScope.ProjectCollection,
+  jobAuthorizationScope: enumValue(
+    BuildAuthorizationScope,
+    BuildAuthorizationScope.ProjectCollection
+  ),
   jobCancelTimeoutInMinutes: 0,
   target: phaseTarget,
   steps,
@@ -418,6 +437,13 @@ const defaultsBuildCompletion: BuildCompletionTrigger | object = {
   requiresSuccessfulBuild: true,
   branchFilters: ['+refs/heads/master'],
   definition: buildCompletionTriggerDefinition,
+}
+
+const defaultsTrigger: BuildTrigger | object = {
+  triggerType: enumValue(
+    DefinitionTriggerType,
+    DefinitionTriggerType.ContinuousIntegration
+  ),
 }
 
 const defaultsVariableGroup: VariableGroup | object = {
