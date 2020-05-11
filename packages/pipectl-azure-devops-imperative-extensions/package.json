@@ -15,7 +15,7 @@
   "devDependencies": {
     "@kroonprins/pipectl": "0.0.1-alpha.4",
     "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.4",
-    "updates": "10.2.10"
+    "updates": "10.2.11"
   },
   "dependencies": {
     "azure-devops-node-api": "10.1.1",
