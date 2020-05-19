@@ -18,7 +18,7 @@
     "release": "lerna publish"
   },
   "devDependencies": {
-    "@types/jest": "25.2.1",
+    "@types/jest": "25.2.3",
     "@types/node": "13.13.5",
     "@types/yargs": "15.0.4",
     "husky": "4.2.5",
