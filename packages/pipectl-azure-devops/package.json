@@ -15,9 +15,9 @@
   "devDependencies": {
     "@kroonprins/pipectl": "0.0.1-alpha.4",
     "@types/columnify": "1.5.0",
-    "@types/js-yaml": "3.12.3",
+    "@types/js-yaml": "3.12.4",
     "@types/text-table": "0.2.1",
-    "updates": "10.2.10"
+    "updates": "10.2.12"
   },
   "dependencies": {
     "azure-devops-node-api": "10.1.1",
