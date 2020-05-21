@@ -22,7 +22,7 @@
     "@kroonprins/pipectl-azure-devops-imperative-extensions": "0.0.1-alpha.4",
     "@types/js-yaml": "3.12.3",
     "@types/parse-json": "4.0.0",
-    "updates": "10.2.10"
+    "updates": "10.2.12"
   },
   "dependencies": {
     "get-stdin": "7.0.0",
