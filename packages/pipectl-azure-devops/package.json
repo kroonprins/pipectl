@@ -22,7 +22,7 @@
   "dependencies": {
     "azure-devops-node-api": "10.1.1",
     "columnify": "1.5.4",
-    "js-yaml": "3.13.1",
+    "js-yaml": "3.14.0",
     "p-memoize": "4.0.0",
     "ts-enum-util": "4.0.1",
     "yargs": "15.3.1"
