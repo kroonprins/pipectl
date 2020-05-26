@@ -30,6 +30,6 @@
     "ts-node": "8.10.1",
     "tslint": "6.1.2",
     "typescript": "3.9.3",
-    "updates": "10.2.12"
+    "updates": "10.2.13"
   }
 }
