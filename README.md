@@ -21,4 +21,4 @@ Configure server and user details in config file like the example of `sample/con
 
 - place it `$HOME/.pipe/config`
 - or, set environment variable `PIPECONFIG` to the location of the file
-- or, call pipectl with command line option `--pipconfig=<location config file>`
+- or, call pipectl with command line option `--pipeconfig=<location config file>`

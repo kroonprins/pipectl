@@ -18,5 +18,6 @@
 - remove some duplication in azure devops reporters, transformers, etc
 - check if yarn workspaces can be alternative for lerna
 - yargs: no error when no command matches
-- extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)npm
+- extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)
 - syntax for tasks in release definition is different as for build definition / task group => allow the other (better) syntax for release definitions
+- github actions
