@@ -13,6 +13,7 @@ contexts:
       user: user-azure-devops
       plugins:
         - '@kroonprins/pipectl-azure-devops'
+        - '@kroonprins/pipectl-azure-devops-imperative-extensions'
     name: context-azure-devops
 current-context: context-azure-devops
 users:
