@@ -17,14 +17,14 @@
     "@types/columnify": "1.5.0",
     "@types/js-yaml": "3.12.4",
     "@types/text-table": "0.2.1",
-    "updates": "10.2.12"
+    "updates": "10.2.13"
   },
   "dependencies": {
     "azure-devops-node-api": "10.1.1",
     "columnify": "1.5.4",
-    "js-yaml": "3.13.1",
+    "js-yaml": "3.14.0",
     "p-memoize": "4.0.0",
-    "ts-enum-util": "4.0.1",
+    "ts-enum-util": "4.0.2",
     "yargs": "15.3.1"
   },
   "peerDependencies": {
