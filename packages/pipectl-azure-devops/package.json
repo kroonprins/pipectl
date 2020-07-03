@@ -25,7 +25,7 @@
     "js-yaml": "3.14.0",
     "p-memoize": "4.0.0",
     "ts-enum-util": "4.0.2",
-    "yargs": "15.3.1"
+    "yargs": "15.4.0"
   },
   "peerDependencies": {
     "@kroonprins/pipectl": "*"
