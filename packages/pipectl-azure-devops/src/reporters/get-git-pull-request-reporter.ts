@@ -47,19 +47,19 @@ class GetGitPullRequestReporter extends GetReporter<GitPullRequest> {
       truncate: true,
       config: {
         DESCRIPTION: {
-          maxWidth: 40,
+          maxWidth: 100,
         },
         REPOSITORY: {
-          maxWidth: 30,
+          maxWidth: 100,
         },
         REVIEWERS: {
-          maxWidth: 50,
+          maxWidth: 100,
         },
         SOURCE: {
-          maxWidth: 50,
+          maxWidth: 100,
         },
         TARGET: {
-          maxWidth: 50,
+          maxWidth: 100,
         },
       },
     }

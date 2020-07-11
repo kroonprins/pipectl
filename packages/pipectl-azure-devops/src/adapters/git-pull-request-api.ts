@@ -78,9 +78,15 @@ class GitPullRequestApi {
   async findAllGitPullRequests(project: string) {
     log.debug(`[GitPullRequestApi.findAllGitRepositories] project[${project}]`)
     const api = await this.getApi()
-    return api.getPullRequestsByProject(project, {
-      status: PullRequestStatus.Active,
-    })
+    return api.getPullRequestsByProject(
+      project,
+      {
+        status: PullRequestStatus.Active,
+      },
+      undefined,
+      undefined,
+      -1
+    )
   }
 
   async createGitPullRequest(gitPullRequest: GitPullRequest, project: string) {

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import * as dotenv from 'dotenv'
 import yargs from 'yargs'
 import { bootstrapCore, BootstrapFunction } from './bootstrap'
 import { currentPlugins, initialize as initializeConfig } from './config'
@@ -7,6 +8,8 @@ import { initializeLogging, log } from './util/logging'
 
 const main = async () => {
   try {
+    dotenv.config()
+
     yargs.showHelpOnFail(false)
     const argv = yargs.options({
       pipeconfig: { type: 'string' },
