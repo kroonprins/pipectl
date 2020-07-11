@@ -53,13 +53,13 @@ class GetGitPullRequestReporter extends GetReporter<GitPullRequest> {
           maxWidth: 30,
         },
         REVIEWERS: {
-          maxWidth: 30,
+          maxWidth: 50,
         },
         SOURCE: {
-          maxWidth: 25,
+          maxWidth: 50,
         },
         TARGET: {
-          maxWidth: 25,
+          maxWidth: 50,
         },
       },
     }

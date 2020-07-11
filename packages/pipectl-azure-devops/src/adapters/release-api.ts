@@ -104,12 +104,12 @@ class ReleaseApi {
       log.debug(
         `[ReleaseApi.createReleaseDefinition] add tags ${JSON.stringify(
           releaseDefinition.tags
-        )}`
+        )}, project[${project}], release id[${createdReleaseDefinition.id}]`
       )
       await api.addReleaseTags(
         releaseDefinition.tags,
         project,
-        releaseDefinition.id!
+        createdReleaseDefinition.id!
       )
     }
     return { ...createdReleaseDefinition, tags: releaseDefinition.tags }

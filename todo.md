@@ -16,8 +16,8 @@
 - in variable groups and agent pools for release pipelines it should be possible to also define them with 'id:' or 'name:' to handle the case where the name is a number
 - register stuff via annotations? (e.g. via tsyringe)
 - remove some duplication in azure devops reporters, transformers, etc
-- check if yarn workspaces can be alternative for lerna
 - yargs: no error when no command matches
 - extra checks on delete to make sure not to delete something that is still referenced somewhere? (e.g. variable group reference by a pipeline)
 - syntax for tasks in release definition is different as for build definition / task group => allow the other (better) syntax for release definitions
 - github actions
+- order needed in delete?

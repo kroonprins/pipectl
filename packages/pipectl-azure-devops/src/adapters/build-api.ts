@@ -110,7 +110,11 @@ class BuildApi {
           buildDefinition.tags
         )}`
       )
-      await api.addBuildTags(buildDefinition.tags, project, buildDefinition.id!)
+      await api.addBuildTags(
+        buildDefinition.tags,
+        project,
+        createdBuildDefinition.id!
+      )
     }
     return { ...createdBuildDefinition, tags: buildDefinition.tags }
   }
