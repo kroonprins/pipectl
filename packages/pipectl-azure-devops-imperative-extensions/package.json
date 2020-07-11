@@ -1,6 +1,6 @@
 {
   "name": "@kroonprins/pipectl-azure-devops-imperative-extensions",
-  "version": "0.0.1-alpha.6",
+  "version": "0.0.1-alpha.7",
   "description": "imperative extensions for the pipectl plugin for Azure DevOps",
   "scripts": {
     "build": "tsc",
@@ -13,8 +13,8 @@
     "dist/**/!(*.test).d.ts"
   ],
   "devDependencies": {
-    "@kroonprins/pipectl": "0.0.1-alpha.6",
-    "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.6",
+    "@kroonprins/pipectl": "0.0.1-alpha.7",
+    "@kroonprins/pipectl-azure-devops": "0.0.1-alpha.7",
     "updates": "10.2.15"
   },
   "dependencies": {

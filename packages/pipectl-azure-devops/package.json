@@ -1,6 +1,6 @@
 {
   "name": "@kroonprins/pipectl-azure-devops",
-  "version": "0.0.1-alpha.6",
+  "version": "0.0.1-alpha.7",
   "description": "pipectl plugin for Azure DevOps",
   "scripts": {
     "build": "tsc",
@@ -13,7 +13,7 @@
     "dist/**/!(*.test).d.ts"
   ],
   "devDependencies": {
-    "@kroonprins/pipectl": "0.0.1-alpha.6",
+    "@kroonprins/pipectl": "0.0.1-alpha.7",
     "@types/columnify": "1.5.0",
     "@types/js-yaml": "3.12.5",
     "@types/text-table": "0.2.1",
